@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>India Air Quality Explorer</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fa;color:#192b3e;font:16px system-ui,sans-serif}main{max-width:1300px;margin:auto;padding:32px 22px}h1{margin:8px 0;font-size:32px}.eyebrow{color:#176b70;font-weight:700;font-size:13px;letter-spacing:2px}.sub{color:#526578}form,.panel{background:white;border:1px solid #dbe3eb;border-radius:14px;padding:22px;margin:22px 0}form{display:flex;gap:18px;align-items:end;flex-wrap:wrap}label{display:block;font-weight:600;margin-bottom:8px}input{border:1px solid #bac8d5;border-radius:7px;padding:12px;font:inherit;width:260px;max-width:100%}button{background:#176b70;color:white;border:0;border-radius:7px;padding:14px 22px;font:inherit;cursor:pointer}button:disabled{opacity:.65}.note{background:#fff6df;border-left:4px solid #d69b26;padding:14px;font-size:14px;line-height:1.6}.error{background:#fee9e7;border:1px solid #efb4ad;padding:16px;border-radius:8px}.stats{display:flex;gap:28px;margin:20px 0}.stats strong{font-size:28px;display:block}.map iframe{width:100%;height:680px!important;border:0}.map>div{padding-bottom:0!important;height:680px!important}.hint{font-size:13px;color:#526578}footer{margin-top:24px;font-size:13px;color:#526578}a{color:#176b70}
+</style>
+</head><body><main>
+<div class="eyebrow">INDIA · STATION EXPLORER</div>
+<h1>Air quality, on the map</h1>
+<p class="sub">Explore station readings from the Government of India open-data platform.</p>
+<form method="post" id="filters">
+<div><label for="state">State / union territory</label><input id="state" name="state" value="{{ state }}" maxlength="100" required placeholder="Delhi"></div>
+<div><label for="city">City (optional)</label><input id="city" name="city" value="{{ city }}" maxlength="100" placeholder="Leave blank for all cities"></div>
+<button id="submit" type="submit">Load station data</button>
+<p class="hint" style="width:100%;margin:0" id="progress" role="status">Use the dataset’s exact names, for example Karnataka / Bengaluru. All result pages are fetched; this may take a few minutes.</p>
+</form>
+<div class="note"><b>How colours work:</b> Indicative PM2.5 severity only, assuming avg_value is a 24-hour concentration in µg/m³. Units and averaging period have not been verified from this API. This is not official overall AQI. Grey means no valid PM2.5 reading. Click a station to see every pollutant.</div>
+{% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+{% if loaded and not error %}
+<div class="stats"><div><strong>{{ count }}</strong>readings fetched</div><div><strong>{{ station_count }}</strong>stations mapped</div><div><strong>{{ skipped }}</strong>invalid coordinates</div></div>
+{% if map_html %}<div class="panel map">{{ map_html|safe }}</div>{% else %}<div class="panel">No matching records. Check the state and city names.</div>{% endif %}
+{% else %}{% if not error %}<div class="panel">Choose a location above to load the map.</div>{% endif %}{% endif %}
+<footer>Data: CPCB / data.gov.in · Map: OpenStreetMap contributors · <a href="https://www.airquality.cpcb.gov.in/ccr_docs/About_AQI.pdf">CPCB AQI reference</a></footer>
+</main><script>
+document.getElementById('filters').addEventListener('submit',()=>{const b=document.getElementById('submit');b.disabled=true;b.textContent='Loading…';document.getElementById('progress').textContent='Fetching all pages and building your map. Please keep this page open.';});
+</script></body></html>
