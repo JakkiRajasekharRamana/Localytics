@@ -8,7 +8,7 @@ from urllib.parse import urlencode
 
 from dotenv import load_dotenv
 from flask import Flask, render_template, request
-from mapping import build_map
+from unified_map import build_map
 
 load_dotenv(Path(__file__).with_name('.env'))
 app = Flask(__name__)
@@ -77,6 +77,8 @@ def index():
     map_html = None
     count = station_count = skipped = 0
     loaded = False
+    if request.method == 'GET':
+        map_html, _, _ = build_map([])
     if request.method == 'POST':
         state = request.form.get('state', '').strip()
         city = request.form.get('city', '').strip()
@@ -86,16 +88,40 @@ def index():
             records = fetch_records(state, city)
             count = len(records)
             loaded = True
-            if records:
-                try:
-                    map_html, station_count, skipped = build_map(records)
-                except ValueError:
-                    raise FetchError('Records were returned, but none have valid map coordinates.') from None
+            map_html, station_count, skipped = build_map(records)
         except FetchError as exc:
             error = str(exc)
     return render_template('index.html', state=state, city=city, error=error,
                            map_html=map_html, count=count, station_count=station_count,
                            skipped=skipped, loaded=loaded)
+
+
+@app.route('/connectivity', methods=['GET', 'POST'])
+def connectivity():
+    import math
+    from transport import search_transport, transport_map, CATEGORIES, DATA_DIR
+    lat, lon, radius, limit = 28.6139, 77.2090, 5.0, 5
+    error, map_html, results = None, None, None
+    try:
+        if request.method == 'POST':
+            lat = float(request.form.get('latitude', ''))
+            lon = float(request.form.get('longitude', ''))
+            radius = float(request.form.get('radius', ''))
+            limit = int(request.form.get('limit', ''))
+            if not (math.isfinite(lat) and math.isfinite(lon) and
+                    -90 <= lat <= 90 and -180 <= lon <= 180 and
+                    math.isfinite(radius) and 0.1 <= radius <= 100 and 1 <= limit <= 20):
+                raise ValueError
+            results = search_transport(lat, lon, radius, limit)
+            map_html = transport_map(lat, lon, results, radius)
+    except (ValueError, OverflowError):
+        error = 'Enter valid coordinates, a radius from 0.1 to 100 km, and 1–20 results per category.'
+        lat, lon, radius, limit = 28.6139, 77.2090, 5.0, 5
+    except OSError:
+        error = 'Local transport data is missing. Restore the connectivity folder from the download.'
+    return render_template('connectivity.html', lat=lat, lon=lon, radius=radius,
+                           limit=limit, error=error, results=results, map_html=map_html,
+                           categories=CATEGORIES)
 
 
 if __name__ == '__main__':

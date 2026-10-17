@@ -1,0 +1,31 @@
+{
+  "source_files": [
+    "delhi.pbf",
+    "other1.pbf"
+  ],
+  "source_feature_counts": {
+    "delhi.pbf": 4217,
+    "other1.pbf": 7132
+  },
+  "overlap_duplicates_removed": 4217,
+  "deduplication": "OSM type + ID; highest object version/timestamp wins; later input wins ties",
+  "extracted_at_utc": "2026-10-17T13:01:22.386925+00:00",
+  "counts": {
+    "metro_station": 399,
+    "bus_stop": 4744,
+    "railway_station": 1313,
+    "metro_entrance": 583,
+    "airport_terminal": 43,
+    "airport": 50
+  },
+  "invalid_features": 0,
+  "limitations": [
+    "OSM nodes and ways only; relation-only facilities are not extracted.",
+    "Multiple OSM objects may represent the same physical facility; counts are mapped features, not unique stations.",
+    "Way coordinates are bounding-box centres, not entrances or guaranteed interior points.",
+    "Classification depends on OSM tags; metro facilities may be missing or classified as railway stations.",
+    "Airports/terminals may include private or military facilities; passenger service is not verified.",
+    "Coverage is limited to the supplied extract, not necessarily all Delhi NCT/NCR."
+  ],
+  "attribution": "\u00a9 OpenStreetMap contributors, ODbL: https://www.openstreetmap.org/copyright"
+}
