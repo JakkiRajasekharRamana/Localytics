@@ -27,5 +27,25 @@
     "Airports/terminals may include private or military facilities; passenger service is not verified.",
     "Coverage is limited to the supplied extract, not necessarily all Delhi NCT/NCR."
   ],
-  "attribution": "\u00a9 OpenStreetMap contributors, ODbL: https://www.openstreetmap.org/copyright"
+  "attribution": "\u00a9 OpenStreetMap contributors, ODbL: https://www.openstreetmap.org/copyright",
+  "source_header_bounds": [
+    {
+      "file": "delhi.pbf",
+      "bounds": [
+        76.241,
+        27.84,
+        77.943,
+        29.44
+      ]
+    },
+    {
+      "file": "other1.pbf",
+      "bounds": [
+        74.435,
+        22.61,
+        84.427,
+        31.101
+      ]
+    }
+  ]
 }

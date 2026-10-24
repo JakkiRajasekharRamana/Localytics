@@ -53,3 +53,9 @@ Data attribution: © OpenStreetMap contributors, ODbL https://www.openstreetmap.
 ## Tests
 
 Install pytest, then run `python -m pytest -q`. API tests use simulated responses; transport tests use the bundled extracted data.
+
+
+### Searching other cities
+The home page starts with an India overview and empty filters. Enter the dataset's state/union territory and optional city name (for example Maharashtra / Pune or Karnataka / Bengaluru). All result pages are fetched and the map moves to the returned stations. A city with no monitoring records cannot be displayed as measured air quality.
+
+Transport searches use only the bundled local OSM extracts. Outside their recorded bounds, or when a search radius crosses a boundary, the map withholds the connectivity score and labels the coverage unavailable or partial. Download and merge additional extracts to extend transport coverage; update `source_header_bounds` in `connectivity/metadata.json` with their actual PBF bounds. Bounds indicate extent, not completeness.

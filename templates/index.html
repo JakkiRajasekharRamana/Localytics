@@ -20,17 +20,18 @@
 <div class="eyebrow">INDIA · STATION EXPLORER</div>
 <nav><a href="/">Air quality</a> · <a href="/connectivity">Nearby transport (legacy)</a></nav><h1>Air quality & connectivity</h1>
 <p class="sub">Explore station readings from the Government of India open-data platform.</p>
+<p class="hint">Search any state and city covered by the air-quality dataset. Transport results are limited to your downloaded OSM extracts; more cities need additional extracts.</p>
 <form method="post" id="filters">
-<div><label for="state">State / union territory</label><input id="state" name="state" value="{{ state }}" maxlength="100" required placeholder="Delhi"></div>
+<div><label for="state">State / union territory</label><input id="state" name="state" value="{{ state }}" maxlength="100" required placeholder="e.g. Maharashtra"></div>
 <div><label for="city">City (optional)</label><input id="city" name="city" value="{{ city }}" maxlength="100" placeholder="Leave blank for all cities"></div>
 <button id="submit" type="submit">Load station data</button>
-<p class="hint" style="width:100%;margin:0" id="progress" role="status">Use the dataset’s exact names, for example Karnataka / Bengaluru. All result pages are fetched; this may take a few minutes.</p>
+<p class="hint" style="width:100%;margin:0" id="progress" role="status">Use the dataset’s city names, for example Karnataka / Bengaluru. Capitalisation is handled automatically when an exact search returns no readings. All result pages are fetched; this may take a few minutes.</p>
 </form>
 <div class="note">Click anywhere on the map to see air-quality and connectivity details in the side panel. Inner dots show indicative PM2.5; outer rings show connectivity. Adjust the connectivity radius in the map legend. <br><b>How colours work:</b> Indicative PM2.5 severity only, assuming avg_value is a 24-hour concentration in µg/m³. Units and averaging period have not been verified from this API. This is not official overall AQI. Grey means no valid PM2.5 reading. Click a station to see every pollutant.</div>
 {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
 {% if loaded and not error %}
 <div class="stats"><div><strong>{{ count }}</strong>readings fetched</div><div><strong>{{ station_count }}</strong>stations mapped</div><div><strong>{{ skipped }}</strong>invalid coordinates</div></div>
-{% if not count %}<p>No matching records. Transport searches remain available on the map.</p>{% endif %}{% if map_html %}{% include 'explorer.html' %}{% else %}<div class="panel">No matching records. Check the state and city names.</div>{% endif %}
+{% if not count %}<p>No matching records were returned by the air-quality API for {{ state }}{% if city %} / {{ city }}{% endif %}. Try leaving City blank to see all available stations in this state. Transport coverage does not affect air-quality results.</p>{% endif %}{% if map_html %}{% include 'explorer.html' %}{% else %}<div class="panel">No matching records. Check the state and city names.</div>{% endif %}
 {% else %}{% if not error %}{% include 'explorer.html' %}<p>Load air-quality data above, then click a monitor or any location for combined details.</p>{% endif %}{% endif %}
 <footer>Data: CPCB / data.gov.in · Map: OpenStreetMap contributors · <a href="https://www.airquality.cpcb.gov.in/ccr_docs/About_AQI.pdf">CPCB AQI reference</a></footer>
 </main><script>

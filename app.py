@@ -19,7 +19,7 @@ class FetchError(Exception):
     pass
 
 
-def fetch_records(state, city):
+def _fetch_records(state, city):
     key = os.environ.get('DATA_GOV_API_KEY', '').strip()
     if not key:
         raise FetchError('Set DATA_GOV_API_KEY in your .env file, then restart the app.')
@@ -70,9 +70,31 @@ def fetch_records(state, city):
     raise FetchError('The query exceeded 200 pages. Please narrow it to a city.')
 
 
+
+def fetch_records(state, city):
+    """Use exact filters first, then tolerate user-entered capitalisation."""
+    state = ' '.join(state.split())
+    city = ' '.join(city.split())
+    records = _fetch_records(state, city)
+    if records:
+        return records
+    canonical_state = state.title()
+    if canonical_state != state:
+        records = _fetch_records(canonical_state, city)
+        if records:
+            return records
+    if city:
+        # Resolve city spelling/case against returned data, never substitute another city.
+        state_records = _fetch_records(canonical_state, '')
+        wanted = city.casefold()
+        return [r for r in state_records
+                if ' '.join(str(r.get('city', '')).split()).casefold() == wanted]
+    return []
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    state, city = 'Delhi', 'Delhi'
+    state, city = '', ''
     error = None
     map_html = None
     count = station_count = skipped = 0
@@ -100,7 +122,7 @@ def index():
 def connectivity():
     import math
     from transport import search_transport, transport_map, CATEGORIES, DATA_DIR
-    lat, lon, radius, limit = 28.6139, 77.2090, 5.0, 5
+    lat, lon, radius, limit = '', '', 5.0, 5
     error, map_html, results = None, None, None
     try:
         if request.method == 'POST':
@@ -116,7 +138,7 @@ def connectivity():
             map_html = transport_map(lat, lon, results, radius)
     except (ValueError, OverflowError):
         error = 'Enter valid coordinates, a radius from 0.1 to 100 km, and 1–20 results per category.'
-        lat, lon, radius, limit = 28.6139, 77.2090, 5.0, 5
+        lat, lon, radius, limit = '', '', 5.0, 5
     except OSError:
         error = 'Local transport data is missing. Restore the connectivity folder from the download.'
     return render_template('connectivity.html', lat=lat, lon=lon, radius=radius,
