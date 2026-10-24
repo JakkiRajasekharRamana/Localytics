@@ -1,0 +1,328 @@
+{
+  "created_at": "2026-10-24T05:27:09.832205+00:00",
+  "data_version": "2026-10-24T05:22:23.682883+00:00",
+  "cell_count": 1487,
+  "ranking_scenarios": [
+    {
+      "scenario": "Default priorities",
+      "weights": {
+        "transit": 4,
+        "school": 3,
+        "hospital": 3,
+        "park": 3
+      },
+      "radius_km": 2,
+      "count_cap": 10,
+      "eligible": 1487,
+      "top10": [
+        "DL43_717_3170",
+        "DL43_709_3172",
+        "DL43_724_3170",
+        "DL43_721_3159",
+        "DL43_724_3166",
+        "DL43_724_3171",
+        "DL43_711_3175",
+        "DL43_719_3160",
+        "DL43_725_3169",
+        "DL43_718_3162"
+      ],
+      "top10_overlap_with_default": 1.0
+    },
+    {
+      "scenario": "Equal core weights",
+      "weights": {
+        "transit": 1,
+        "school": 1,
+        "hospital": 1,
+        "park": 1
+      },
+      "radius_km": 2,
+      "count_cap": 10,
+      "eligible": 1487,
+      "top10": [
+        "DL43_717_3170",
+        "DL43_709_3172",
+        "DL43_724_3170",
+        "DL43_724_3166",
+        "DL43_721_3159",
+        "DL43_724_3171",
+        "DL43_711_3175",
+        "DL43_719_3160",
+        "DL43_718_3162",
+        "DL43_725_3169"
+      ],
+      "top10_overlap_with_default": 1.0
+    },
+    {
+      "scenario": "Transit only",
+      "weights": {
+        "transit": 1
+      },
+      "radius_km": 2,
+      "count_cap": 10,
+      "eligible": 1487,
+      "top10": [
+        "DL43_710_3173",
+        "DL43_717_3170",
+        "DL43_724_3170",
+        "DL43_716_3168",
+        "DL43_717_3168",
+        "DL43_719_3160",
+        "DL43_718_3168",
+        "DL43_711_3175",
+        "DL43_710_3172",
+        "DL43_721_3160"
+      ],
+      "top10_overlap_with_default": 0.4
+    },
+    {
+      "scenario": "Schools only",
+      "weights": {
+        "school": 1
+      },
+      "radius_km": 2,
+      "count_cap": 10,
+      "eligible": 1487,
+      "top10": [
+        "DL43_708_3173",
+        "DL43_699_3160",
+        "DL43_714_3161",
+        "DL43_721_3159",
+        "DL43_711_3158",
+        "DL43_724_3170",
+        "DL43_703_3172",
+        "DL43_707_3180",
+        "DL43_714_3170",
+        "DL43_717_3164"
+      ],
+      "top10_overlap_with_default": 0.2
+    },
+    {
+      "scenario": "Local radius 1 km",
+      "weights": {
+        "transit": 4,
+        "school": 3,
+        "hospital": 3,
+        "park": 3
+      },
+      "radius_km": 1,
+      "count_cap": 10,
+      "eligible": 1487,
+      "top10": [
+        "DL43_709_3172",
+        "DL43_693_3166",
+        "DL43_703_3164",
+        "DL43_724_3166",
+        "DL43_719_3162",
+        "DL43_694_3166",
+        "DL43_716_3158",
+        "DL43_718_3162",
+        "DL43_719_3161",
+        "DL43_707_3177"
+      ],
+      "top10_overlap_with_default": 0.3
+    },
+    {
+      "scenario": "Local radius 5 km",
+      "weights": {
+        "transit": 4,
+        "school": 3,
+        "hospital": 3,
+        "park": 3
+      },
+      "radius_km": 5,
+      "count_cap": 10,
+      "eligible": 1487,
+      "top10": [
+        "DL43_717_3170",
+        "DL43_724_3166",
+        "DL43_724_3170",
+        "DL43_722_3161",
+        "DL43_721_3159",
+        "DL43_709_3172",
+        "DL43_723_3169",
+        "DL43_703_3164",
+        "DL43_707_3177",
+        "DL43_718_3162"
+      ],
+      "top10_overlap_with_default": 0.6
+    },
+    {
+      "scenario": "Count cap 5",
+      "weights": {
+        "transit": 4,
+        "school": 3,
+        "hospital": 3,
+        "park": 3
+      },
+      "radius_km": 2,
+      "count_cap": 5,
+      "eligible": 1487,
+      "top10": [
+        "DL43_717_3170",
+        "DL43_724_3166",
+        "DL43_724_3170",
+        "DL43_722_3161",
+        "DL43_721_3159",
+        "DL43_709_3172",
+        "DL43_723_3169",
+        "DL43_707_3177",
+        "DL43_718_3162",
+        "DL43_711_3179"
+      ],
+      "top10_overlap_with_default": 0.6
+    },
+    {
+      "scenario": "Count cap 20",
+      "weights": {
+        "transit": 4,
+        "school": 3,
+        "hospital": 3,
+        "park": 3
+      },
+      "radius_km": 2,
+      "count_cap": 20,
+      "eligible": 1487,
+      "top10": [
+        "DL43_717_3170",
+        "DL43_709_3172",
+        "DL43_724_3170",
+        "DL43_724_3171",
+        "DL43_718_3162",
+        "DL43_719_3160",
+        "DL43_723_3169",
+        "DL43_709_3176",
+        "DL43_716_3159",
+        "DL43_708_3173"
+      ],
+      "top10_overlap_with_default": 0.6
+    }
+  ],
+  "clustering": {
+    "available": true,
+    "method": "K-Means",
+    "k": 2,
+    "silhouette": 0.357,
+    "stability": 0.978,
+    "trials": [
+      {
+        "method": "K-Means",
+        "k": 2,
+        "silhouette": 0.357
+      },
+      {
+        "method": "K-Means",
+        "k": 3,
+        "silhouette": 0.29
+      },
+      {
+        "method": "K-Means",
+        "k": 4,
+        "silhouette": 0.288
+      },
+      {
+        "method": "K-Means",
+        "k": 5,
+        "silhouette": 0.256
+      },
+      {
+        "method": "K-Means",
+        "k": 6,
+        "silhouette": 0.231
+      },
+      {
+        "method": "Hierarchical",
+        "k": 2,
+        "silhouette": 0.343
+      },
+      {
+        "method": "Hierarchical",
+        "k": 3,
+        "silhouette": 0.265
+      },
+      {
+        "method": "Hierarchical",
+        "k": 4,
+        "silhouette": 0.273
+      },
+      {
+        "method": "Hierarchical",
+        "k": 5,
+        "silhouette": 0.236
+      },
+      {
+        "method": "Hierarchical",
+        "k": 6,
+        "silhouette": 0.224
+      }
+    ],
+    "profiles": [
+      {
+        "group": 1,
+        "size": 761,
+        "indicators": {
+          "bus_stop_count": 0.0,
+          "bus_stop_distance": 2.04,
+          "metro_station_count": 0.0,
+          "metro_station_distance": 6.09,
+          "school_count": 0.0,
+          "school_distance": 2.18,
+          "hospital_count": 0.0,
+          "hospital_distance": 2.35,
+          "park_count": 0.0,
+          "park_distance": 2.25,
+          "gym_count": 0.0,
+          "gym_distance": 6.36,
+          "mall_count": 0.0,
+          "mall_distance": 7.92,
+          "ev_count": 0.0,
+          "ev_distance": 10.0
+        }
+      },
+      {
+        "group": 2,
+        "size": 726,
+        "indicators": {
+          "bus_stop_count": 26.0,
+          "bus_stop_distance": 0.43,
+          "metro_station_count": 3.0,
+          "metro_station_distance": 0.94,
+          "school_count": 16.0,
+          "school_distance": 0.53,
+          "hospital_count": 10.0,
+          "hospital_distance": 0.67,
+          "park_count": 55.0,
+          "park_distance": 0.34,
+          "gym_count": 2.0,
+          "gym_distance": 1.4,
+          "mall_count": 0.0,
+          "mall_distance": 2.16,
+          "ev_count": 0.0,
+          "ev_distance": 2.17
+        }
+      }
+    ],
+    "features": [
+      "bus_stop_count",
+      "bus_stop_distance",
+      "metro_station_count",
+      "metro_station_distance",
+      "school_count",
+      "school_distance",
+      "hospital_count",
+      "hospital_distance",
+      "park_count",
+      "park_distance",
+      "gym_count",
+      "gym_distance",
+      "mall_count",
+      "mall_distance",
+      "ev_count",
+      "ev_distance"
+    ],
+    "sample_count": 1487,
+    "stability_repeats": 5,
+    "data_version": "2026-10-24T05:22:23.682883+00:00"
+  },
+  "note": "Offline descriptive evaluation, not user relevance or recommendation accuracy. No invented user feedback. These offline baselines compare service factors; the PM2.5 indicator is available in personalised ranking."
+}

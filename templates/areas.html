@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Localytics · Find an area{% endblock %}
+{% block styles %}
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='areas.css') }}">
+{% endblock %}
+{% block content %}
+    <h1>Find an area that fits your priorities</h1>
+    <p class="muted">Compare Delhi areas using mapped services and your preferences. Each area is a 1 km grid cell, with distances measured from its centre.</p>
+    {% if error %}<p class="error"
+   role="alert">{{ error }}</p>{% endif %}{% if notice %}<p class="note"
+   role="status">{{ notice }}</p>{% endif %}
+    {% if ready %}
+        <div class="layout">
+            <aside class="preferences">
+                <form method="get" class="panel" id="preferences">
+                    <h2>Your priorities</h2>
+                    <p class="muted">0 = ignore · 5 = very important. Optional factors start at zero.</p>
+                    <div class="factors">{% for key,label in factors.items() %}<div class="factor"><label for="w_{{ key }}">{{ label }}</label><output id="out_{{ key }}">{{ weights.get(key,0)|int }}</output><input id="w_{{ key }}"
+       name="w_{{ key }}"
+       type="range"
+       min="0"
+       max="5"
+       step="1"
+       value="{{ weights.get(key,0)|int }}"
+       oninput="document.getElementById('out_{{ key }}').textContent=this.value">{% if key=="air" %}<small style="grid-column:1/3">Uses nearby recent PM2.5 readings. Lower values score better; this is an indicator, not official AQI.</small>{% endif %}</div>{% endfor %}</div>
+                    <label for="radius">Local search radius</label><select id="radius" name="radius">{% for r in [1,2,5] %}<option value="{{ r }}" {% if radius==r %}selected{% endif %}>{{ r }} km</option>{% endfor %}</select>
+                    <details>
+                        <summary>Workplace / college</summary>
+                        <p><small>Enter coordinates or press “Choose workplace” and click the map. Distances are straight-line, not commute minutes.</small></p>
+                        <label for="work_lat">Latitude</label><input id="work_lat"
+       name="work_lat"
+       type="number"
+       step="any"
+       min="-90"
+       max="90"
+       value="{{ workplace[0] if workplace else '' }}"><label for="work_lon">Longitude</label><input id="work_lon"
+       name="work_lon"
+       type="number"
+       step="any"
+       min="-180"
+       max="180"
+       value="{{ workplace[1] if workplace else '' }}"><button type="button" class="secondary" id="choose-work">Choose workplace on map</button>
+                    </details>
+                    <details style="margin:18px 0"><summary>Must-have requirements</summary><p><small>Leave blank to skip. Distance limits must not exceed the local search radius. These filter the shortlist.</small></p>{% for key,label in [('metro_station','Metro'),('school','School'),('hospital','Hospital'),('park','Public green space'),('ev','EV charging')] %}<label for="must_{{ key }}">{{ label }} within (km)</label><input id="must_{{ key }}"
+       name="must_{{ key }}"
+       type="number"
+       step="0.1"
+       min="0.1"
+       max="{{ radius }}"
+       value="{{ must.get(key,'') }}">{% endfor %}<small>School stage/quality and EV connector suitability are unverified; these checks cover mapped proximity only.</small></details>
+                    <details style="margin:18px 0"><summary>Comparison settings</summary><label for="cap">Count cap</label><select name="cap" id="cap">{% for n in [5,10,20] %}<option value="{{ n }}" {% if cap==n %}selected{% endif %}>{{ n }} facilities</option>{% endfor %}</select><label><input name="clusters"
+       type="checkbox"
+       value="1"
+       {% if request.args.get('clusters')=='1' %}checked{% endif %}> Explore similar-area groups</label><p><small>Try another radius or count cap to see how robust the shortlist is.</small></p></details>
+                    <button type="submit">Update recommendations</button>
+                </form>
+                <div class="panel">
+                    <h3>Not available yet</h3>
+                    <p class="muted">School quality, water quality, affordability, density, crime and routed commute times need additional evidence. They do not affect these scores.</p>
+                </div>
+            </aside>
+            <section>
+                <div class="panel" style="margin-top:0">
+                    <div class="stats">
+                        <div><strong>{{ manifest.cell_count }}</strong>Delhi cells</div>
+                        <div><strong>{{ usable }}</strong>ranked with selected factors</div>
+                        <div><strong>{{ excluded }}</strong>excluded / missing evidence</div>
+                    </div>
+                    <p class="muted">Nearby locality labels are orientation aids, not official cell names. Cells include places that may not be residential.</p>
+                    <details>
+                        <summary>How the score works</summary>
+                        <p>Importance weights are divided by their sum. The score is 100 × the weighted sum of factor scores. Service access uses equal parts distance and count: ½ × (1 − min(distance/radius, 1)) + ½ × min(count/cap, 1). Daily transit averages bus and metro access. Airport terminals use 25 km. Workplace distance uses a 50 km cap. PM2.5 indicator score = 100 × (1 − min(value/250, 1)), using the nearest valid PM2.5 monitor within 5 km and 6 hours. Values must be nonnegative. The cap of 250 is a project normalisation choice, not a safe-air limit. Units and averaging period are not assumed; this indicator is not official AQI. These are project rules, not official standards.</p>
+                        <p>Every positively weighted factor must have data. Missing factors never receive invented values or a different set of weights for each area. Extract bounds indicate extent, not guaranteed completeness. A zero means no suitable mapped evidence in range, not proof a service does not exist.</p>
+                    </details>
+                </div>
+                <div class="switches" style="margin:14px 0"><label for="map-mode">Map colours</label><select id="map-mode"><option value="score">Suitability score</option>{% if groups.available %}<option value="group">Similar-area groups</option>{% endif %}</select><span id="map-status" role="status"></span></div>
+                <div class="maplayout">
+                    <div id="map" aria-label="Delhi area comparison map"></div>
+                    <aside class="panel" id="insights" aria-live="polite">
+                        <h2>Select an area</h2>
+                        <p>Click a grid cell to see its factor scores, nearby facilities, air-quality observations and missing evidence.</p>
+                        <p>Check areas in the shortlist to compare up to three side by side.</p>
+                    </aside>
+                </div>
+                <div class="panel"><h2>Your shortlist</h2>{% if top %}<p class="muted">Scores describe the chosen factors and mapped evidence. They are not a guarantee of housing availability or overall liveability.</p><div class="tablewrap"><table><thead><tr><th>Compare</th><th>Area / nearby locality</th><th>Score / 100</th><th>Main contributions</th></tr></thead><tbody>{% for row in top %}<tr><td><input type="checkbox"
+       class="compare-check"
+       data-id="{{ row.id }}"
+       aria-label="Compare {{ row.id }}"></td><td><button class="secondary inspect" data-id="{{ row.id }}">{{ row.label }}</button><br><small>{{ row.id }}</small></td><td><strong>{{ '%.1f'|format(row.score) }}</strong></td><td>{% for key,value in (row.contributions.items()|sort(attribute='1',reverse=True))[:3] %}{{ factors[key] }} +{{ '%.1f'|format(value) }}{% if not loop.last %}<br>{% endif %}{% endfor %}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p>No area has enough evidence and passes every selected requirement. Adjust your factors or must-have limits. Available observations remain visible when you click any cell.</p>{% endif %}<p><a id="export" class="button" href="{{ url_for('areas.export') }}">Download comparison CSV</a></p></div>
+                <div class="panel" id="compare-panel">
+                    <h2>Compare selected areas</h2>
+                    <div id="compare-output">
+                        <p>Select up to three areas from the map or shortlist.</p>
+                    </div>
+                </div>
+                <div class="panel"><h2>Air-quality evidence</h2><p>{{ air_count }} cached readings. {% if air_fetched %}Downloaded {{ air_fetched }}.{% else %}No Delhi readings saved yet.{% endif %} Readings show their own observation times.</p><form method="post" action="/areas/refresh-air" id="refresh-air"><button>Refresh Delhi air readings</button><span class="muted" id="refresh-status"></span></form><p class="muted">This uses your existing server-side API key. A refresh may take a few minutes; the offline area comparison works independently.</p></div>
+                {% if request.args.get("clusters")=="1" %}<div class="panel"><h2>Similar-area groups</h2>{% if groups.available %}<p>{{ groups.method }} · {{ groups.k }} groups · {{ groups.sample_count }} cells. Silhouette: {{ groups.silhouette }}. Mean resampling agreement: {{ groups.stability }} ({{ groups.stability_repeats }} repeats).</p><p class="muted">Groups describe mapped service patterns, not better or worse places to live. They never add points to your ranking. Median filling and scaling are confined to the clustering copy.</p><div class="tablewrap"><table><tr><th>Method</th><th>Groups</th><th>Silhouette</th></tr>{% for trial in groups.trials %}<tr><td>{{ trial.method }}</td><td>{{ trial.k }}</td><td>{{ trial.silhouette }}</td></tr>{% endfor %}</table></div><details><summary>Group profiles and model features</summary>{% for profile in groups.profiles %}<h3>Group {{ profile.group }} · {{ profile.size }} cells</h3><p>{% for name,value in profile.indicators.items() %}{{ name|replace('_', ' ') }}: {{ value }}{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endfor %}<small>Distances are km, capped at 10 for clustering. Counts are mapped features within 2 km.</small></details>{% else %}<p>{{ groups.reason }}</p>{% endif %}</div>{% endif %}
+                {% if evaluation %}<div class="panel"><h2>Ranking checks</h2><p class="muted">These offline comparisons show how the shortlist changes with different priorities and settings. They are not a measure of user satisfaction or recommendation accuracy.</p><div class="tablewrap"><table><tr><th>Scenario</th><th>Ranked cells</th><th>Top-ten overlap with default</th></tr>{% for scenario in evaluation.ranking_scenarios %}<tr><td>{{ scenario.scenario }}</td><td>{{ scenario.eligible }}</td><td>{{(scenario.top10_overlap_with_default*100)|round|int}}%</td></tr>{% endfor %}</table></div><p><a href="/areas/evaluation.json">Download evaluation report</a></p></div>{% endif %}
+                <div class="panel"><h2>Data coverage</h2><p>Built {{ manifest.built_at }} · {{ manifest.boundary_area_km2|round(1) }} km² boundary · 1 km grid in EPSG:32643.</p><p>{% for category,count in manifest.counts.items() %}{{ category|replace('_', ' ') }}: {{ count }}{% if not loop.last %} · {% endif %}{% endfor %}</p><p>{{ manifest.overlap_removed }} repeated OSM objects removed; {{ manifest.physical_candidates_merged }} nearby same-name representations consolidated.</p><ul>{% for note in manifest.limitations %}<li>{{ note }}</li>{% endfor %}</ul></div>
+            </section>
+        </div>
+    {% endif %}
+    <footer>
+        Facilities: © OpenStreetMap contributors, <a href="https://www.openstreetmap.org/copyright">ODbL</a>. Boundary: <a href="https://github.com/datameet/Municipal_Spatial_Data/tree/master/Delhi">DataMeet Delhi spatial data</a>, CC BY-SA 2.5 India. Sources, fingerprints and processing counts are recorded in data/area_manifest.json. School locations do not establish school quality.
+    </footer>
+{% endblock %}
+{% block scripts %}
+    {% if ready %}
+        <script id="area-config" type="application/json">{{ browser_config|tojson }}</script>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script src="{{ url_for('static', filename='shared.js') }}"></script>
+        <script src="{{ url_for('static', filename='areas.js') }}"></script>
+    {% endif %}
+{% endblock %}

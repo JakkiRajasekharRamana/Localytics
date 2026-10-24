@@ -1,0 +1,5 @@
+line-length = 100
+[lint]
+select = ["F", "I"]
+[lint.isort]
+known-first-party = ["air_client", "app", "area_views", "areas", "clustering", "config", "data_store", "geography", "observations", "osm_data", "transport", "transport_data", "unified_map", "connectivity"]

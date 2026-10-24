@@ -1,10 +1,58 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Localytics · Nearby transport</title>
-<style>body{font:16px system-ui;margin:0;background:#f3f6fa;color:#192b3e}main{max-width:1250px;margin:auto;padding:28px}a{color:#176b70}form,.panel{background:white;padding:22px;border-radius:12px;margin:20px 0;border:1px solid #dbe3eb}form{display:flex;gap:16px;flex-wrap:wrap;align-items:end}label{display:block;font-size:14px;margin-bottom:6px}input{padding:10px;border:1px solid #bac8d5;border-radius:6px;width:155px;font:inherit}button{padding:12px 20px;background:#176b70;color:white;border:0;border-radius:6px;font:inherit;cursor:pointer}.note{padding:16px;background:#fff6df;font-size:14px;line-height:1.6}.error{background:#fee9e7;padding:16px}.map iframe{width:100%;height:620px!important;border:0}.map>div{padding-bottom:0!important;height:620px!important}table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;padding:10px;border-bottom:1px solid #e5eaf0}.table{overflow:auto}.muted{color:#526578;font-size:13px}</style></head>
-<body><main><nav><a href="/">Air quality</a> · <a href="/connectivity">Nearby transport</a></nav>
-<h1>Localytics · Nearby transport</h1><p>Find mapped bus stops, metro stations and airport terminals from your merged local OSM extracts.</p>
-<form method="post"><div><label for="lat">Latitude</label><input id="lat" name="latitude" type="number" step="any" min="-90" max="90" required value="{{lat}}"></div><div><label for="lon">Longitude</label><input id="lon" name="longitude" type="number" step="any" min="-180" max="180" required value="{{lon}}"></div><div><label for="radius">Radius (km)</label><input id="radius" name="radius" type="number" step="any" min="0.1" max="100" required value="{{radius}}"></div><div><label for="limit">Results per category</label><input id="limit" name="limit" type="number" min="1" max="20" required value="{{limit}}"></div><button>Find nearby transport</button></form>
-<div class="note">Distances are <b>straight-line</b>, not walking/driving distances. Results are mapped features: opposite-direction stops or multiple objects for a station may appear separately. Airport passenger service is unverified, and building centres are approximate. Data covers only your extract; no matches means no mapped matches in this radius, not proof of absent transport. Search runs locally; background maps still need internet.</div>
-{% if error %}<p class="error" role="alert">{{error}}</p>{% endif %}
-{% if map_html %}<div class="panel map">{{map_html|safe}}</div>{% endif %}
-{% if results is not none %}{% for category, config in categories.items() %}<section class="panel"><h2 style="color:{{config[1]}}">{{config[0]}}</h2>{% if results[category] %}<div class="table"><table><thead><tr><th>Name</th><th>Distance (km)</th><th>Location</th><th>Coordinates</th></tr></thead><tbody>{% for p in results[category] %}<tr><td>{{p.name}}</td><td>{{'%.2f'|format(p.distance_km)}}</td><td>{{'Mapped point' if p.coordinate_method == 'mapped_point' else 'Approximate centre'}}</td><td>{{'%.5f'|format(p.latitude)}}, {{'%.5f'|format(p.longitude)}}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p>No mapped matches within {{radius}} km. Try a larger radius.</p>{% endif %}</section>{% endfor %}{% endif %}
-<p class="muted">Extracted 17 October 2026 from delhi.pbf and other1.pbf; this is extraction time, not proof every feature was recently updated. © OpenStreetMap contributors · <a href="https://www.openstreetmap.org/copyright">ODbL attribution</a>. Only nodes and ways are included; relation-only features may be missing.</p></main></body></html>
+{% extends "base.html" %}
+{% block title %}Localytics · Nearby transport{% endblock %}
+{% block styles %}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='connectivity.css') }}">
+{% endblock %}
+{% block content %}
+    <h1>Localytics · Nearby transport</h1>
+    <p>Find mapped bus stops, metro stations and airport terminals from your merged local OSM extracts.</p>
+    <form method="post">
+        <div>
+            <label for="lat">Latitude</label><input id="lat"
+       name="latitude"
+       type="number"
+       step="any"
+       min="-90"
+       max="90"
+       required
+       value="{{ lat }}">
+        </div>
+        <div>
+            <label for="lon">Longitude</label><input id="lon"
+       name="longitude"
+       type="number"
+       step="any"
+       min="-180"
+       max="180"
+       required
+       value="{{ lon }}">
+        </div>
+        <div>
+            <label for="radius">Radius (km)</label><input id="radius"
+       name="radius"
+       type="number"
+       step="any"
+       min="0.1"
+       max="100"
+       required
+       value="{{ radius }}">
+        </div>
+        <div>
+            <label for="limit">Results per category</label><input id="limit"
+       name="limit"
+       type="number"
+       min="1"
+       max="20"
+       required
+       value="{{ limit }}">
+        </div>
+        <button>Find nearby transport</button>
+    </form>
+    <div class="note">Distances are <b>straight-line</b>, not walking/driving distances. Results are mapped features: opposite-direction stops or multiple objects for a station may appear separately. Airport passenger service is unverified, and building centres are approximate. Data covers only your extract; no matches means no mapped matches in this radius, not proof of absent transport. Search runs locally; background maps still need internet.</div>
+    {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+    {% if map_html %}<div class="panel map">{{ map_html|safe }}</div>{% endif %}
+    {% if results is not none %}{% for category, config in categories.items() %}<section class="panel"><h2 style="color:{{ config[1] }}">{{ config[0] }}</h2>{% if results[category] %}<div class="table"><table><thead><tr><th>Name</th><th>Distance (km)</th><th>Location</th><th>Coordinates</th></tr></thead><tbody>{% for p in results[category] %}<tr><td>{{ p.name }}</td><td>{{ '%.2f'|format(p.distance_km) }}</td><td>{{'Mapped point' if p.coordinate_method == 'mapped_point' else 'Approximate centre'}}</td><td>{{ '%.5f'|format(p.latitude) }}, {{ '%.5f'|format(p.longitude) }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p>No mapped matches within {{ radius }} km. Try a larger radius.</p>{% endif %}</section>{% endfor %}{% endif %}
+    <p class="muted">Extracted 17 October 2026 from delhi.pbf and other1.pbf; this is extraction time, not proof every feature was recently updated. © OpenStreetMap contributors · <a href="https://www.openstreetmap.org/copyright">ODbL attribution</a>. Only nodes and ways are included; relation-only features may be missing.</p>
+{% endblock %}
+{% block scripts %}{% endblock %}

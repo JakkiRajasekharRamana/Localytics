@@ -1,0 +1,59 @@
+{
+  "sources": [
+    {
+      "file": "delhi.pbf",
+      "sha256": "c872c0eaba8cd87abce0b086afa6c8986a0e1ab454f0978093da39eb86d91177",
+      "bounds": [
+        [
+          76.241,
+          27.84,
+          77.943,
+          29.44
+        ]
+      ]
+    },
+    {
+      "file": "other1.pbf",
+      "sha256": "a3bbfc43616a6ddd57897d1494fb8c143a0ba291dcd8fe08b0b31946535ac68b",
+      "bounds": [
+        [
+          74.435,
+          22.61,
+          84.427,
+          31.101
+        ]
+      ]
+    }
+  ],
+  "overlap_removed": 16608,
+  "physical_candidates_merged": 1279,
+  "invalid": 0,
+  "counts": {
+    "locality": 33367,
+    "hospital": 6682,
+    "metro_station": 387,
+    "bus_stop": 3733,
+    "school": 8346,
+    "mall": 338,
+    "park": 13134,
+    "gym": 393,
+    "ev": 214,
+    "airport_terminal": 42
+  },
+  "boundary_area_km2": 1488.1037716537019,
+  "boundary_source": "https://github.com/datameet/Municipal_Spatial_Data/tree/master/Delhi",
+  "boundary_license": "CC BY-SA 2.5 India",
+  "boundary_sha256": "efe9b90986441de75a4310ab140d0cd334f9700b6abca304f47ad4c488409638",
+  "built_at": "2026-10-24T05:22:23.682883+00:00",
+  "crs": "EPSG:32643",
+  "cell_metres": 1000,
+  "limitations": [
+    "Boundary is a community-published reference, not a legal boundary.",
+    "Nodes and ways only; relation-only features may be absent.",
+    "Counts are mapped facilities, not proof of actual service availability.",
+    "Unknown access is retained and disclosed; private/no access excluded.",
+    "EV connector and airport passenger service are unverified.",
+    "Grid cells do not imply residential suitability or land-use permission."
+  ],
+  "cell_count": 1487
+}
