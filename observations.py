@@ -2,7 +2,7 @@
 
 import math
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from config import MISSING_PM25, PM25_BANDS
@@ -34,6 +34,20 @@ def latest_pm25(readings):
         return (value if math.isfinite(value) and value >= 0 else None), stamp
     except (ValueError, TypeError, KeyError):
         return None, stamp
+
+
+FRESH_WINDOW_H = 48  # readings more than this much older than the newest one are ignored
+
+
+def freshest_only(monitors, hours=FRESH_WINDOW_H):
+    """Drop monitors whose reading is much older than the newest reading, so an old cached snapshot never sits next to a fresh one
+    (PM2.5 swings a lot from day to day: Gurugram today next to Delhi from two weeks ago would compare nothing). If only one
+    snapshot is cached, nothing is dropped."""
+    stamps = [m["stamp"] for m in monitors if m["stamp"]]
+    if not stamps:
+        return monitors
+    newest = max(stamps)
+    return [m for m in monitors if m["stamp"] and newest - m["stamp"] <= timedelta(hours=hours)]
 
 
 def severity(value):

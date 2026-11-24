@@ -51,7 +51,7 @@ def nearest_air(cell, stations, now=None):
         scoring_distance_km=round(scoring_km, 2) if scored else None,
         status="PM2.5 indicator: lower values score better; not official AQI"
         if scored
-        else "No valid PM2.5 monitor within 5 km and 6 hours",
+        else f"No valid PM2.5 monitor within {MONITOR_RADIUS_KM:g} km and {MONITOR_MAX_AGE_HOURS:g} hours",
     )
 
 
