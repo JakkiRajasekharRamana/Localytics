@@ -295,7 +295,9 @@
           .join("") +
         "</ul><small>Access and current service are not guaranteed.</small></details>";
     }
+    h += '<div id="school-profile"></div>';
     document.getElementById("insights").innerHTML = h;
+    LocalyticsSchools.load(document.getElementById("school-profile"), r.lat, r.lon);
     document.getElementById("compare-current").onclick = () => addCompare(r);
   }
   function syncChecks() {

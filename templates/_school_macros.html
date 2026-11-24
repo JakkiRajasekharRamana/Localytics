@@ -1,0 +1,48 @@
+{% set colors = {
+    "dept_education": "#176b70",
+    "local_body": "#2878b5",
+    "aided": "#8b46a5",
+    "private_unaided": "#db7618",
+    "central": "#5f3dc4",
+    "other": "#8a97a5",
+    "pre_primary": "#e8590c",
+    "primary": "#2f9e44",
+    "upper_primary": "#1098ad",
+    "secondary": "#2878b5",
+    "higher_secondary": "#8b46a5",
+    "cbse": "#176b70",
+    "state_board": "#db7618",
+    "icse": "#5f3dc4",
+    "no_secondary": "#c3ccd6",
+    "english": "#2878b5",
+    "hindi": "#e8590c",
+    "urdu": "#2f9e44"
+} %}
+{% macro mixbar(items, label) %}
+    <div class="school-bar"
+         role="img"
+         aria-label="{{ label }}: {% for i in items %}{{ i.label }} {{ '%.0f'|format(i.pct) }}%{{ ', ' if not loop.last }}{% endfor %}">
+        {% for i in items %}
+            <span style="width:{{ i.pct }}%;
+                         background:{{ colors.get(i.key, '#8a97a5') }}"
+                  title="{{ i.label }}: {{ i.count }} ({{ '%.0f'|format(i.pct) }}%)"></span>
+        {% endfor %}
+    </div>
+{% endmacro %}
+{% macro legend(items) %}
+    <ul class="school-legend">
+        {% for i in items %}
+            <li>
+                <i style="background:{{ colors.get(i.key, '#8a97a5') }}"></i>{{ i.label }}: {{ '{:,}'.format(i.count) }} ({{ '%.0f'|format(i.pct) }}%)
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+{% macro stat(ind) %}
+    {% if ind.text %}
+        <b>{{ ind.text.median }}</b> <small class="nowrap">({{ ind.text.range }})</small>
+    {% else %}
+        <span class="muted"
+              title="Fewer than 5 schools with data, so no range is shown">–</span>
+    {% endif %}
+{% endmacro %}

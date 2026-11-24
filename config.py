@@ -4,6 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data"
+SCHOOL_DIR = DATA_DIR / "schools"
 TRANSPORT_DIR = ROOT / "connectivity"
 FACTORS = {
     "air": "Air quality (PM2.5)",

@@ -1,0 +1,6418 @@
+{
+ "metadata": {
+  "source": "UDISE+ Delhi 2024-25 school data (Ministry of Education), as republished on OpenCity (public domain): https://data.opencity.in/dataset/delhi-udise-2024-25",
+  "generated_at_utc": "2026-10-21T20:24:27.340523+00:00",
+  "schools_total": 5556,
+  "schools_without_pincode": 4,
+  "pincode_count": 93,
+  "min_schools_for_range": 5,
+  "rules": [
+   "Ranges are 10th, 50th and 90th percentiles across schools in the pincode; shown only with at least 5 schools.",
+   "Pupil-teacher ratio and students per classroom above 100 are treated as data errors and excluded; schools with zero teachers are excluded from teacher-based indicators.",
+   "Students are the sum of social-category enrolment rows; classrooms are the sum of the good, minor-repair and major-repair counts because total_class_rooms is empty in the source.",
+   "Smart board means any digital board or smart classroom reported; special educator means a dedicated one on staff.",
+   "Board is the secondary-section board, or the higher-secondary board if there is no secondary board; no_secondary means neither was reported. Medium is the school's first-listed medium of instruction."
+  ],
+  "not_shown": [
+   "Water, library, electricity, internet, handwashing, ramps and furniture: almost every school reports yes, so they do not distinguish schools.",
+   "Instructional days: 12% of schools report 0, treated as missing.",
+   "Any single quality score: pincode explains little of the variation between schools, so a pincode score would hide most differences."
+  ],
+  "limitations": [
+   "Pincodes are postal areas, not the 1 km grid cells; the two are not yet linked.",
+   "These are resource and staffing indicators reported by schools, not learning outcomes or quality verdicts.",
+   "The source has no school names or coordinates, so schools cannot be matched to map locations."
+  ]
+ },
+ "delhi": {
+  "schools": 5556,
+  "students": 4491032,
+  "teachers": 161958,
+  "management": {
+   "private_unaided": 2637,
+   "local_body": 1559,
+   "dept_education": 1071,
+   "aided": 238,
+   "central": 51
+  },
+  "stage": {
+   "primary": 2528,
+   "higher_secondary": 1899,
+   "upper_primary": 803,
+   "secondary": 326
+  },
+  "board": {
+   "no_secondary": 3331,
+   "cbse": 2177,
+   "state_board": 37,
+   "other": 9,
+   "icse": 2
+  },
+  "medium": {
+   "english": 2924,
+   "hindi": 2582,
+   "urdu": 50
+  },
+  "indicators": {
+   "pupil_teacher_ratio": {
+    "n": 5541,
+    "p10": 16.5,
+    "median": 28.3,
+    "p90": 41.6
+   },
+   "students_per_classroom": {
+    "n": 5551,
+    "p10": 13.6,
+    "median": 30.5,
+    "p90": 46.2
+   },
+   "pct_postgraduate_teachers": {
+    "n": 5554,
+    "p10": 8.0,
+    "median": 43.0,
+    "p90": 77.0
+   },
+   "pct_computer_trained_teachers": {
+    "n": 5554,
+    "p10": 11.0,
+    "median": 64.0,
+    "p90": 100.0
+   },
+   "pct_regular_teachers": {
+    "n": 5554,
+    "p10": 40.0,
+    "median": 86.0,
+    "p90": 100.0
+   }
+  },
+  "shares": {
+   "has_smart_board": {
+    "n": 5556,
+    "yes": 3652
+   },
+   "has_special_educator": {
+    "n": 5556,
+    "yes": 3926
+   }
+  }
+ },
+ "pincodes": [
+  {
+   "pincode": "110001",
+   "schools": 40,
+   "students": 45245,
+   "teachers": 1785,
+   "management": {
+    "local_body": 15,
+    "aided": 13,
+    "private_unaided": 11,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 25,
+    "secondary": 7,
+    "primary": 5,
+    "upper_primary": 3
+   },
+   "board": {
+    "cbse": 32,
+    "no_secondary": 8
+   },
+   "medium": {
+    "english": 26,
+    "hindi": 14
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 40,
+     "p10": 15.0,
+     "median": 24.7,
+     "p90": 33.5
+    },
+    "students_per_classroom": {
+     "n": 40,
+     "p10": 21.7,
+     "median": 33.2,
+     "p90": 43.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 40,
+     "p10": 47.0,
+     "median": 64.0,
+     "p90": 87.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 40,
+     "p10": 7.0,
+     "median": 49.0,
+     "p90": 97.0
+    },
+    "pct_regular_teachers": {
+     "n": 40,
+     "p10": 50.0,
+     "median": 74.0,
+     "p90": 99.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 40,
+     "yes": 37
+    },
+    "has_special_educator": {
+     "n": 40,
+     "yes": 26
+    }
+   }
+  },
+  {
+   "pincode": "110002",
+   "schools": 43,
+   "students": 26363,
+   "teachers": 989,
+   "management": {
+    "aided": 13,
+    "dept_education": 11,
+    "private_unaided": 10,
+    "local_body": 9
+   },
+   "stage": {
+    "higher_secondary": 28,
+    "primary": 13,
+    "secondary": 1,
+    "upper_primary": 1
+   },
+   "board": {
+    "cbse": 28,
+    "no_secondary": 14,
+    "other": 1
+   },
+   "medium": {
+    "hindi": 23,
+    "english": 17,
+    "urdu": 3
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 43,
+     "p10": 16.5,
+     "median": 24.6,
+     "p90": 37.3
+    },
+    "students_per_classroom": {
+     "n": 43,
+     "p10": 17.6,
+     "median": 30.7,
+     "p90": 42.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 43,
+     "p10": 23.0,
+     "median": 65.0,
+     "p90": 92.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 43,
+     "p10": 8.0,
+     "median": 42.0,
+     "p90": 86.0
+    },
+    "pct_regular_teachers": {
+     "n": 43,
+     "p10": 51.0,
+     "median": 71.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 43,
+     "yes": 20
+    },
+    "has_special_educator": {
+     "n": 43,
+     "yes": 24
+    }
+   }
+  },
+  {
+   "pincode": "110003",
+   "schools": 37,
+   "students": 28455,
+   "teachers": 1302,
+   "management": {
+    "local_body": 14,
+    "aided": 8,
+    "dept_education": 7,
+    "private_unaided": 7,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 23,
+    "primary": 12,
+    "secondary": 1,
+    "upper_primary": 1
+   },
+   "board": {
+    "cbse": 23,
+    "no_secondary": 13,
+    "state_board": 1
+   },
+   "medium": {
+    "hindi": 19,
+    "english": 18
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 36,
+     "p10": 12.5,
+     "median": 25.0,
+     "p90": 31.6
+    },
+    "students_per_classroom": {
+     "n": 37,
+     "p10": 11.0,
+     "median": 27.1,
+     "p90": 38.6
+    },
+    "pct_postgraduate_teachers": {
+     "n": 37,
+     "p10": 19.0,
+     "median": 67.0,
+     "p90": 90.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 37,
+     "p10": 37.0,
+     "median": 70.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 37,
+     "p10": 54.0,
+     "median": 81.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 37,
+     "yes": 35
+    },
+    "has_special_educator": {
+     "n": 37,
+     "yes": 26
+    }
+   }
+  },
+  {
+   "pincode": "110004",
+   "schools": 1,
+   "students": 1438,
+   "teachers": 66,
+   "management": {
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 1
+   },
+   "board": {
+    "cbse": 1
+   },
+   "medium": {
+    "english": 1
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 1,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "students_per_classroom": {
+     "n": 1,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_postgraduate_teachers": {
+     "n": 1,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_computer_trained_teachers": {
+     "n": 1,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_regular_teachers": {
+     "n": 1,
+     "p10": null,
+     "median": null,
+     "p90": null
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 1,
+     "yes": 1
+    },
+    "has_special_educator": {
+     "n": 1,
+     "yes": 1
+    }
+   }
+  },
+  {
+   "pincode": "110005",
+   "schools": 67,
+   "students": 37927,
+   "teachers": 1502,
+   "management": {
+    "local_body": 23,
+    "aided": 18,
+    "private_unaided": 14,
+    "dept_education": 12
+   },
+   "stage": {
+    "higher_secondary": 33,
+    "primary": 30,
+    "upper_primary": 3,
+    "secondary": 1
+   },
+   "board": {
+    "no_secondary": 33,
+    "cbse": 32,
+    "state_board": 2
+   },
+   "medium": {
+    "hindi": 44,
+    "english": 23
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 67,
+     "p10": 16.5,
+     "median": 26.5,
+     "p90": 43.5
+    },
+    "students_per_classroom": {
+     "n": 67,
+     "p10": 13.1,
+     "median": 32.3,
+     "p90": 44.0
+    },
+    "pct_postgraduate_teachers": {
+     "n": 67,
+     "p10": 5.0,
+     "median": 60.0,
+     "p90": 92.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 67,
+     "p10": 5.0,
+     "median": 47.0,
+     "p90": 98.0
+    },
+    "pct_regular_teachers": {
+     "n": 67,
+     "p10": 49.0,
+     "median": 83.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 67,
+     "yes": 41
+    },
+    "has_special_educator": {
+     "n": 67,
+     "yes": 40
+    }
+   }
+  },
+  {
+   "pincode": "110006",
+   "schools": 123,
+   "students": 40378,
+   "teachers": 1756,
+   "management": {
+    "aided": 40,
+    "local_body": 38,
+    "dept_education": 27,
+    "private_unaided": 18
+   },
+   "stage": {
+    "primary": 57,
+    "higher_secondary": 43,
+    "secondary": 13,
+    "upper_primary": 10
+   },
+   "board": {
+    "no_secondary": 67,
+    "cbse": 55,
+    "icse": 1
+   },
+   "medium": {
+    "hindi": 79,
+    "english": 23,
+    "urdu": 21
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 123,
+     "p10": 11.7,
+     "median": 24.2,
+     "p90": 39.8
+    },
+    "students_per_classroom": {
+     "n": 123,
+     "p10": 12.2,
+     "median": 23.8,
+     "p90": 37.5
+    },
+    "pct_postgraduate_teachers": {
+     "n": 123,
+     "p10": 0.0,
+     "median": 50.0,
+     "p90": 85.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 123,
+     "p10": 0.0,
+     "median": 33.0,
+     "p90": 89.0
+    },
+    "pct_regular_teachers": {
+     "n": 123,
+     "p10": 42.0,
+     "median": 80.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 123,
+     "yes": 53
+    },
+    "has_special_educator": {
+     "n": 123,
+     "yes": 71
+    }
+   }
+  },
+  {
+   "pincode": "110007",
+   "schools": 71,
+   "students": 38338,
+   "teachers": 1446,
+   "management": {
+    "local_body": 28,
+    "dept_education": 21,
+    "private_unaided": 11,
+    "aided": 11
+   },
+   "stage": {
+    "primary": 33,
+    "higher_secondary": 28,
+    "upper_primary": 5,
+    "secondary": 5
+   },
+   "board": {
+    "no_secondary": 38,
+    "cbse": 31,
+    "state_board": 2
+   },
+   "medium": {
+    "hindi": 49,
+    "english": 22
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 71,
+     "p10": 17.6,
+     "median": 25.2,
+     "p90": 41.0
+    },
+    "students_per_classroom": {
+     "n": 71,
+     "p10": 17.2,
+     "median": 29.0,
+     "p90": 40.0
+    },
+    "pct_postgraduate_teachers": {
+     "n": 71,
+     "p10": 20.0,
+     "median": 62.0,
+     "p90": 87.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 71,
+     "p10": 17.0,
+     "median": 50.0,
+     "p90": 92.0
+    },
+    "pct_regular_teachers": {
+     "n": 71,
+     "p10": 33.0,
+     "median": 80.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 71,
+     "yes": 31
+    },
+    "has_special_educator": {
+     "n": 71,
+     "yes": 53
+    }
+   }
+  },
+  {
+   "pincode": "110008",
+   "schools": 48,
+   "students": 36911,
+   "teachers": 1276,
+   "management": {
+    "local_body": 18,
+    "private_unaided": 15,
+    "dept_education": 9,
+    "aided": 6
+   },
+   "stage": {
+    "primary": 28,
+    "higher_secondary": 13,
+    "secondary": 4,
+    "upper_primary": 3
+   },
+   "board": {
+    "no_secondary": 31,
+    "cbse": 17
+   },
+   "medium": {
+    "hindi": 33,
+    "english": 15
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 48,
+     "p10": 21.8,
+     "median": 30.5,
+     "p90": 39.8
+    },
+    "students_per_classroom": {
+     "n": 48,
+     "p10": 20.1,
+     "median": 33.9,
+     "p90": 50.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 48,
+     "p10": 4.0,
+     "median": 48.0,
+     "p90": 79.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 48,
+     "p10": 0.0,
+     "median": 46.0,
+     "p90": 89.0
+    },
+    "pct_regular_teachers": {
+     "n": 48,
+     "p10": 48.0,
+     "median": 75.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 48,
+     "yes": 44
+    },
+    "has_special_educator": {
+     "n": 48,
+     "yes": 34
+    }
+   }
+  },
+  {
+   "pincode": "110009",
+   "schools": 53,
+   "students": 48125,
+   "teachers": 1850,
+   "management": {
+    "local_body": 21,
+    "private_unaided": 17,
+    "dept_education": 12,
+    "aided": 3
+   },
+   "stage": {
+    "higher_secondary": 24,
+    "primary": 23,
+    "upper_primary": 4,
+    "secondary": 2
+   },
+   "board": {
+    "no_secondary": 27,
+    "cbse": 26
+   },
+   "medium": {
+    "hindi": 33,
+    "english": 20
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 53,
+     "p10": 17.3,
+     "median": 27.0,
+     "p90": 37.4
+    },
+    "students_per_classroom": {
+     "n": 53,
+     "p10": 12.0,
+     "median": 28.0,
+     "p90": 49.2
+    },
+    "pct_postgraduate_teachers": {
+     "n": 53,
+     "p10": 14.0,
+     "median": 50.0,
+     "p90": 76.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 53,
+     "p10": 34.0,
+     "median": 83.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 53,
+     "p10": 45.0,
+     "median": 87.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 53,
+     "yes": 22
+    },
+    "has_special_educator": {
+     "n": 53,
+     "yes": 44
+    }
+   }
+  },
+  {
+   "pincode": "110010",
+   "schools": 29,
+   "students": 51020,
+   "teachers": 1988,
+   "management": {
+    "private_unaided": 13,
+    "local_body": 6,
+    "aided": 4,
+    "central": 4,
+    "dept_education": 2
+   },
+   "stage": {
+    "higher_secondary": 23,
+    "secondary": 3,
+    "primary": 3
+   },
+   "board": {
+    "cbse": 26,
+    "no_secondary": 3
+   },
+   "medium": {
+    "english": 18,
+    "hindi": 11
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 29,
+     "p10": 16.1,
+     "median": 23.2,
+     "p90": 32.8
+    },
+    "students_per_classroom": {
+     "n": 29,
+     "p10": 24.2,
+     "median": 32.9,
+     "p90": 49.0
+    },
+    "pct_postgraduate_teachers": {
+     "n": 29,
+     "p10": 64.0,
+     "median": 74.0,
+     "p90": 81.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 29,
+     "p10": 22.0,
+     "median": 87.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 29,
+     "p10": 23.0,
+     "median": 80.0,
+     "p90": 99.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 29,
+     "yes": 26
+    },
+    "has_special_educator": {
+     "n": 29,
+     "yes": 21
+    }
+   }
+  },
+  {
+   "pincode": "110011",
+   "schools": 6,
+   "students": 1725,
+   "teachers": 87,
+   "management": {
+    "local_body": 3,
+    "aided": 2,
+    "private_unaided": 1
+   },
+   "stage": {
+    "primary": 3,
+    "higher_secondary": 1,
+    "secondary": 1,
+    "upper_primary": 1
+   },
+   "board": {
+    "no_secondary": 4,
+    "cbse": 2
+   },
+   "medium": {
+    "hindi": 3,
+    "english": 3
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 6,
+     "p10": 13.9,
+     "median": 20.5,
+     "p90": 26.9
+    },
+    "students_per_classroom": {
+     "n": 6,
+     "p10": 15.6,
+     "median": 22.4,
+     "p90": 30.0
+    },
+    "pct_postgraduate_teachers": {
+     "n": 6,
+     "p10": 44.0,
+     "median": 77.0,
+     "p90": 92.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 6,
+     "p10": 25.0,
+     "median": 36.0,
+     "p90": 52.0
+    },
+    "pct_regular_teachers": {
+     "n": 6,
+     "p10": 57.0,
+     "median": 79.0,
+     "p90": 98.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 6,
+     "yes": 2
+    },
+    "has_special_educator": {
+     "n": 6,
+     "yes": 1
+    }
+   }
+  },
+  {
+   "pincode": "110012",
+   "schools": 16,
+   "students": 12194,
+   "teachers": 400,
+   "management": {
+    "local_body": 8,
+    "private_unaided": 4,
+    "dept_education": 4
+   },
+   "stage": {
+    "primary": 10,
+    "higher_secondary": 6
+   },
+   "board": {
+    "no_secondary": 10,
+    "cbse": 6
+   },
+   "medium": {
+    "hindi": 11,
+    "english": 5
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 16,
+     "p10": 26.1,
+     "median": 32.5,
+     "p90": 47.5
+    },
+    "students_per_classroom": {
+     "n": 16,
+     "p10": 19.7,
+     "median": 33.8,
+     "p90": 43.1
+    },
+    "pct_postgraduate_teachers": {
+     "n": 16,
+     "p10": 10.0,
+     "median": 44.0,
+     "p90": 70.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 16,
+     "p10": 17.0,
+     "median": 46.0,
+     "p90": 62.0
+    },
+    "pct_regular_teachers": {
+     "n": 16,
+     "p10": 29.0,
+     "median": 75.0,
+     "p90": 81.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 16,
+     "yes": 12
+    },
+    "has_special_educator": {
+     "n": 16,
+     "yes": 10
+    }
+   }
+  },
+  {
+   "pincode": "110013",
+   "schools": 10,
+   "students": 6454,
+   "teachers": 251,
+   "management": {
+    "local_body": 4,
+    "private_unaided": 3,
+    "aided": 2,
+    "dept_education": 1
+   },
+   "stage": {
+    "higher_secondary": 4,
+    "primary": 4,
+    "secondary": 1,
+    "upper_primary": 1
+   },
+   "board": {
+    "cbse": 5,
+    "no_secondary": 5
+   },
+   "medium": {
+    "english": 6,
+    "hindi": 4
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 10,
+     "p10": 20.6,
+     "median": 28.3,
+     "p90": 41.9
+    },
+    "students_per_classroom": {
+     "n": 10,
+     "p10": 22.4,
+     "median": 32.4,
+     "p90": 35.3
+    },
+    "pct_postgraduate_teachers": {
+     "n": 10,
+     "p10": 35.0,
+     "median": 64.0,
+     "p90": 83.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 10,
+     "p10": 17.0,
+     "median": 62.0,
+     "p90": 93.0
+    },
+    "pct_regular_teachers": {
+     "n": 10,
+     "p10": 54.0,
+     "median": 77.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 10,
+     "yes": 10
+    },
+    "has_special_educator": {
+     "n": 10,
+     "yes": 8
+    }
+   }
+  },
+  {
+   "pincode": "110014",
+   "schools": 18,
+   "students": 7974,
+   "teachers": 319,
+   "management": {
+    "local_body": 8,
+    "dept_education": 4,
+    "aided": 4,
+    "private_unaided": 2
+   },
+   "stage": {
+    "primary": 11,
+    "higher_secondary": 6,
+    "secondary": 1
+   },
+   "board": {
+    "no_secondary": 11,
+    "cbse": 7
+   },
+   "medium": {
+    "hindi": 15,
+    "english": 3
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 18,
+     "p10": 13.7,
+     "median": 25.9,
+     "p90": 39.0
+    },
+    "students_per_classroom": {
+     "n": 18,
+     "p10": 12.3,
+     "median": 23.9,
+     "p90": 39.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 18,
+     "p10": 0.0,
+     "median": 48.0,
+     "p90": 70.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 18,
+     "p10": 14.0,
+     "median": 70.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 18,
+     "p10": 38.0,
+     "median": 75.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 18,
+     "yes": 14
+    },
+    "has_special_educator": {
+     "n": 18,
+     "yes": 14
+    }
+   }
+  },
+  {
+   "pincode": "110015",
+   "schools": 46,
+   "students": 28459,
+   "teachers": 1096,
+   "management": {
+    "local_body": 18,
+    "private_unaided": 14,
+    "dept_education": 10,
+    "aided": 4
+   },
+   "stage": {
+    "primary": 22,
+    "higher_secondary": 15,
+    "secondary": 6,
+    "upper_primary": 3
+   },
+   "board": {
+    "no_secondary": 25,
+    "cbse": 20,
+    "other": 1
+   },
+   "medium": {
+    "hindi": 26,
+    "english": 20
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 46,
+     "p10": 19.0,
+     "median": 27.2,
+     "p90": 38.3
+    },
+    "students_per_classroom": {
+     "n": 46,
+     "p10": 12.2,
+     "median": 31.4,
+     "p90": 39.7
+    },
+    "pct_postgraduate_teachers": {
+     "n": 46,
+     "p10": 9.0,
+     "median": 42.0,
+     "p90": 80.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 46,
+     "p10": 8.0,
+     "median": 49.0,
+     "p90": 96.0
+    },
+    "pct_regular_teachers": {
+     "n": 46,
+     "p10": 56.0,
+     "median": 83.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 46,
+     "yes": 44
+    },
+    "has_special_educator": {
+     "n": 46,
+     "yes": 36
+    }
+   }
+  },
+  {
+   "pincode": "110016",
+   "schools": 24,
+   "students": 16467,
+   "teachers": 677,
+   "management": {
+    "private_unaided": 11,
+    "local_body": 10,
+    "aided": 2,
+    "dept_education": 1
+   },
+   "stage": {
+    "primary": 12,
+    "higher_secondary": 8,
+    "upper_primary": 2,
+    "secondary": 2
+   },
+   "board": {
+    "no_secondary": 14,
+    "cbse": 10
+   },
+   "medium": {
+    "english": 14,
+    "hindi": 10
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 24,
+     "p10": 13.4,
+     "median": 24.1,
+     "p90": 34.5
+    },
+    "students_per_classroom": {
+     "n": 24,
+     "p10": 12.4,
+     "median": 23.6,
+     "p90": 38.5
+    },
+    "pct_postgraduate_teachers": {
+     "n": 24,
+     "p10": 4.0,
+     "median": 50.0,
+     "p90": 75.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 24,
+     "p10": 51.0,
+     "median": 100.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 24,
+     "p10": 52.0,
+     "median": 83.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 24,
+     "yes": 19
+    },
+    "has_special_educator": {
+     "n": 24,
+     "yes": 19
+    }
+   }
+  },
+  {
+   "pincode": "110017",
+   "schools": 57,
+   "students": 58786,
+   "teachers": 2341,
+   "management": {
+    "private_unaided": 19,
+    "local_body": 19,
+    "dept_education": 15,
+    "aided": 3,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 27,
+    "primary": 24,
+    "upper_primary": 5,
+    "secondary": 1
+   },
+   "board": {
+    "no_secondary": 29,
+    "cbse": 28
+   },
+   "medium": {
+    "english": 28,
+    "hindi": 28,
+    "urdu": 1
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 57,
+     "p10": 18.1,
+     "median": 26.4,
+     "p90": 37.7
+    },
+    "students_per_classroom": {
+     "n": 57,
+     "p10": 15.8,
+     "median": 31.9,
+     "p90": 41.8
+    },
+    "pct_postgraduate_teachers": {
+     "n": 57,
+     "p10": 18.0,
+     "median": 61.0,
+     "p90": 76.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 57,
+     "p10": 60.0,
+     "median": 99.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 57,
+     "p10": 47.0,
+     "median": 78.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 57,
+     "yes": 56
+    },
+    "has_special_educator": {
+     "n": 57,
+     "yes": 51
+    }
+   }
+  },
+  {
+   "pincode": "110018",
+   "schools": 88,
+   "students": 82021,
+   "teachers": 3103,
+   "management": {
+    "private_unaided": 38,
+    "local_body": 29,
+    "dept_education": 18,
+    "aided": 3
+   },
+   "stage": {
+    "primary": 39,
+    "higher_secondary": 36,
+    "secondary": 7,
+    "upper_primary": 6
+   },
+   "board": {
+    "no_secondary": 45,
+    "cbse": 43
+   },
+   "medium": {
+    "hindi": 47,
+    "english": 41
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 88,
+     "p10": 18.5,
+     "median": 27.6,
+     "p90": 43.8
+    },
+    "students_per_classroom": {
+     "n": 88,
+     "p10": 17.5,
+     "median": 33.2,
+     "p90": 44.1
+    },
+    "pct_postgraduate_teachers": {
+     "n": 88,
+     "p10": 12.0,
+     "median": 48.0,
+     "p90": 73.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 88,
+     "p10": 11.0,
+     "median": 58.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 88,
+     "p10": 45.0,
+     "median": 89.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 88,
+     "yes": 84
+    },
+    "has_special_educator": {
+     "n": 88,
+     "yes": 65
+    }
+   }
+  },
+  {
+   "pincode": "110019",
+   "schools": 55,
+   "students": 55788,
+   "teachers": 1974,
+   "management": {
+    "private_unaided": 22,
+    "dept_education": 16,
+    "local_body": 16,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 27,
+    "higher_secondary": 24,
+    "secondary": 2,
+    "upper_primary": 2
+   },
+   "board": {
+    "no_secondary": 29,
+    "cbse": 25,
+    "state_board": 1
+   },
+   "medium": {
+    "hindi": 29,
+    "english": 26
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 54,
+     "p10": 16.7,
+     "median": 29.8,
+     "p90": 43.8
+    },
+    "students_per_classroom": {
+     "n": 55,
+     "p10": 16.9,
+     "median": 36.5,
+     "p90": 45.8
+    },
+    "pct_postgraduate_teachers": {
+     "n": 55,
+     "p10": 24.0,
+     "median": 58.0,
+     "p90": 78.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 55,
+     "p10": 0.0,
+     "median": 44.0,
+     "p90": 96.0
+    },
+    "pct_regular_teachers": {
+     "n": 55,
+     "p10": 39.0,
+     "median": 73.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 55,
+     "yes": 47
+    },
+    "has_special_educator": {
+     "n": 55,
+     "yes": 45
+    }
+   }
+  },
+  {
+   "pincode": "110020",
+   "schools": 22,
+   "students": 19788,
+   "teachers": 590,
+   "management": {
+    "local_body": 12,
+    "private_unaided": 6,
+    "dept_education": 4
+   },
+   "stage": {
+    "primary": 16,
+    "higher_secondary": 4,
+    "upper_primary": 2
+   },
+   "board": {
+    "no_secondary": 18,
+    "cbse": 4
+   },
+   "medium": {
+    "hindi": 16,
+    "english": 6
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 21,
+     "p10": 27.1,
+     "median": 32.2,
+     "p90": 47.8
+    },
+    "students_per_classroom": {
+     "n": 22,
+     "p10": 18.9,
+     "median": 37.2,
+     "p90": 60.7
+    },
+    "pct_postgraduate_teachers": {
+     "n": 22,
+     "p10": 0.0,
+     "median": 31.0,
+     "p90": 62.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 22,
+     "p10": 1.0,
+     "median": 32.0,
+     "p90": 95.0
+    },
+    "pct_regular_teachers": {
+     "n": 22,
+     "p10": 54.0,
+     "median": 83.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 22,
+     "yes": 20
+    },
+    "has_special_educator": {
+     "n": 22,
+     "yes": 20
+    }
+   }
+  },
+  {
+   "pincode": "110021",
+   "schools": 22,
+   "students": 20876,
+   "teachers": 1062,
+   "management": {
+    "local_body": 9,
+    "private_unaided": 7,
+    "dept_education": 4,
+    "aided": 2
+   },
+   "stage": {
+    "higher_secondary": 16,
+    "primary": 4,
+    "secondary": 2
+   },
+   "board": {
+    "cbse": 18,
+    "no_secondary": 4
+   },
+   "medium": {
+    "hindi": 11,
+    "english": 11
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 22,
+     "p10": 13.4,
+     "median": 20.6,
+     "p90": 32.1
+    },
+    "students_per_classroom": {
+     "n": 22,
+     "p10": 24.8,
+     "median": 30.9,
+     "p90": 36.5
+    },
+    "pct_postgraduate_teachers": {
+     "n": 22,
+     "p10": 37.0,
+     "median": 70.0,
+     "p90": 79.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 22,
+     "p10": 33.0,
+     "median": 66.0,
+     "p90": 99.0
+    },
+    "pct_regular_teachers": {
+     "n": 22,
+     "p10": 61.0,
+     "median": 78.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 22,
+     "yes": 19
+    },
+    "has_special_educator": {
+     "n": 22,
+     "yes": 15
+    }
+   }
+  },
+  {
+   "pincode": "110022",
+   "schools": 32,
+   "students": 28982,
+   "teachers": 1297,
+   "management": {
+    "local_body": 10,
+    "dept_education": 8,
+    "private_unaided": 7,
+    "aided": 5,
+    "central": 2
+   },
+   "stage": {
+    "higher_secondary": 18,
+    "primary": 12,
+    "upper_primary": 2
+   },
+   "board": {
+    "cbse": 18,
+    "no_secondary": 14
+   },
+   "medium": {
+    "hindi": 18,
+    "english": 14
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 31,
+     "p10": 16.7,
+     "median": 24.9,
+     "p90": 34.3
+    },
+    "students_per_classroom": {
+     "n": 32,
+     "p10": 18.1,
+     "median": 30.7,
+     "p90": 42.5
+    },
+    "pct_postgraduate_teachers": {
+     "n": 32,
+     "p10": 17.0,
+     "median": 67.0,
+     "p90": 80.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 32,
+     "p10": 28.0,
+     "median": 72.0,
+     "p90": 98.0
+    },
+    "pct_regular_teachers": {
+     "n": 32,
+     "p10": 45.0,
+     "median": 87.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 32,
+     "yes": 31
+    },
+    "has_special_educator": {
+     "n": 32,
+     "yes": 28
+    }
+   }
+  },
+  {
+   "pincode": "110023",
+   "schools": 24,
+   "students": 19845,
+   "teachers": 797,
+   "management": {
+    "local_body": 10,
+    "dept_education": 5,
+    "private_unaided": 4,
+    "aided": 3,
+    "central": 2
+   },
+   "stage": {
+    "higher_secondary": 14,
+    "primary": 4,
+    "upper_primary": 3,
+    "secondary": 3
+   },
+   "board": {
+    "cbse": 16,
+    "no_secondary": 7,
+    "state_board": 1
+   },
+   "medium": {
+    "hindi": 12,
+    "english": 12
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 24,
+     "p10": 15.0,
+     "median": 22.1,
+     "p90": 30.4
+    },
+    "students_per_classroom": {
+     "n": 24,
+     "p10": 18.0,
+     "median": 28.0,
+     "p90": 41.8
+    },
+    "pct_postgraduate_teachers": {
+     "n": 24,
+     "p10": 32.0,
+     "median": 69.0,
+     "p90": 90.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 24,
+     "p10": 20.0,
+     "median": 80.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 24,
+     "p10": 51.0,
+     "median": 85.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 24,
+     "yes": 20
+    },
+    "has_special_educator": {
+     "n": 24,
+     "yes": 13
+    }
+   }
+  },
+  {
+   "pincode": "110024",
+   "schools": 32,
+   "students": 22278,
+   "teachers": 860,
+   "management": {
+    "local_body": 10,
+    "dept_education": 8,
+    "aided": 7,
+    "private_unaided": 6,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 17,
+    "primary": 12,
+    "secondary": 2,
+    "upper_primary": 1
+   },
+   "board": {
+    "cbse": 16,
+    "no_secondary": 13,
+    "state_board": 2,
+    "icse": 1
+   },
+   "medium": {
+    "hindi": 17,
+    "english": 15
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 31,
+     "p10": 16.2,
+     "median": 22.7,
+     "p90": 35.9
+    },
+    "students_per_classroom": {
+     "n": 32,
+     "p10": 8.4,
+     "median": 29.5,
+     "p90": 42.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 32,
+     "p10": 30.0,
+     "median": 60.0,
+     "p90": 84.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 32,
+     "p10": 19.0,
+     "median": 87.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 32,
+     "p10": 49.0,
+     "median": 78.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 32,
+     "yes": 28
+    },
+    "has_special_educator": {
+     "n": 32,
+     "yes": 23
+    }
+   }
+  },
+  {
+   "pincode": "110025",
+   "schools": 52,
+   "students": 49547,
+   "teachers": 1726,
+   "management": {
+    "private_unaided": 24,
+    "local_body": 18,
+    "dept_education": 10
+   },
+   "stage": {
+    "primary": 29,
+    "higher_secondary": 14,
+    "upper_primary": 8,
+    "secondary": 1
+   },
+   "board": {
+    "no_secondary": 37,
+    "cbse": 12,
+    "other": 3
+   },
+   "medium": {
+    "english": 24,
+    "hindi": 22,
+    "urdu": 6
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 52,
+     "p10": 14.7,
+     "median": 29.0,
+     "p90": 36.7
+    },
+    "students_per_classroom": {
+     "n": 52,
+     "p10": 14.6,
+     "median": 35.7,
+     "p90": 49.0
+    },
+    "pct_postgraduate_teachers": {
+     "n": 52,
+     "p10": 20.0,
+     "median": 55.0,
+     "p90": 78.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 52,
+     "p10": 5.0,
+     "median": 25.0,
+     "p90": 86.0
+    },
+    "pct_regular_teachers": {
+     "n": 52,
+     "p10": 17.0,
+     "median": 75.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 52,
+     "yes": 46
+    },
+    "has_special_educator": {
+     "n": 52,
+     "yes": 36
+    }
+   }
+  },
+  {
+   "pincode": "110026",
+   "schools": 18,
+   "students": 22025,
+   "teachers": 864,
+   "management": {
+    "private_unaided": 8,
+    "dept_education": 4,
+    "local_body": 4,
+    "aided": 2
+   },
+   "stage": {
+    "higher_secondary": 11,
+    "primary": 5,
+    "upper_primary": 1,
+    "secondary": 1
+   },
+   "board": {
+    "cbse": 12,
+    "no_secondary": 6
+   },
+   "medium": {
+    "hindi": 10,
+    "english": 8
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 17,
+     "p10": 20.8,
+     "median": 27.1,
+     "p90": 41.7
+    },
+    "students_per_classroom": {
+     "n": 18,
+     "p10": 27.1,
+     "median": 33.9,
+     "p90": 38.5
+    },
+    "pct_postgraduate_teachers": {
+     "n": 18,
+     "p10": 38.0,
+     "median": 61.0,
+     "p90": 88.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 18,
+     "p10": 16.0,
+     "median": 48.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 18,
+     "p10": 50.0,
+     "median": 85.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 18,
+     "yes": 16
+    },
+    "has_special_educator": {
+     "n": 18,
+     "yes": 16
+    }
+   }
+  },
+  {
+   "pincode": "110027",
+   "schools": 50,
+   "students": 37209,
+   "teachers": 1446,
+   "management": {
+    "local_body": 21,
+    "dept_education": 14,
+    "private_unaided": 12,
+    "aided": 2,
+    "central": 1
+   },
+   "stage": {
+    "primary": 25,
+    "higher_secondary": 20,
+    "secondary": 3,
+    "upper_primary": 2
+   },
+   "board": {
+    "no_secondary": 27,
+    "cbse": 22,
+    "other": 1
+   },
+   "medium": {
+    "hindi": 32,
+    "english": 18
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 50,
+     "p10": 16.9,
+     "median": 26.2,
+     "p90": 44.5
+    },
+    "students_per_classroom": {
+     "n": 50,
+     "p10": 17.2,
+     "median": 31.5,
+     "p90": 41.1
+    },
+    "pct_postgraduate_teachers": {
+     "n": 50,
+     "p10": 15.0,
+     "median": 41.0,
+     "p90": 77.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 50,
+     "p10": 12.0,
+     "median": 56.0,
+     "p90": 92.0
+    },
+    "pct_regular_teachers": {
+     "n": 50,
+     "p10": 57.0,
+     "median": 91.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 50,
+     "yes": 46
+    },
+    "has_special_educator": {
+     "n": 50,
+     "yes": 31
+    }
+   }
+  },
+  {
+   "pincode": "110028",
+   "schools": 16,
+   "students": 11716,
+   "teachers": 421,
+   "management": {
+    "private_unaided": 8,
+    "local_body": 5,
+    "dept_education": 3
+   },
+   "stage": {
+    "primary": 7,
+    "higher_secondary": 5,
+    "upper_primary": 4
+   },
+   "board": {
+    "no_secondary": 11,
+    "cbse": 5
+   },
+   "medium": {
+    "english": 9,
+    "hindi": 7
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 16,
+     "p10": 18.6,
+     "median": 28.1,
+     "p90": 40.3
+    },
+    "students_per_classroom": {
+     "n": 16,
+     "p10": 10.2,
+     "median": 26.6,
+     "p90": 40.5
+    },
+    "pct_postgraduate_teachers": {
+     "n": 16,
+     "p10": 22.0,
+     "median": 45.0,
+     "p90": 76.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 16,
+     "p10": 22.0,
+     "median": 51.0,
+     "p90": 95.0
+    },
+    "pct_regular_teachers": {
+     "n": 16,
+     "p10": 45.0,
+     "median": 72.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 16,
+     "yes": 11
+    },
+    "has_special_educator": {
+     "n": 16,
+     "yes": 10
+    }
+   }
+  },
+  {
+   "pincode": "110029",
+   "schools": 8,
+   "students": 9291,
+   "teachers": 404,
+   "management": {
+    "private_unaided": 4,
+    "local_body": 3,
+    "dept_education": 1
+   },
+   "stage": {
+    "higher_secondary": 6,
+    "primary": 2
+   },
+   "board": {
+    "cbse": 6,
+    "no_secondary": 2
+   },
+   "medium": {
+    "english": 4,
+    "hindi": 4
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 8,
+     "p10": 20.0,
+     "median": 25.4,
+     "p90": 30.2
+    },
+    "students_per_classroom": {
+     "n": 8,
+     "p10": 23.2,
+     "median": 33.7,
+     "p90": 43.1
+    },
+    "pct_postgraduate_teachers": {
+     "n": 8,
+     "p10": 36.0,
+     "median": 65.0,
+     "p90": 70.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 8,
+     "p10": 54.0,
+     "median": 99.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 8,
+     "p10": 51.0,
+     "median": 70.0,
+     "p90": 90.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 8,
+     "yes": 8
+    },
+    "has_special_educator": {
+     "n": 8,
+     "yes": 8
+    }
+   }
+  },
+  {
+   "pincode": "110030",
+   "schools": 39,
+   "students": 23634,
+   "teachers": 883,
+   "management": {
+    "private_unaided": 16,
+    "local_body": 12,
+    "dept_education": 10,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 22,
+    "higher_secondary": 10,
+    "secondary": 5,
+    "upper_primary": 2
+   },
+   "board": {
+    "no_secondary": 24,
+    "cbse": 15
+   },
+   "medium": {
+    "hindi": 22,
+    "english": 17
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 39,
+     "p10": 19.6,
+     "median": 26.9,
+     "p90": 40.5
+    },
+    "students_per_classroom": {
+     "n": 39,
+     "p10": 15.3,
+     "median": 28.5,
+     "p90": 46.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 39,
+     "p10": 0.0,
+     "median": 48.0,
+     "p90": 77.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 39,
+     "p10": 35.0,
+     "median": 98.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 39,
+     "p10": 61.0,
+     "median": 87.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 39,
+     "yes": 36
+    },
+    "has_special_educator": {
+     "n": 39,
+     "yes": 26
+    }
+   }
+  },
+  {
+   "pincode": "110031",
+   "schools": 77,
+   "students": 38998,
+   "teachers": 1477,
+   "management": {
+    "private_unaided": 25,
+    "local_body": 25,
+    "dept_education": 17,
+    "aided": 10
+   },
+   "stage": {
+    "primary": 42,
+    "higher_secondary": 23,
+    "upper_primary": 11,
+    "secondary": 1
+   },
+   "board": {
+    "no_secondary": 53,
+    "cbse": 23,
+    "state_board": 1
+   },
+   "medium": {
+    "hindi": 47,
+    "english": 30
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 77,
+     "p10": 15.3,
+     "median": 27.7,
+     "p90": 43.1
+    },
+    "students_per_classroom": {
+     "n": 77,
+     "p10": 13.4,
+     "median": 28.0,
+     "p90": 42.1
+    },
+    "pct_postgraduate_teachers": {
+     "n": 77,
+     "p10": 7.0,
+     "median": 50.0,
+     "p90": 79.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 77,
+     "p10": 0.0,
+     "median": 57.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 77,
+     "p10": 53.0,
+     "median": 86.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 77,
+     "yes": 50
+    },
+    "has_special_educator": {
+     "n": 77,
+     "yes": 48
+    }
+   }
+  },
+  {
+   "pincode": "110032",
+   "schools": 127,
+   "students": 69128,
+   "teachers": 2608,
+   "management": {
+    "private_unaided": 64,
+    "local_body": 31,
+    "dept_education": 24,
+    "aided": 8
+   },
+   "stage": {
+    "primary": 66,
+    "higher_secondary": 28,
+    "upper_primary": 21,
+    "secondary": 12
+   },
+   "board": {
+    "no_secondary": 87,
+    "cbse": 40
+   },
+   "medium": {
+    "english": 68,
+    "hindi": 59
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 126,
+     "p10": 15.6,
+     "median": 27.2,
+     "p90": 40.3
+    },
+    "students_per_classroom": {
+     "n": 127,
+     "p10": 11.6,
+     "median": 27.5,
+     "p90": 42.1
+    },
+    "pct_postgraduate_teachers": {
+     "n": 127,
+     "p10": 14.0,
+     "median": 47.0,
+     "p90": 78.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 127,
+     "p10": 0.0,
+     "median": 42.0,
+     "p90": 96.0
+    },
+    "pct_regular_teachers": {
+     "n": 127,
+     "p10": 25.0,
+     "median": 83.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 127,
+     "yes": 64
+    },
+    "has_special_educator": {
+     "n": 127,
+     "yes": 69
+    }
+   }
+  },
+  {
+   "pincode": "110033",
+   "schools": 74,
+   "students": 62056,
+   "teachers": 2145,
+   "management": {
+    "local_body": 36,
+    "dept_education": 20,
+    "private_unaided": 17,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 42,
+    "higher_secondary": 24,
+    "upper_primary": 7,
+    "secondary": 1
+   },
+   "board": {
+    "no_secondary": 49,
+    "cbse": 25
+   },
+   "medium": {
+    "hindi": 56,
+    "english": 18
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 74,
+     "p10": 22.0,
+     "median": 30.9,
+     "p90": 43.3
+    },
+    "students_per_classroom": {
+     "n": 74,
+     "p10": 16.7,
+     "median": 33.9,
+     "p90": 46.6
+    },
+    "pct_postgraduate_teachers": {
+     "n": 74,
+     "p10": 13.0,
+     "median": 39.0,
+     "p90": 76.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 74,
+     "p10": 18.0,
+     "median": 81.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 74,
+     "p10": 50.0,
+     "median": 85.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 74,
+     "yes": 32
+    },
+    "has_special_educator": {
+     "n": 74,
+     "yes": 60
+    }
+   }
+  },
+  {
+   "pincode": "110034",
+   "schools": 82,
+   "students": 77779,
+   "teachers": 2954,
+   "management": {
+    "private_unaided": 40,
+    "local_body": 23,
+    "dept_education": 17,
+    "central": 2
+   },
+   "stage": {
+    "higher_secondary": 42,
+    "primary": 33,
+    "upper_primary": 6,
+    "secondary": 1
+   },
+   "board": {
+    "cbse": 42,
+    "no_secondary": 39,
+    "state_board": 1
+   },
+   "medium": {
+    "english": 46,
+    "hindi": 36
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 82,
+     "p10": 15.2,
+     "median": 26.7,
+     "p90": 40.8
+    },
+    "students_per_classroom": {
+     "n": 82,
+     "p10": 14.5,
+     "median": 29.3,
+     "p90": 44.2
+    },
+    "pct_postgraduate_teachers": {
+     "n": 82,
+     "p10": 17.0,
+     "median": 55.0,
+     "p90": 77.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 82,
+     "p10": 30.0,
+     "median": 86.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 82,
+     "p10": 33.0,
+     "median": 83.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 82,
+     "yes": 54
+    },
+    "has_special_educator": {
+     "n": 82,
+     "yes": 60
+    }
+   }
+  },
+  {
+   "pincode": "110035",
+   "schools": 42,
+   "students": 27056,
+   "teachers": 958,
+   "management": {
+    "local_body": 20,
+    "dept_education": 10,
+    "private_unaided": 10,
+    "central": 1,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 26,
+    "higher_secondary": 14,
+    "upper_primary": 2
+   },
+   "board": {
+    "no_secondary": 28,
+    "cbse": 14
+   },
+   "medium": {
+    "hindi": 30,
+    "english": 11,
+    "urdu": 1
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 42,
+     "p10": 23.1,
+     "median": 30.8,
+     "p90": 42.0
+    },
+    "students_per_classroom": {
+     "n": 42,
+     "p10": 12.8,
+     "median": 30.4,
+     "p90": 41.3
+    },
+    "pct_postgraduate_teachers": {
+     "n": 42,
+     "p10": 0.0,
+     "median": 37.0,
+     "p90": 77.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 42,
+     "p10": 9.0,
+     "median": 48.0,
+     "p90": 98.0
+    },
+    "pct_regular_teachers": {
+     "n": 42,
+     "p10": 57.0,
+     "median": 80.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 42,
+     "yes": 19
+    },
+    "has_special_educator": {
+     "n": 42,
+     "yes": 32
+    }
+   }
+  },
+  {
+   "pincode": "110036",
+   "schools": 65,
+   "students": 44980,
+   "teachers": 1565,
+   "management": {
+    "private_unaided": 31,
+    "local_body": 26,
+    "dept_education": 8
+   },
+   "stage": {
+    "primary": 32,
+    "higher_secondary": 20,
+    "upper_primary": 12,
+    "secondary": 1
+   },
+   "board": {
+    "no_secondary": 44,
+    "cbse": 21
+   },
+   "medium": {
+    "hindi": 33,
+    "english": 32
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 65,
+     "p10": 20.3,
+     "median": 27.5,
+     "p90": 37.4
+    },
+    "students_per_classroom": {
+     "n": 65,
+     "p10": 18.3,
+     "median": 30.2,
+     "p90": 42.7
+    },
+    "pct_postgraduate_teachers": {
+     "n": 65,
+     "p10": 8.0,
+     "median": 29.0,
+     "p90": 69.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 65,
+     "p10": 19.0,
+     "median": 67.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 65,
+     "p10": 36.0,
+     "median": 90.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 65,
+     "yes": 25
+    },
+    "has_special_educator": {
+     "n": 65,
+     "yes": 58
+    }
+   }
+  },
+  {
+   "pincode": "110037",
+   "schools": 45,
+   "students": 45481,
+   "teachers": 1434,
+   "management": {
+    "private_unaided": 24,
+    "local_body": 13,
+    "dept_education": 7,
+    "central": 1
+   },
+   "stage": {
+    "primary": 25,
+    "higher_secondary": 11,
+    "upper_primary": 9
+   },
+   "board": {
+    "no_secondary": 34,
+    "cbse": 11
+   },
+   "medium": {
+    "english": 26,
+    "hindi": 19
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 45,
+     "p10": 20.7,
+     "median": 32.5,
+     "p90": 42.5
+    },
+    "students_per_classroom": {
+     "n": 45,
+     "p10": 18.4,
+     "median": 30.9,
+     "p90": 51.8
+    },
+    "pct_postgraduate_teachers": {
+     "n": 45,
+     "p10": 0.0,
+     "median": 29.0,
+     "p90": 73.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 45,
+     "p10": 10.0,
+     "median": 53.0,
+     "p90": 98.0
+    },
+    "pct_regular_teachers": {
+     "n": 45,
+     "p10": 55.0,
+     "median": 100.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 45,
+     "yes": 30
+    },
+    "has_special_educator": {
+     "n": 45,
+     "yes": 32
+    }
+   }
+  },
+  {
+   "pincode": "110038",
+   "schools": 8,
+   "students": 8118,
+   "teachers": 282,
+   "management": {
+    "local_body": 3,
+    "private_unaided": 2,
+    "dept_education": 2,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 4,
+    "primary": 3,
+    "upper_primary": 1
+   },
+   "board": {
+    "cbse": 4,
+    "no_secondary": 4
+   },
+   "medium": {
+    "hindi": 5,
+    "english": 3
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 8,
+     "p10": 24.1,
+     "median": 28.3,
+     "p90": 35.5
+    },
+    "students_per_classroom": {
+     "n": 8,
+     "p10": 30.6,
+     "median": 38.0,
+     "p90": 45.5
+    },
+    "pct_postgraduate_teachers": {
+     "n": 8,
+     "p10": 27.0,
+     "median": 44.0,
+     "p90": 75.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 8,
+     "p10": 14.0,
+     "median": 51.0,
+     "p90": 92.0
+    },
+    "pct_regular_teachers": {
+     "n": 8,
+     "p10": 52.0,
+     "median": 85.0,
+     "p90": 92.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 8,
+     "yes": 6
+    },
+    "has_special_educator": {
+     "n": 8,
+     "yes": 8
+    }
+   }
+  },
+  {
+   "pincode": "110039",
+   "schools": 81,
+   "students": 54510,
+   "teachers": 1900,
+   "management": {
+    "local_body": 32,
+    "private_unaided": 30,
+    "dept_education": 16,
+    "central": 2,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 39,
+    "higher_secondary": 29,
+    "upper_primary": 9,
+    "secondary": 4
+   },
+   "board": {
+    "no_secondary": 48,
+    "cbse": 31,
+    "state_board": 1,
+    "other": 1
+   },
+   "medium": {
+    "hindi": 51,
+    "english": 30
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 79,
+     "p10": 16.0,
+     "median": 29.2,
+     "p90": 39.8
+    },
+    "students_per_classroom": {
+     "n": 81,
+     "p10": 14.7,
+     "median": 32.0,
+     "p90": 54.0
+    },
+    "pct_postgraduate_teachers": {
+     "n": 80,
+     "p10": 0.0,
+     "median": 33.0,
+     "p90": 73.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 80,
+     "p10": 10.0,
+     "median": 58.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 80,
+     "p10": 57.0,
+     "median": 93.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 81,
+     "yes": 38
+    },
+    "has_special_educator": {
+     "n": 81,
+     "yes": 67
+    }
+   }
+  },
+  {
+   "pincode": "110040",
+   "schools": 91,
+   "students": 68037,
+   "teachers": 2271,
+   "management": {
+    "private_unaided": 38,
+    "local_body": 34,
+    "dept_education": 18,
+    "central": 1
+   },
+   "stage": {
+    "primary": 50,
+    "higher_secondary": 27,
+    "upper_primary": 13,
+    "secondary": 1
+   },
+   "board": {
+    "no_secondary": 63,
+    "cbse": 27,
+    "state_board": 1
+   },
+   "medium": {
+    "hindi": 51,
+    "english": 40
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 91,
+     "p10": 18.4,
+     "median": 30.2,
+     "p90": 41.0
+    },
+    "students_per_classroom": {
+     "n": 91,
+     "p10": 15.3,
+     "median": 33.3,
+     "p90": 49.8
+    },
+    "pct_postgraduate_teachers": {
+     "n": 91,
+     "p10": 0.0,
+     "median": 33.0,
+     "p90": 83.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 91,
+     "p10": 15.0,
+     "median": 67.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 91,
+     "p10": 50.0,
+     "median": 94.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 91,
+     "yes": 38
+    },
+    "has_special_educator": {
+     "n": 91,
+     "yes": 68
+    }
+   }
+  },
+  {
+   "pincode": "110041",
+   "schools": 153,
+   "students": 135905,
+   "teachers": 4572,
+   "management": {
+    "private_unaided": 95,
+    "local_body": 34,
+    "dept_education": 24
+   },
+   "stage": {
+    "primary": 65,
+    "higher_secondary": 47,
+    "upper_primary": 23,
+    "secondary": 18
+   },
+   "board": {
+    "no_secondary": 88,
+    "cbse": 65
+   },
+   "medium": {
+    "english": 96,
+    "hindi": 57
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 153,
+     "p10": 17.2,
+     "median": 29.2,
+     "p90": 40.2
+    },
+    "students_per_classroom": {
+     "n": 153,
+     "p10": 14.9,
+     "median": 30.1,
+     "p90": 52.8
+    },
+    "pct_postgraduate_teachers": {
+     "n": 153,
+     "p10": 11.0,
+     "median": 33.0,
+     "p90": 74.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 153,
+     "p10": 11.0,
+     "median": 52.0,
+     "p90": 97.0
+    },
+    "pct_regular_teachers": {
+     "n": 153,
+     "p10": 35.0,
+     "median": 91.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 153,
+     "yes": 76
+    },
+    "has_special_educator": {
+     "n": 153,
+     "yes": 101
+    }
+   }
+  },
+  {
+   "pincode": "110042",
+   "schools": 98,
+   "students": 83994,
+   "teachers": 2640,
+   "management": {
+    "private_unaided": 48,
+    "local_body": 28,
+    "dept_education": 21,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 54,
+    "higher_secondary": 20,
+    "upper_primary": 19,
+    "secondary": 5
+   },
+   "board": {
+    "no_secondary": 73,
+    "cbse": 25
+   },
+   "medium": {
+    "hindi": 49,
+    "english": 49
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 98,
+     "p10": 19.7,
+     "median": 32.9,
+     "p90": 42.1
+    },
+    "students_per_classroom": {
+     "n": 98,
+     "p10": 17.7,
+     "median": 33.0,
+     "p90": 51.9
+    },
+    "pct_postgraduate_teachers": {
+     "n": 98,
+     "p10": 0.0,
+     "median": 25.0,
+     "p90": 72.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 98,
+     "p10": 19.0,
+     "median": 65.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 98,
+     "p10": 38.0,
+     "median": 83.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 98,
+     "yes": 44
+    },
+    "has_special_educator": {
+     "n": 98,
+     "yes": 65
+    }
+   }
+  },
+  {
+   "pincode": "110043",
+   "schools": 186,
+   "students": 124305,
+   "teachers": 4643,
+   "management": {
+    "private_unaided": 111,
+    "local_body": 41,
+    "dept_education": 34
+   },
+   "stage": {
+    "primary": 73,
+    "higher_secondary": 64,
+    "upper_primary": 27,
+    "secondary": 22
+   },
+   "board": {
+    "no_secondary": 100,
+    "cbse": 86
+   },
+   "medium": {
+    "english": 118,
+    "hindi": 68
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 186,
+     "p10": 13.6,
+     "median": 24.8,
+     "p90": 35.4
+    },
+    "students_per_classroom": {
+     "n": 185,
+     "p10": 10.3,
+     "median": 27.4,
+     "p90": 42.8
+    },
+    "pct_postgraduate_teachers": {
+     "n": 186,
+     "p10": 0.0,
+     "median": 36.0,
+     "p90": 74.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 186,
+     "p10": 28.0,
+     "median": 89.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 186,
+     "p10": 50.0,
+     "median": 97.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 186,
+     "yes": 127
+    },
+    "has_special_educator": {
+     "n": 186,
+     "yes": 144
+    }
+   }
+  },
+  {
+   "pincode": "110044",
+   "schools": 162,
+   "students": 134906,
+   "teachers": 4475,
+   "management": {
+    "private_unaided": 107,
+    "dept_education": 27,
+    "local_body": 27,
+    "central": 1
+   },
+   "stage": {
+    "primary": 81,
+    "upper_primary": 41,
+    "higher_secondary": 36,
+    "secondary": 4
+   },
+   "board": {
+    "no_secondary": 122,
+    "cbse": 40
+   },
+   "medium": {
+    "english": 109,
+    "hindi": 53
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 162,
+     "p10": 16.5,
+     "median": 30.8,
+     "p90": 44.9
+    },
+    "students_per_classroom": {
+     "n": 161,
+     "p10": 10.3,
+     "median": 30.4,
+     "p90": 48.7
+    },
+    "pct_postgraduate_teachers": {
+     "n": 162,
+     "p10": 0.0,
+     "median": 29.0,
+     "p90": 71.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 162,
+     "p10": 8.0,
+     "median": 51.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 162,
+     "p10": 50.0,
+     "median": 94.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 162,
+     "yes": 150
+    },
+    "has_special_educator": {
+     "n": 162,
+     "yes": 112
+    }
+   }
+  },
+  {
+   "pincode": "110045",
+   "schools": 72,
+   "students": 49430,
+   "teachers": 1733,
+   "management": {
+    "private_unaided": 50,
+    "dept_education": 12,
+    "local_body": 10
+   },
+   "stage": {
+    "primary": 37,
+    "higher_secondary": 20,
+    "upper_primary": 12,
+    "secondary": 3
+   },
+   "board": {
+    "no_secondary": 49,
+    "cbse": 23
+   },
+   "medium": {
+    "english": 54,
+    "hindi": 18
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 72,
+     "p10": 15.8,
+     "median": 27.6,
+     "p90": 38.4
+    },
+    "students_per_classroom": {
+     "n": 72,
+     "p10": 11.8,
+     "median": 29.5,
+     "p90": 41.1
+    },
+    "pct_postgraduate_teachers": {
+     "n": 72,
+     "p10": 14.0,
+     "median": 44.0,
+     "p90": 77.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 72,
+     "p10": 12.0,
+     "median": 62.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 72,
+     "p10": 47.0,
+     "median": 93.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 72,
+     "yes": 55
+    },
+    "has_special_educator": {
+     "n": 72,
+     "yes": 48
+    }
+   }
+  },
+  {
+   "pincode": "110046",
+   "schools": 27,
+   "students": 18793,
+   "teachers": 662,
+   "management": {
+    "private_unaided": 16,
+    "local_body": 7,
+    "dept_education": 4
+   },
+   "stage": {
+    "primary": 12,
+    "upper_primary": 9,
+    "higher_secondary": 4,
+    "secondary": 2
+   },
+   "board": {
+    "no_secondary": 21,
+    "cbse": 6
+   },
+   "medium": {
+    "english": 17,
+    "hindi": 10
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 27,
+     "p10": 18.7,
+     "median": 28.1,
+     "p90": 35.8
+    },
+    "students_per_classroom": {
+     "n": 27,
+     "p10": 16.6,
+     "median": 28.4,
+     "p90": 39.2
+    },
+    "pct_postgraduate_teachers": {
+     "n": 27,
+     "p10": 16.0,
+     "median": 38.0,
+     "p90": 68.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 27,
+     "p10": 23.0,
+     "median": 62.0,
+     "p90": 91.0
+    },
+    "pct_regular_teachers": {
+     "n": 27,
+     "p10": 38.0,
+     "median": 100.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 27,
+     "yes": 16
+    },
+    "has_special_educator": {
+     "n": 27,
+     "yes": 17
+    }
+   }
+  },
+  {
+   "pincode": "110047",
+   "schools": 23,
+   "students": 22817,
+   "teachers": 807,
+   "management": {
+    "private_unaided": 11,
+    "dept_education": 6,
+    "local_body": 5,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 12,
+    "primary": 8,
+    "upper_primary": 2,
+    "secondary": 1
+   },
+   "board": {
+    "cbse": 13,
+    "no_secondary": 10
+   },
+   "medium": {
+    "english": 12,
+    "hindi": 11
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 23,
+     "p10": 17.8,
+     "median": 29.5,
+     "p90": 35.9
+    },
+    "students_per_classroom": {
+     "n": 23,
+     "p10": 19.2,
+     "median": 35.2,
+     "p90": 42.6
+    },
+    "pct_postgraduate_teachers": {
+     "n": 23,
+     "p10": 19.0,
+     "median": 50.0,
+     "p90": 75.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 23,
+     "p10": 84.0,
+     "median": 98.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 23,
+     "p10": 69.0,
+     "median": 87.0,
+     "p90": 99.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 23,
+     "yes": 23
+    },
+    "has_special_educator": {
+     "n": 23,
+     "yes": 16
+    }
+   }
+  },
+  {
+   "pincode": "110048",
+   "schools": 14,
+   "students": 19080,
+   "teachers": 820,
+   "management": {
+    "private_unaided": 10,
+    "local_body": 3,
+    "dept_education": 1
+   },
+   "stage": {
+    "higher_secondary": 7,
+    "primary": 4,
+    "upper_primary": 2,
+    "secondary": 1
+   },
+   "board": {
+    "cbse": 8,
+    "no_secondary": 6
+   },
+   "medium": {
+    "english": 11,
+    "hindi": 3
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 14,
+     "p10": 15.0,
+     "median": 24.0,
+     "p90": 33.0
+    },
+    "students_per_classroom": {
+     "n": 14,
+     "p10": 14.4,
+     "median": 28.2,
+     "p90": 38.3
+    },
+    "pct_postgraduate_teachers": {
+     "n": 14,
+     "p10": 29.0,
+     "median": 58.0,
+     "p90": 75.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 14,
+     "p10": 30.0,
+     "median": 97.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 14,
+     "p10": 46.0,
+     "median": 85.0,
+     "p90": 99.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 14,
+     "yes": 13
+    },
+    "has_special_educator": {
+     "n": 14,
+     "yes": 12
+    }
+   }
+  },
+  {
+   "pincode": "110049",
+   "schools": 20,
+   "students": 14962,
+   "teachers": 604,
+   "management": {
+    "private_unaided": 8,
+    "local_body": 6,
+    "dept_education": 5,
+    "central": 1
+   },
+   "stage": {
+    "primary": 9,
+    "higher_secondary": 8,
+    "upper_primary": 2,
+    "secondary": 1
+   },
+   "board": {
+    "no_secondary": 11,
+    "cbse": 8,
+    "state_board": 1
+   },
+   "medium": {
+    "hindi": 11,
+    "english": 9
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 20,
+     "p10": 14.6,
+     "median": 26.3,
+     "p90": 34.7
+    },
+    "students_per_classroom": {
+     "n": 20,
+     "p10": 14.3,
+     "median": 26.6,
+     "p90": 39.2
+    },
+    "pct_postgraduate_teachers": {
+     "n": 20,
+     "p10": 14.0,
+     "median": 44.0,
+     "p90": 70.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 20,
+     "p10": 27.0,
+     "median": 77.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 20,
+     "p10": 51.0,
+     "median": 81.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 20,
+     "yes": 16
+    },
+    "has_special_educator": {
+     "n": 20,
+     "yes": 15
+    }
+   }
+  },
+  {
+   "pincode": "110051",
+   "schools": 70,
+   "students": 35022,
+   "teachers": 1317,
+   "management": {
+    "private_unaided": 36,
+    "local_body": 19,
+    "dept_education": 10,
+    "aided": 5
+   },
+   "stage": {
+    "primary": 41,
+    "higher_secondary": 14,
+    "upper_primary": 11,
+    "secondary": 4
+   },
+   "board": {
+    "no_secondary": 52,
+    "cbse": 18
+   },
+   "medium": {
+    "english": 37,
+    "hindi": 32,
+    "urdu": 1
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 70,
+     "p10": 16.8,
+     "median": 26.8,
+     "p90": 35.0
+    },
+    "students_per_classroom": {
+     "n": 70,
+     "p10": 13.3,
+     "median": 27.7,
+     "p90": 39.2
+    },
+    "pct_postgraduate_teachers": {
+     "n": 70,
+     "p10": 14.0,
+     "median": 44.0,
+     "p90": 73.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 70,
+     "p10": 0.0,
+     "median": 52.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 70,
+     "p10": 40.0,
+     "median": 84.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 70,
+     "yes": 35
+    },
+    "has_special_educator": {
+     "n": 70,
+     "yes": 36
+    }
+   }
+  },
+  {
+   "pincode": "110052",
+   "schools": 61,
+   "students": 54644,
+   "teachers": 1968,
+   "management": {
+    "local_body": 26,
+    "private_unaided": 20,
+    "dept_education": 13,
+    "aided": 2
+   },
+   "stage": {
+    "primary": 32,
+    "higher_secondary": 23,
+    "upper_primary": 4,
+    "secondary": 2
+   },
+   "board": {
+    "no_secondary": 36,
+    "cbse": 25
+   },
+   "medium": {
+    "hindi": 37,
+    "english": 23,
+    "urdu": 1
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 61,
+     "p10": 19.0,
+     "median": 28.4,
+     "p90": 41.3
+    },
+    "students_per_classroom": {
+     "n": 61,
+     "p10": 17.5,
+     "median": 31.1,
+     "p90": 40.7
+    },
+    "pct_postgraduate_teachers": {
+     "n": 61,
+     "p10": 0.0,
+     "median": 45.0,
+     "p90": 74.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 61,
+     "p10": 14.0,
+     "median": 64.0,
+     "p90": 97.0
+    },
+    "pct_regular_teachers": {
+     "n": 61,
+     "p10": 55.0,
+     "median": 81.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 61,
+     "yes": 35
+    },
+    "has_special_educator": {
+     "n": 61,
+     "yes": 53
+    }
+   }
+  },
+  {
+   "pincode": "110053",
+   "schools": 244,
+   "students": 157312,
+   "teachers": 5369,
+   "management": {
+    "private_unaided": 126,
+    "local_body": 68,
+    "dept_education": 48,
+    "aided": 2
+   },
+   "stage": {
+    "primary": 129,
+    "upper_primary": 55,
+    "higher_secondary": 46,
+    "secondary": 14
+   },
+   "board": {
+    "no_secondary": 184,
+    "cbse": 58,
+    "state_board": 2
+   },
+   "medium": {
+    "english": 126,
+    "hindi": 108,
+    "urdu": 10
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 244,
+     "p10": 18.5,
+     "median": 30.0,
+     "p90": 45.2
+    },
+    "students_per_classroom": {
+     "n": 244,
+     "p10": 12.5,
+     "median": 29.4,
+     "p90": 47.8
+    },
+    "pct_postgraduate_teachers": {
+     "n": 244,
+     "p10": 0.0,
+     "median": 40.0,
+     "p90": 76.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 244,
+     "p10": 0.0,
+     "median": 40.0,
+     "p90": 94.0
+    },
+    "pct_regular_teachers": {
+     "n": 244,
+     "p10": 40.0,
+     "median": 80.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 244,
+     "yes": 106
+    },
+    "has_special_educator": {
+     "n": 244,
+     "yes": 158
+    }
+   }
+  },
+  {
+   "pincode": "110054",
+   "schools": 36,
+   "students": 35870,
+   "teachers": 1266,
+   "management": {
+    "dept_education": 13,
+    "local_body": 11,
+    "private_unaided": 6,
+    "aided": 6
+   },
+   "stage": {
+    "higher_secondary": 21,
+    "primary": 12,
+    "upper_primary": 3
+   },
+   "board": {
+    "cbse": 19,
+    "no_secondary": 15,
+    "state_board": 2
+   },
+   "medium": {
+    "english": 19,
+    "hindi": 17
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 35,
+     "p10": 15.9,
+     "median": 30.3,
+     "p90": 40.1
+    },
+    "students_per_classroom": {
+     "n": 36,
+     "p10": 15.4,
+     "median": 31.6,
+     "p90": 50.2
+    },
+    "pct_postgraduate_teachers": {
+     "n": 36,
+     "p10": 17.0,
+     "median": 62.0,
+     "p90": 89.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 36,
+     "p10": 12.0,
+     "median": 46.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 36,
+     "p10": 19.0,
+     "median": 85.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 36,
+     "yes": 19
+    },
+    "has_special_educator": {
+     "n": 36,
+     "yes": 33
+    }
+   }
+  },
+  {
+   "pincode": "110055",
+   "schools": 42,
+   "students": 17115,
+   "teachers": 629,
+   "management": {
+    "local_body": 16,
+    "aided": 16,
+    "dept_education": 6,
+    "private_unaided": 4
+   },
+   "stage": {
+    "primary": 23,
+    "higher_secondary": 14,
+    "secondary": 4,
+    "upper_primary": 1
+   },
+   "board": {
+    "no_secondary": 24,
+    "cbse": 18
+   },
+   "medium": {
+    "hindi": 31,
+    "english": 10,
+    "urdu": 1
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 42,
+     "p10": 19.9,
+     "median": 29.1,
+     "p90": 42.7
+    },
+    "students_per_classroom": {
+     "n": 42,
+     "p10": 19.6,
+     "median": 34.5,
+     "p90": 47.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 42,
+     "p10": 13.0,
+     "median": 43.0,
+     "p90": 90.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 42,
+     "p10": 14.0,
+     "median": 39.0,
+     "p90": 83.0
+    },
+    "pct_regular_teachers": {
+     "n": 42,
+     "p10": 57.0,
+     "median": 84.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 42,
+     "yes": 15
+    },
+    "has_special_educator": {
+     "n": 42,
+     "yes": 20
+    }
+   }
+  },
+  {
+   "pincode": "110056",
+   "schools": 4,
+   "students": 2785,
+   "teachers": 112,
+   "management": {
+    "local_body": 3,
+    "dept_education": 1
+   },
+   "stage": {
+    "primary": 3,
+    "higher_secondary": 1
+   },
+   "board": {
+    "no_secondary": 3,
+    "cbse": 1
+   },
+   "medium": {
+    "hindi": 4
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 4,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "students_per_classroom": {
+     "n": 4,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_postgraduate_teachers": {
+     "n": 4,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_computer_trained_teachers": {
+     "n": 4,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_regular_teachers": {
+     "n": 4,
+     "p10": null,
+     "median": null,
+     "p90": null
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 4,
+     "yes": 1
+    },
+    "has_special_educator": {
+     "n": 4,
+     "yes": 3
+    }
+   }
+  },
+  {
+   "pincode": "110057",
+   "schools": 15,
+   "students": 14954,
+   "teachers": 690,
+   "management": {
+    "private_unaided": 7,
+    "local_body": 5,
+    "dept_education": 2,
+    "aided": 1
+   },
+   "stage": {
+    "higher_secondary": 8,
+    "primary": 6,
+    "secondary": 1
+   },
+   "board": {
+    "cbse": 8,
+    "no_secondary": 6,
+    "other": 1
+   },
+   "medium": {
+    "english": 8,
+    "hindi": 7
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 15,
+     "p10": 15.2,
+     "median": 23.9,
+     "p90": 29.6
+    },
+    "students_per_classroom": {
+     "n": 15,
+     "p10": 17.6,
+     "median": 29.0,
+     "p90": 36.6
+    },
+    "pct_postgraduate_teachers": {
+     "n": 15,
+     "p10": 29.0,
+     "median": 64.0,
+     "p90": 74.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 15,
+     "p10": 20.0,
+     "median": 81.0,
+     "p90": 99.0
+    },
+    "pct_regular_teachers": {
+     "n": 15,
+     "p10": 70.0,
+     "median": 86.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 15,
+     "yes": 14
+    },
+    "has_special_educator": {
+     "n": 15,
+     "yes": 12
+    }
+   }
+  },
+  {
+   "pincode": "110058",
+   "schools": 51,
+   "students": 66565,
+   "teachers": 2391,
+   "management": {
+    "private_unaided": 18,
+    "dept_education": 16,
+    "local_body": 13,
+    "aided": 3,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 34,
+    "primary": 14,
+    "secondary": 2,
+    "upper_primary": 1
+   },
+   "board": {
+    "cbse": 35,
+    "no_secondary": 15,
+    "state_board": 1
+   },
+   "medium": {
+    "hindi": 27,
+    "english": 24
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 51,
+     "p10": 21.8,
+     "median": 27.0,
+     "p90": 36.1
+    },
+    "students_per_classroom": {
+     "n": 50,
+     "p10": 22.2,
+     "median": 34.4,
+     "p90": 43.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 51,
+     "p10": 12.0,
+     "median": 65.0,
+     "p90": 82.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 51,
+     "p10": 27.0,
+     "median": 96.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 51,
+     "p10": 65.0,
+     "median": 93.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 51,
+     "yes": 47
+    },
+    "has_special_educator": {
+     "n": 51,
+     "yes": 45
+    }
+   }
+  },
+  {
+   "pincode": "110059",
+   "schools": 222,
+   "students": 160760,
+   "teachers": 5371,
+   "management": {
+    "private_unaided": 156,
+    "local_body": 41,
+    "dept_education": 24,
+    "central": 1
+   },
+   "stage": {
+    "primary": 113,
+    "upper_primary": 49,
+    "higher_secondary": 40,
+    "secondary": 20
+   },
+   "board": {
+    "no_secondary": 162,
+    "cbse": 60
+   },
+   "medium": {
+    "english": 166,
+    "hindi": 56
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 222,
+     "p10": 17.0,
+     "median": 30.2,
+     "p90": 44.4
+    },
+    "students_per_classroom": {
+     "n": 222,
+     "p10": 12.7,
+     "median": 29.7,
+     "p90": 48.2
+    },
+    "pct_postgraduate_teachers": {
+     "n": 222,
+     "p10": 7.0,
+     "median": 33.0,
+     "p90": 67.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 222,
+     "p10": 31.0,
+     "median": 92.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 222,
+     "p10": 27.0,
+     "median": 100.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 222,
+     "yes": 168
+    },
+    "has_special_educator": {
+     "n": 222,
+     "yes": 126
+    }
+   }
+  },
+  {
+   "pincode": "110060",
+   "schools": 16,
+   "students": 19679,
+   "teachers": 800,
+   "management": {
+    "aided": 7,
+    "private_unaided": 4,
+    "local_body": 3,
+    "dept_education": 2
+   },
+   "stage": {
+    "higher_secondary": 11,
+    "primary": 3,
+    "secondary": 2
+   },
+   "board": {
+    "cbse": 13,
+    "no_secondary": 3
+   },
+   "medium": {
+    "english": 9,
+    "hindi": 7
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 16,
+     "p10": 12.5,
+     "median": 23.5,
+     "p90": 33.2
+    },
+    "students_per_classroom": {
+     "n": 16,
+     "p10": 13.6,
+     "median": 34.2,
+     "p90": 42.3
+    },
+    "pct_postgraduate_teachers": {
+     "n": 16,
+     "p10": 29.0,
+     "median": 70.0,
+     "p90": 100.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 16,
+     "p10": 3.0,
+     "median": 72.0,
+     "p90": 96.0
+    },
+    "pct_regular_teachers": {
+     "n": 16,
+     "p10": 73.0,
+     "median": 84.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 16,
+     "yes": 12
+    },
+    "has_special_educator": {
+     "n": 16,
+     "yes": 11
+    }
+   }
+  },
+  {
+   "pincode": "110061",
+   "schools": 14,
+   "students": 6107,
+   "teachers": 255,
+   "management": {
+    "private_unaided": 9,
+    "local_body": 4,
+    "dept_education": 1
+   },
+   "stage": {
+    "primary": 8,
+    "higher_secondary": 3,
+    "upper_primary": 3
+   },
+   "board": {
+    "no_secondary": 11,
+    "cbse": 3
+   },
+   "medium": {
+    "english": 9,
+    "hindi": 5
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 14,
+     "p10": 16.4,
+     "median": 27.1,
+     "p90": 49.2
+    },
+    "students_per_classroom": {
+     "n": 14,
+     "p10": 18.9,
+     "median": 24.2,
+     "p90": 33.2
+    },
+    "pct_postgraduate_teachers": {
+     "n": 14,
+     "p10": 0.0,
+     "median": 39.0,
+     "p90": 61.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 14,
+     "p10": 26.0,
+     "median": 77.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 14,
+     "p10": 89.0,
+     "median": 100.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 14,
+     "yes": 8
+    },
+    "has_special_educator": {
+     "n": 14,
+     "yes": 12
+    }
+   }
+  },
+  {
+   "pincode": "110062",
+   "schools": 117,
+   "students": 86791,
+   "teachers": 2847,
+   "management": {
+    "private_unaided": 72,
+    "local_body": 24,
+    "dept_education": 20,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 61,
+    "higher_secondary": 24,
+    "upper_primary": 23,
+    "secondary": 9
+   },
+   "board": {
+    "no_secondary": 84,
+    "cbse": 33
+   },
+   "medium": {
+    "english": 78,
+    "hindi": 39
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 116,
+     "p10": 15.6,
+     "median": 30.2,
+     "p90": 41.7
+    },
+    "students_per_classroom": {
+     "n": 117,
+     "p10": 11.6,
+     "median": 29.6,
+     "p90": 47.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 117,
+     "p10": 0.0,
+     "median": 36.0,
+     "p90": 71.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 117,
+     "p10": 43.0,
+     "median": 97.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 117,
+     "p10": 37.0,
+     "median": 88.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 117,
+     "yes": 103
+    },
+    "has_special_educator": {
+     "n": 117,
+     "yes": 62
+    }
+   }
+  },
+  {
+   "pincode": "110063",
+   "schools": 35,
+   "students": 37788,
+   "teachers": 1549,
+   "management": {
+    "private_unaided": 17,
+    "dept_education": 10,
+    "local_body": 7,
+    "aided": 1
+   },
+   "stage": {
+    "higher_secondary": 27,
+    "primary": 7,
+    "upper_primary": 1
+   },
+   "board": {
+    "cbse": 25,
+    "no_secondary": 8,
+    "state_board": 1,
+    "other": 1
+   },
+   "medium": {
+    "english": 22,
+    "hindi": 13
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 35,
+     "p10": 15.7,
+     "median": 24.9,
+     "p90": 35.7
+    },
+    "students_per_classroom": {
+     "n": 35,
+     "p10": 18.9,
+     "median": 30.4,
+     "p90": 39.5
+    },
+    "pct_postgraduate_teachers": {
+     "n": 35,
+     "p10": 28.0,
+     "median": 65.0,
+     "p90": 84.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 35,
+     "p10": 30.0,
+     "median": 86.0,
+     "p90": 99.0
+    },
+    "pct_regular_teachers": {
+     "n": 35,
+     "p10": 31.0,
+     "median": 78.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 35,
+     "yes": 29
+    },
+    "has_special_educator": {
+     "n": 35,
+     "yes": 28
+    }
+   }
+  },
+  {
+   "pincode": "110064",
+   "schools": 19,
+   "students": 16577,
+   "teachers": 636,
+   "management": {
+    "local_body": 8,
+    "private_unaided": 6,
+    "dept_education": 5
+   },
+   "stage": {
+    "higher_secondary": 9,
+    "primary": 8,
+    "upper_primary": 2
+   },
+   "board": {
+    "no_secondary": 10,
+    "cbse": 8,
+    "state_board": 1
+   },
+   "medium": {
+    "hindi": 10,
+    "english": 9
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 19,
+     "p10": 16.6,
+     "median": 29.2,
+     "p90": 39.0
+    },
+    "students_per_classroom": {
+     "n": 19,
+     "p10": 9.8,
+     "median": 26.1,
+     "p90": 39.0
+    },
+    "pct_postgraduate_teachers": {
+     "n": 19,
+     "p10": 33.0,
+     "median": 60.0,
+     "p90": 76.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 19,
+     "p10": 23.0,
+     "median": 69.0,
+     "p90": 93.0
+    },
+    "pct_regular_teachers": {
+     "n": 19,
+     "p10": 37.0,
+     "median": 86.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 19,
+     "yes": 19
+    },
+    "has_special_educator": {
+     "n": 19,
+     "yes": 16
+    }
+   }
+  },
+  {
+   "pincode": "110065",
+   "schools": 27,
+   "students": 24924,
+   "teachers": 961,
+   "management": {
+    "private_unaided": 10,
+    "local_body": 9,
+    "dept_education": 6,
+    "aided": 2
+   },
+   "stage": {
+    "higher_secondary": 15,
+    "primary": 10,
+    "secondary": 1,
+    "upper_primary": 1
+   },
+   "board": {
+    "cbse": 16,
+    "no_secondary": 11
+   },
+   "medium": {
+    "hindi": 16,
+    "english": 11
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 27,
+     "p10": 20.1,
+     "median": 26.6,
+     "p90": 37.3
+    },
+    "students_per_classroom": {
+     "n": 27,
+     "p10": 22.9,
+     "median": 33.1,
+     "p90": 42.0
+    },
+    "pct_postgraduate_teachers": {
+     "n": 27,
+     "p10": 30.0,
+     "median": 62.0,
+     "p90": 78.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 27,
+     "p10": 17.0,
+     "median": 94.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 27,
+     "p10": 45.0,
+     "median": 73.0,
+     "p90": 93.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 27,
+     "yes": 22
+    },
+    "has_special_educator": {
+     "n": 27,
+     "yes": 23
+    }
+   }
+  },
+  {
+   "pincode": "110066",
+   "schools": 2,
+   "students": 1212,
+   "teachers": 55,
+   "management": {
+    "dept_education": 1,
+    "local_body": 1
+   },
+   "stage": {
+    "higher_secondary": 1,
+    "primary": 1
+   },
+   "board": {
+    "cbse": 1,
+    "no_secondary": 1
+   },
+   "medium": {
+    "english": 1,
+    "hindi": 1
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 2,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "students_per_classroom": {
+     "n": 2,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_postgraduate_teachers": {
+     "n": 2,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_computer_trained_teachers": {
+     "n": 2,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_regular_teachers": {
+     "n": 2,
+     "p10": null,
+     "median": null,
+     "p90": null
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 2,
+     "yes": 1
+    },
+    "has_special_educator": {
+     "n": 2,
+     "yes": 1
+    }
+   }
+  },
+  {
+   "pincode": "110067",
+   "schools": 4,
+   "students": 6961,
+   "teachers": 244,
+   "management": {
+    "dept_education": 1,
+    "private_unaided": 1,
+    "central": 1,
+    "local_body": 1
+   },
+   "stage": {
+    "higher_secondary": 2,
+    "secondary": 1,
+    "primary": 1
+   },
+   "board": {
+    "cbse": 3,
+    "no_secondary": 1
+   },
+   "medium": {
+    "hindi": 2,
+    "english": 2
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 4,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "students_per_classroom": {
+     "n": 4,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_postgraduate_teachers": {
+     "n": 4,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_computer_trained_teachers": {
+     "n": 4,
+     "p10": null,
+     "median": null,
+     "p90": null
+    },
+    "pct_regular_teachers": {
+     "n": 4,
+     "p10": null,
+     "median": null,
+     "p90": null
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 4,
+     "yes": 4
+    },
+    "has_special_educator": {
+     "n": 4,
+     "yes": 4
+    }
+   }
+  },
+  {
+   "pincode": "110068",
+   "schools": 18,
+   "students": 10296,
+   "teachers": 334,
+   "management": {
+    "private_unaided": 10,
+    "local_body": 5,
+    "dept_education": 3
+   },
+   "stage": {
+    "primary": 10,
+    "upper_primary": 4,
+    "secondary": 3,
+    "higher_secondary": 1
+   },
+   "board": {
+    "no_secondary": 14,
+    "cbse": 4
+   },
+   "medium": {
+    "english": 10,
+    "hindi": 8
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 17,
+     "p10": 20.5,
+     "median": 34.8,
+     "p90": 48.4
+    },
+    "students_per_classroom": {
+     "n": 18,
+     "p10": 16.3,
+     "median": 23.0,
+     "p90": 44.9
+    },
+    "pct_postgraduate_teachers": {
+     "n": 18,
+     "p10": 11.0,
+     "median": 44.0,
+     "p90": 75.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 18,
+     "p10": 75.0,
+     "median": 100.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 18,
+     "p10": 20.0,
+     "median": 84.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 18,
+     "yes": 16
+    },
+    "has_special_educator": {
+     "n": 18,
+     "yes": 12
+    }
+   }
+  },
+  {
+   "pincode": "110070",
+   "schools": 22,
+   "students": 31637,
+   "teachers": 1473,
+   "management": {
+    "private_unaided": 15,
+    "dept_education": 4,
+    "local_body": 2,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 15,
+    "primary": 4,
+    "upper_primary": 2,
+    "secondary": 1
+   },
+   "board": {
+    "cbse": 16,
+    "no_secondary": 6
+   },
+   "medium": {
+    "english": 18,
+    "hindi": 4
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 22,
+     "p10": 11.6,
+     "median": 26.8,
+     "p90": 36.0
+    },
+    "students_per_classroom": {
+     "n": 22,
+     "p10": 15.8,
+     "median": 35.6,
+     "p90": 47.3
+    },
+    "pct_postgraduate_teachers": {
+     "n": 22,
+     "p10": 39.0,
+     "median": 62.0,
+     "p90": 75.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 22,
+     "p10": 30.0,
+     "median": 86.0,
+     "p90": 99.0
+    },
+    "pct_regular_teachers": {
+     "n": 22,
+     "p10": 48.0,
+     "median": 77.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 22,
+     "yes": 20
+    },
+    "has_special_educator": {
+     "n": 22,
+     "yes": 16
+    }
+   }
+  },
+  {
+   "pincode": "110071",
+   "schools": 38,
+   "students": 28969,
+   "teachers": 1170,
+   "management": {
+    "private_unaided": 23,
+    "local_body": 8,
+    "dept_education": 6,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 14,
+    "primary": 14,
+    "upper_primary": 5,
+    "secondary": 5
+   },
+   "board": {
+    "cbse": 19,
+    "no_secondary": 19
+   },
+   "medium": {
+    "english": 24,
+    "hindi": 14
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 38,
+     "p10": 16.3,
+     "median": 24.8,
+     "p90": 35.0
+    },
+    "students_per_classroom": {
+     "n": 38,
+     "p10": 16.2,
+     "median": 27.3,
+     "p90": 40.9
+    },
+    "pct_postgraduate_teachers": {
+     "n": 38,
+     "p10": 17.0,
+     "median": 45.0,
+     "p90": 78.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 38,
+     "p10": 30.0,
+     "median": 81.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 38,
+     "p10": 60.0,
+     "median": 95.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 38,
+     "yes": 30
+    },
+    "has_special_educator": {
+     "n": 38,
+     "yes": 32
+    }
+   }
+  },
+  {
+   "pincode": "110072",
+   "schools": 17,
+   "students": 12968,
+   "teachers": 456,
+   "management": {
+    "private_unaided": 9,
+    "dept_education": 4,
+    "local_body": 3,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 9,
+    "primary": 5,
+    "upper_primary": 3
+   },
+   "board": {
+    "cbse": 8,
+    "no_secondary": 8,
+    "state_board": 1
+   },
+   "medium": {
+    "english": 11,
+    "hindi": 6
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 17,
+     "p10": 8.9,
+     "median": 27.5,
+     "p90": 34.6
+    },
+    "students_per_classroom": {
+     "n": 17,
+     "p10": 18.2,
+     "median": 32.3,
+     "p90": 41.2
+    },
+    "pct_postgraduate_teachers": {
+     "n": 17,
+     "p10": 18.0,
+     "median": 44.0,
+     "p90": 81.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 17,
+     "p10": 25.0,
+     "median": 71.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 17,
+     "p10": 45.0,
+     "median": 92.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 17,
+     "yes": 16
+    },
+    "has_special_educator": {
+     "n": 17,
+     "yes": 13
+    }
+   }
+  },
+  {
+   "pincode": "110073",
+   "schools": 50,
+   "students": 14384,
+   "teachers": 740,
+   "management": {
+    "local_body": 22,
+    "private_unaided": 14,
+    "dept_education": 13,
+    "central": 1
+   },
+   "stage": {
+    "primary": 26,
+    "higher_secondary": 20,
+    "upper_primary": 2,
+    "secondary": 2
+   },
+   "board": {
+    "no_secondary": 28,
+    "cbse": 22
+   },
+   "medium": {
+    "hindi": 35,
+    "english": 15
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 50,
+     "p10": 7.5,
+     "median": 15.8,
+     "p90": 28.0
+    },
+    "students_per_classroom": {
+     "n": 50,
+     "p10": 6.2,
+     "median": 20.5,
+     "p90": 32.1
+    },
+    "pct_postgraduate_teachers": {
+     "n": 50,
+     "p10": 0.0,
+     "median": 44.0,
+     "p90": 79.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 50,
+     "p10": 24.0,
+     "median": 75.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 50,
+     "p10": 74.0,
+     "median": 100.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 50,
+     "yes": 22
+    },
+    "has_special_educator": {
+     "n": 50,
+     "yes": 41
+    }
+   }
+  },
+  {
+   "pincode": "110074",
+   "schools": 33,
+   "students": 31023,
+   "teachers": 992,
+   "management": {
+    "local_body": 13,
+    "private_unaided": 12,
+    "dept_education": 8
+   },
+   "stage": {
+    "primary": 17,
+    "higher_secondary": 11,
+    "upper_primary": 4,
+    "secondary": 1
+   },
+   "board": {
+    "no_secondary": 21,
+    "cbse": 12
+   },
+   "medium": {
+    "hindi": 21,
+    "english": 12
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 33,
+     "p10": 20.9,
+     "median": 33.9,
+     "p90": 42.4
+    },
+    "students_per_classroom": {
+     "n": 33,
+     "p10": 14.1,
+     "median": 32.1,
+     "p90": 50.9
+    },
+    "pct_postgraduate_teachers": {
+     "n": 33,
+     "p10": 17.0,
+     "median": 38.0,
+     "p90": 78.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 33,
+     "p10": 79.0,
+     "median": 98.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 33,
+     "p10": 51.0,
+     "median": 88.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 33,
+     "yes": 32
+    },
+    "has_special_educator": {
+     "n": 33,
+     "yes": 25
+    }
+   }
+  },
+  {
+   "pincode": "110075",
+   "schools": 54,
+   "students": 82079,
+   "teachers": 3277,
+   "management": {
+    "private_unaided": 37,
+    "dept_education": 10,
+    "local_body": 6,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 39,
+    "primary": 10,
+    "upper_primary": 4,
+    "secondary": 1
+   },
+   "board": {
+    "cbse": 37,
+    "no_secondary": 14,
+    "state_board": 3
+   },
+   "medium": {
+    "english": 46,
+    "hindi": 8
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 54,
+     "p10": 16.0,
+     "median": 24.6,
+     "p90": 38.4
+    },
+    "students_per_classroom": {
+     "n": 53,
+     "p10": 16.3,
+     "median": 33.6,
+     "p90": 42.9
+    },
+    "pct_postgraduate_teachers": {
+     "n": 54,
+     "p10": 36.0,
+     "median": 61.0,
+     "p90": 80.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 54,
+     "p10": 36.0,
+     "median": 91.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 54,
+     "p10": 23.0,
+     "median": 86.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 54,
+     "yes": 51
+    },
+    "has_special_educator": {
+     "n": 54,
+     "yes": 47
+    }
+   }
+  },
+  {
+   "pincode": "110076",
+   "schools": 52,
+   "students": 39841,
+   "teachers": 1323,
+   "management": {
+    "private_unaided": 25,
+    "local_body": 15,
+    "dept_education": 12
+   },
+   "stage": {
+    "primary": 29,
+    "higher_secondary": 17,
+    "upper_primary": 4,
+    "secondary": 2
+   },
+   "board": {
+    "no_secondary": 33,
+    "cbse": 19
+   },
+   "medium": {
+    "english": 27,
+    "hindi": 25
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 52,
+     "p10": 22.1,
+     "median": 32.2,
+     "p90": 54.5
+    },
+    "students_per_classroom": {
+     "n": 52,
+     "p10": 18.8,
+     "median": 32.5,
+     "p90": 56.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 52,
+     "p10": 0.0,
+     "median": 31.0,
+     "p90": 73.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 52,
+     "p10": 24.0,
+     "median": 86.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 52,
+     "p10": 49.0,
+     "median": 82.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 52,
+     "yes": 50
+    },
+    "has_special_educator": {
+     "n": 52,
+     "yes": 36
+    }
+   }
+  },
+  {
+   "pincode": "110077",
+   "schools": 45,
+   "students": 48335,
+   "teachers": 2019,
+   "management": {
+    "private_unaided": 21,
+    "dept_education": 13,
+    "local_body": 10,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 26,
+    "primary": 13,
+    "upper_primary": 4,
+    "secondary": 2
+   },
+   "board": {
+    "cbse": 26,
+    "no_secondary": 17,
+    "state_board": 2
+   },
+   "medium": {
+    "english": 29,
+    "hindi": 16
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 45,
+     "p10": 14.1,
+     "median": 25.0,
+     "p90": 34.1
+    },
+    "students_per_classroom": {
+     "n": 45,
+     "p10": 16.5,
+     "median": 32.2,
+     "p90": 45.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 45,
+     "p10": 24.0,
+     "median": 61.0,
+     "p90": 78.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 45,
+     "p10": 25.0,
+     "median": 87.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 45,
+     "p10": 44.0,
+     "median": 93.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 45,
+     "yes": 33
+    },
+    "has_special_educator": {
+     "n": 45,
+     "yes": 38
+    }
+   }
+  },
+  {
+   "pincode": "110078",
+   "schools": 30,
+   "students": 49081,
+   "teachers": 1885,
+   "management": {
+    "private_unaided": 20,
+    "dept_education": 5,
+    "local_body": 4,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 17,
+    "primary": 6,
+    "upper_primary": 5,
+    "secondary": 2
+   },
+   "board": {
+    "cbse": 19,
+    "no_secondary": 11
+   },
+   "medium": {
+    "english": 23,
+    "hindi": 7
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 30,
+     "p10": 19.4,
+     "median": 27.8,
+     "p90": 37.8
+    },
+    "students_per_classroom": {
+     "n": 30,
+     "p10": 27.7,
+     "median": 37.0,
+     "p90": 52.8
+    },
+    "pct_postgraduate_teachers": {
+     "n": 30,
+     "p10": 26.0,
+     "median": 60.0,
+     "p90": 76.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 30,
+     "p10": 56.0,
+     "median": 95.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 30,
+     "p10": 43.0,
+     "median": 80.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 30,
+     "yes": 28
+    },
+    "has_special_educator": {
+     "n": 30,
+     "yes": 23
+    }
+   }
+  },
+  {
+   "pincode": "110080",
+   "schools": 50,
+   "students": 36892,
+   "teachers": 1242,
+   "management": {
+    "private_unaided": 29,
+    "local_body": 15,
+    "dept_education": 5,
+    "central": 1
+   },
+   "stage": {
+    "primary": 33,
+    "higher_secondary": 10,
+    "upper_primary": 5,
+    "secondary": 2
+   },
+   "board": {
+    "no_secondary": 38,
+    "cbse": 12
+   },
+   "medium": {
+    "english": 31,
+    "hindi": 19
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 50,
+     "p10": 16.8,
+     "median": 30.0,
+     "p90": 42.4
+    },
+    "students_per_classroom": {
+     "n": 50,
+     "p10": 10.2,
+     "median": 29.5,
+     "p90": 45.6
+    },
+    "pct_postgraduate_teachers": {
+     "n": 50,
+     "p10": 6.0,
+     "median": 29.0,
+     "p90": 59.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 50,
+     "p10": 15.0,
+     "median": 97.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 50,
+     "p10": 44.0,
+     "median": 87.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 50,
+     "yes": 46
+    },
+    "has_special_educator": {
+     "n": 50,
+     "yes": 32
+    }
+   }
+  },
+  {
+   "pincode": "110081",
+   "schools": 86,
+   "students": 55399,
+   "teachers": 2042,
+   "management": {
+    "private_unaided": 42,
+    "local_body": 25,
+    "dept_education": 18,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 32,
+    "higher_secondary": 30,
+    "upper_primary": 19,
+    "secondary": 5
+   },
+   "board": {
+    "no_secondary": 51,
+    "cbse": 35
+   },
+   "medium": {
+    "english": 43,
+    "hindi": 43
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 86,
+     "p10": 16.9,
+     "median": 26.0,
+     "p90": 34.7
+    },
+    "students_per_classroom": {
+     "n": 86,
+     "p10": 15.8,
+     "median": 28.8,
+     "p90": 41.1
+    },
+    "pct_postgraduate_teachers": {
+     "n": 86,
+     "p10": 11.0,
+     "median": 37.0,
+     "p90": 74.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 86,
+     "p10": 9.0,
+     "median": 71.0,
+     "p90": 99.0
+    },
+    "pct_regular_teachers": {
+     "n": 86,
+     "p10": 61.0,
+     "median": 96.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 86,
+     "yes": 41
+    },
+    "has_special_educator": {
+     "n": 86,
+     "yes": 75
+    }
+   }
+  },
+  {
+   "pincode": "110082",
+   "schools": 37,
+   "students": 21384,
+   "teachers": 806,
+   "management": {
+    "local_body": 15,
+    "private_unaided": 12,
+    "dept_education": 9,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 16,
+    "higher_secondary": 13,
+    "upper_primary": 6,
+    "secondary": 2
+   },
+   "board": {
+    "no_secondary": 22,
+    "cbse": 15
+   },
+   "medium": {
+    "hindi": 26,
+    "english": 11
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 37,
+     "p10": 20.4,
+     "median": 27.3,
+     "p90": 40.2
+    },
+    "students_per_classroom": {
+     "n": 37,
+     "p10": 20.5,
+     "median": 32.3,
+     "p90": 47.9
+    },
+    "pct_postgraduate_teachers": {
+     "n": 37,
+     "p10": 0.0,
+     "median": 27.0,
+     "p90": 76.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 37,
+     "p10": 18.0,
+     "median": 86.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 37,
+     "p10": 43.0,
+     "median": 88.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 37,
+     "yes": 18
+    },
+    "has_special_educator": {
+     "n": 37,
+     "yes": 32
+    }
+   }
+  },
+  {
+   "pincode": "110083",
+   "schools": 41,
+   "students": 36513,
+   "teachers": 1356,
+   "management": {
+    "local_body": 23,
+    "dept_education": 17,
+    "private_unaided": 1
+   },
+   "stage": {
+    "primary": 24,
+    "higher_secondary": 17
+   },
+   "board": {
+    "no_secondary": 24,
+    "cbse": 17
+   },
+   "medium": {
+    "hindi": 40,
+    "english": 1
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 41,
+     "p10": 21.6,
+     "median": 29.7,
+     "p90": 38.5
+    },
+    "students_per_classroom": {
+     "n": 41,
+     "p10": 18.2,
+     "median": 31.7,
+     "p90": 42.2
+    },
+    "pct_postgraduate_teachers": {
+     "n": 41,
+     "p10": 7.0,
+     "median": 40.0,
+     "p90": 72.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 41,
+     "p10": 11.0,
+     "median": 38.0,
+     "p90": 79.0
+    },
+    "pct_regular_teachers": {
+     "n": 41,
+     "p10": 73.0,
+     "median": 90.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 41,
+     "yes": 24
+    },
+    "has_special_educator": {
+     "n": 41,
+     "yes": 39
+    }
+   }
+  },
+  {
+   "pincode": "110084",
+   "schools": 106,
+   "students": 80989,
+   "teachers": 2489,
+   "management": {
+    "private_unaided": 86,
+    "local_body": 11,
+    "dept_education": 9
+   },
+   "stage": {
+    "primary": 61,
+    "upper_primary": 17,
+    "higher_secondary": 15,
+    "secondary": 13
+   },
+   "board": {
+    "no_secondary": 78,
+    "cbse": 28
+   },
+   "medium": {
+    "english": 85,
+    "hindi": 21
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 105,
+     "p10": 19.6,
+     "median": 31.4,
+     "p90": 46.0
+    },
+    "students_per_classroom": {
+     "n": 106,
+     "p10": 14.1,
+     "median": 30.9,
+     "p90": 54.3
+    },
+    "pct_postgraduate_teachers": {
+     "n": 106,
+     "p10": 0.0,
+     "median": 24.0,
+     "p90": 57.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 106,
+     "p10": 16.0,
+     "median": 61.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 106,
+     "p10": 21.0,
+     "median": 67.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 106,
+     "yes": 54
+    },
+    "has_special_educator": {
+     "n": 106,
+     "yes": 72
+    }
+   }
+  },
+  {
+   "pincode": "110085",
+   "schools": 142,
+   "students": 158318,
+   "teachers": 6158,
+   "management": {
+    "private_unaided": 70,
+    "local_body": 37,
+    "dept_education": 30,
+    "central": 5
+   },
+   "stage": {
+    "higher_secondary": 77,
+    "primary": 46,
+    "upper_primary": 15,
+    "secondary": 4
+   },
+   "board": {
+    "cbse": 78,
+    "no_secondary": 61,
+    "state_board": 3
+   },
+   "medium": {
+    "english": 82,
+    "hindi": 60
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 142,
+     "p10": 17.2,
+     "median": 26.9,
+     "p90": 34.5
+    },
+    "students_per_classroom": {
+     "n": 142,
+     "p10": 15.7,
+     "median": 32.6,
+     "p90": 43.3
+    },
+    "pct_postgraduate_teachers": {
+     "n": 142,
+     "p10": 22.0,
+     "median": 57.0,
+     "p90": 77.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 142,
+     "p10": 27.0,
+     "median": 85.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 142,
+     "p10": 30.0,
+     "median": 88.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 142,
+     "yes": 112
+    },
+    "has_special_educator": {
+     "n": 142,
+     "yes": 125
+    }
+   }
+  },
+  {
+   "pincode": "110086",
+   "schools": 189,
+   "students": 170521,
+   "teachers": 5534,
+   "management": {
+    "private_unaided": 113,
+    "local_body": 45,
+    "dept_education": 30,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 73,
+    "higher_secondary": 58,
+    "upper_primary": 39,
+    "secondary": 19
+   },
+   "board": {
+    "no_secondary": 112,
+    "cbse": 76,
+    "state_board": 1
+   },
+   "medium": {
+    "english": 115,
+    "hindi": 74
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 189,
+     "p10": 18.4,
+     "median": 30.9,
+     "p90": 43.9
+    },
+    "students_per_classroom": {
+     "n": 189,
+     "p10": 14.0,
+     "median": 31.2,
+     "p90": 46.4
+    },
+    "pct_postgraduate_teachers": {
+     "n": 189,
+     "p10": 0.0,
+     "median": 27.0,
+     "p90": 71.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 189,
+     "p10": 8.0,
+     "median": 50.0,
+     "p90": 97.0
+    },
+    "pct_regular_teachers": {
+     "n": 189,
+     "p10": 44.0,
+     "median": 89.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 189,
+     "yes": 102
+    },
+    "has_special_educator": {
+     "n": 189,
+     "yes": 163
+    }
+   }
+  },
+  {
+   "pincode": "110087",
+   "schools": 30,
+   "students": 42657,
+   "teachers": 1429,
+   "management": {
+    "private_unaided": 11,
+    "local_body": 11,
+    "dept_education": 6,
+    "central": 2
+   },
+   "stage": {
+    "higher_secondary": 18,
+    "primary": 11,
+    "secondary": 1
+   },
+   "board": {
+    "cbse": 19,
+    "no_secondary": 11
+   },
+   "medium": {
+    "hindi": 17,
+    "english": 13
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 30,
+     "p10": 24.0,
+     "median": 30.2,
+     "p90": 42.4
+    },
+    "students_per_classroom": {
+     "n": 30,
+     "p10": 19.8,
+     "median": 34.8,
+     "p90": 50.8
+    },
+    "pct_postgraduate_teachers": {
+     "n": 30,
+     "p10": 20.0,
+     "median": 58.0,
+     "p90": 74.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 30,
+     "p10": 17.0,
+     "median": 63.0,
+     "p90": 98.0
+    },
+    "pct_regular_teachers": {
+     "n": 30,
+     "p10": 45.0,
+     "median": 90.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 30,
+     "yes": 21
+    },
+    "has_special_educator": {
+     "n": 30,
+     "yes": 29
+    }
+   }
+  },
+  {
+   "pincode": "110088",
+   "schools": 48,
+   "students": 50107,
+   "teachers": 1954,
+   "management": {
+    "private_unaided": 18,
+    "local_body": 15,
+    "dept_education": 12,
+    "aided": 2,
+    "central": 1
+   },
+   "stage": {
+    "higher_secondary": 24,
+    "primary": 17,
+    "upper_primary": 4,
+    "secondary": 3
+   },
+   "board": {
+    "cbse": 26,
+    "no_secondary": 21,
+    "state_board": 1
+   },
+   "medium": {
+    "hindi": 27,
+    "english": 21
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 48,
+     "p10": 12.8,
+     "median": 27.6,
+     "p90": 38.1
+    },
+    "students_per_classroom": {
+     "n": 48,
+     "p10": 9.0,
+     "median": 30.9,
+     "p90": 41.9
+    },
+    "pct_postgraduate_teachers": {
+     "n": 48,
+     "p10": 15.0,
+     "median": 60.0,
+     "p90": 78.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 48,
+     "p10": 31.0,
+     "median": 83.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 48,
+     "p10": 43.0,
+     "median": 85.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 48,
+     "yes": 26
+    },
+    "has_special_educator": {
+     "n": 48,
+     "yes": 44
+    }
+   }
+  },
+  {
+   "pincode": "110089",
+   "schools": 8,
+   "students": 8629,
+   "teachers": 308,
+   "management": {
+    "dept_education": 4,
+    "private_unaided": 3,
+    "local_body": 1
+   },
+   "stage": {
+    "higher_secondary": 5,
+    "primary": 2,
+    "upper_primary": 1
+   },
+   "board": {
+    "cbse": 4,
+    "no_secondary": 3,
+    "state_board": 1
+   },
+   "medium": {
+    "english": 4,
+    "hindi": 4
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 8,
+     "p10": 24.6,
+     "median": 31.7,
+     "p90": 39.2
+    },
+    "students_per_classroom": {
+     "n": 8,
+     "p10": 20.6,
+     "median": 33.4,
+     "p90": 43.9
+    },
+    "pct_postgraduate_teachers": {
+     "n": 8,
+     "p10": 37.0,
+     "median": 66.0,
+     "p90": 85.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 8,
+     "p10": 50.0,
+     "median": 69.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 8,
+     "p10": 41.0,
+     "median": 93.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 8,
+     "yes": 6
+    },
+    "has_special_educator": {
+     "n": 8,
+     "yes": 6
+    }
+   }
+  },
+  {
+   "pincode": "110090",
+   "schools": 5,
+   "students": 10456,
+   "teachers": 314,
+   "management": {
+    "dept_education": 3,
+    "private_unaided": 2
+   },
+   "stage": {
+    "higher_secondary": 3,
+    "primary": 2
+   },
+   "board": {
+    "cbse": 3,
+    "no_secondary": 2
+   },
+   "medium": {
+    "hindi": 4,
+    "english": 1
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 5,
+     "p10": 20.3,
+     "median": 38.5,
+     "p90": 50.6
+    },
+    "students_per_classroom": {
+     "n": 5,
+     "p10": 11.2,
+     "median": 63.6,
+     "p90": 88.9
+    },
+    "pct_postgraduate_teachers": {
+     "n": 5,
+     "p10": 18.0,
+     "median": 64.0,
+     "p90": 71.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 5,
+     "p10": 24.0,
+     "median": 48.0,
+     "p90": 74.0
+    },
+    "pct_regular_teachers": {
+     "n": 5,
+     "p10": 11.0,
+     "median": 32.0,
+     "p90": 77.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 5,
+     "yes": 1
+    },
+    "has_special_educator": {
+     "n": 5,
+     "yes": 4
+    }
+   }
+  },
+  {
+   "pincode": "110091",
+   "schools": 104,
+   "students": 92401,
+   "teachers": 3565,
+   "management": {
+    "local_body": 40,
+    "dept_education": 33,
+    "private_unaided": 29,
+    "central": 2
+   },
+   "stage": {
+    "primary": 57,
+    "higher_secondary": 39,
+    "upper_primary": 6,
+    "secondary": 2
+   },
+   "board": {
+    "no_secondary": 63,
+    "cbse": 40,
+    "state_board": 1
+   },
+   "medium": {
+    "hindi": 67,
+    "english": 35,
+    "urdu": 2
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 104,
+     "p10": 20.1,
+     "median": 27.0,
+     "p90": 39.3
+    },
+    "students_per_classroom": {
+     "n": 104,
+     "p10": 12.7,
+     "median": 30.0,
+     "p90": 45.0
+    },
+    "pct_postgraduate_teachers": {
+     "n": 104,
+     "p10": 21.0,
+     "median": 52.0,
+     "p90": 77.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 104,
+     "p10": 20.0,
+     "median": 57.0,
+     "p90": 95.0
+    },
+    "pct_regular_teachers": {
+     "n": 104,
+     "p10": 47.0,
+     "median": 80.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 104,
+     "yes": 89
+    },
+    "has_special_educator": {
+     "n": 104,
+     "yes": 85
+    }
+   }
+  },
+  {
+   "pincode": "110092",
+   "schools": 156,
+   "students": 153110,
+   "teachers": 5627,
+   "management": {
+    "private_unaided": 85,
+    "local_body": 35,
+    "dept_education": 33,
+    "central": 2,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 67,
+    "higher_secondary": 63,
+    "upper_primary": 22,
+    "secondary": 4
+   },
+   "board": {
+    "no_secondary": 89,
+    "cbse": 65,
+    "state_board": 2
+   },
+   "medium": {
+    "english": 95,
+    "hindi": 60,
+    "urdu": 1
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 156,
+     "p10": 16.6,
+     "median": 28.0,
+     "p90": 38.2
+    },
+    "students_per_classroom": {
+     "n": 156,
+     "p10": 13.9,
+     "median": 32.2,
+     "p90": 44.2
+    },
+    "pct_postgraduate_teachers": {
+     "n": 156,
+     "p10": 17.0,
+     "median": 55.0,
+     "p90": 77.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 156,
+     "p10": 21.0,
+     "median": 71.0,
+     "p90": 98.0
+    },
+    "pct_regular_teachers": {
+     "n": 156,
+     "p10": 36.0,
+     "median": 80.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 156,
+     "yes": 132
+    },
+    "has_special_educator": {
+     "n": 156,
+     "yes": 110
+    }
+   }
+  },
+  {
+   "pincode": "110093",
+   "schools": 126,
+   "students": 103371,
+   "teachers": 3371,
+   "management": {
+    "private_unaided": 59,
+    "local_body": 40,
+    "dept_education": 26,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 61,
+    "higher_secondary": 30,
+    "upper_primary": 29,
+    "secondary": 6
+   },
+   "board": {
+    "no_secondary": 90,
+    "cbse": 35,
+    "state_board": 1
+   },
+   "medium": {
+    "hindi": 66,
+    "english": 60
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 126,
+     "p10": 19.1,
+     "median": 31.6,
+     "p90": 47.7
+    },
+    "students_per_classroom": {
+     "n": 126,
+     "p10": 12.9,
+     "median": 28.9,
+     "p90": 50.7
+    },
+    "pct_postgraduate_teachers": {
+     "n": 126,
+     "p10": 0.0,
+     "median": 39.0,
+     "p90": 75.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 126,
+     "p10": 6.0,
+     "median": 40.0,
+     "p90": 99.0
+    },
+    "pct_regular_teachers": {
+     "n": 126,
+     "p10": 52.0,
+     "median": 83.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 126,
+     "yes": 45
+    },
+    "has_special_educator": {
+     "n": 126,
+     "yes": 86
+    }
+   }
+  },
+  {
+   "pincode": "110094",
+   "schools": 316,
+   "students": 207671,
+   "teachers": 6416,
+   "management": {
+    "private_unaided": 238,
+    "local_body": 44,
+    "dept_education": 33,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 138,
+    "upper_primary": 116,
+    "higher_secondary": 41,
+    "secondary": 21
+   },
+   "board": {
+    "no_secondary": 254,
+    "cbse": 62
+   },
+   "medium": {
+    "english": 218,
+    "hindi": 98
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 315,
+     "p10": 14.8,
+     "median": 31.3,
+     "p90": 49.0
+    },
+    "students_per_classroom": {
+     "n": 315,
+     "p10": 10.9,
+     "median": 27.0,
+     "p90": 56.7
+    },
+    "pct_postgraduate_teachers": {
+     "n": 316,
+     "p10": 0.0,
+     "median": 29.0,
+     "p90": 71.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 316,
+     "p10": 0.0,
+     "median": 33.0,
+     "p90": 98.0
+    },
+    "pct_regular_teachers": {
+     "n": 316,
+     "p10": 41.0,
+     "median": 92.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 316,
+     "yes": 96
+    },
+    "has_special_educator": {
+     "n": 316,
+     "yes": 134
+    }
+   }
+  },
+  {
+   "pincode": "110095",
+   "schools": 75,
+   "students": 80715,
+   "teachers": 2755,
+   "management": {
+    "private_unaided": 32,
+    "local_body": 23,
+    "dept_education": 18,
+    "aided": 2
+   },
+   "stage": {
+    "primary": 31,
+    "higher_secondary": 25,
+    "upper_primary": 10,
+    "secondary": 9
+   },
+   "board": {
+    "no_secondary": 41,
+    "cbse": 34
+   },
+   "medium": {
+    "hindi": 40,
+    "english": 33,
+    "urdu": 2
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 75,
+     "p10": 22.1,
+     "median": 29.6,
+     "p90": 42.3
+    },
+    "students_per_classroom": {
+     "n": 75,
+     "p10": 18.9,
+     "median": 34.0,
+     "p90": 52.8
+    },
+    "pct_postgraduate_teachers": {
+     "n": 75,
+     "p10": 29.0,
+     "median": 52.0,
+     "p90": 76.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 75,
+     "p10": 14.0,
+     "median": 40.0,
+     "p90": 98.0
+    },
+    "pct_regular_teachers": {
+     "n": 75,
+     "p10": 44.0,
+     "median": 80.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 75,
+     "yes": 49
+    },
+    "has_special_educator": {
+     "n": 75,
+     "yes": 55
+    }
+   }
+  },
+  {
+   "pincode": "110096",
+   "schools": 101,
+   "students": 98048,
+   "teachers": 3332,
+   "management": {
+    "private_unaided": 59,
+    "local_body": 27,
+    "dept_education": 14,
+    "aided": 1
+   },
+   "stage": {
+    "primary": 55,
+    "higher_secondary": 26,
+    "upper_primary": 17,
+    "secondary": 3
+   },
+   "board": {
+    "no_secondary": 72,
+    "cbse": 29
+   },
+   "medium": {
+    "english": 60,
+    "hindi": 41
+   },
+   "indicators": {
+    "pupil_teacher_ratio": {
+     "n": 101,
+     "p10": 19.5,
+     "median": 31.0,
+     "p90": 43.1
+    },
+    "students_per_classroom": {
+     "n": 101,
+     "p10": 14.7,
+     "median": 30.6,
+     "p90": 48.7
+    },
+    "pct_postgraduate_teachers": {
+     "n": 101,
+     "p10": 14.0,
+     "median": 40.0,
+     "p90": 75.0
+    },
+    "pct_computer_trained_teachers": {
+     "n": 101,
+     "p10": 7.0,
+     "median": 54.0,
+     "p90": 100.0
+    },
+    "pct_regular_teachers": {
+     "n": 101,
+     "p10": 55.0,
+     "median": 88.0,
+     "p90": 100.0
+    }
+   },
+   "shares": {
+    "has_smart_board": {
+     "n": 101,
+     "yes": 95
+    },
+    "has_special_educator": {
+     "n": 101,
+     "yes": 62
+    }
+   }
+  }
+ ]
+}

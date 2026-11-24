@@ -18,6 +18,7 @@ Area recommendations currently cover **Delhi**, divided into **1,487 grid cells 
 - **Find nearby transport:** search the downloaded OSM evidence for bus stops, metro stations and airport terminals without contacting Overpass.
 - **Explore similar-area groups:** view precomputed clustering independently of the suitability ranking.
 - **Export results:** save area scores as CSV and download clustering/evaluation reports.
+- **See school profiles by pincode (Flask website only):** who runs the schools and how staffing and resources vary, from UDISE+ 2024-25, shown beside an area when you click the map. See [School profiles](#school-profiles-by-pincode-flask-website).
 
 The responsive Python interface uses **Flet** and **flet-map**. Tabs are built when opened, map cells are drawn around the current viewport, and existing controls are reused for selection updates. Rankings still consider every area in the study dataset.
 
@@ -132,7 +133,7 @@ The repository includes a prebuilt SQLite database, so startup does not require 
 - **Area recommendations:** Delhi only. A cell can include non-residential land and is a comparison unit, not a confirmed housing location.
 - **Transport and amenities:** limited to the downloaded OSM extracts. Extract bounds indicate extent, not guaranteed completeness. No mapped result does not prove no facility exists.
 - **Air-quality search:** independent of transport coverage and available for cities represented in the national dataset.
-- **Schools:** proximity is available; verified school quality, admissions, board and stage matching are not.
+- **Schools:** proximity is available; verified school quality, admissions, board and stage matching are not. The separate pincode school profiles (Flask website) describe UDISE+ staffing and resources beside an area and never enter the score.
 - **Other factors:** water quality, crime, affordability, population density and routed commute times are not currently scored.
 - **Distances:** straight-line distances, not walking routes or travel times. EV connector suitability, hospital capability, public access and passenger airport service are not guaranteed.
 - **Place labels:** nearby mapped locality names are orientation aids, not official grid-cell names or neighbourhood boundaries.
@@ -210,6 +211,7 @@ Model reports describe clustering separation/stability and ranking sensitivity. 
 | `clustering.py` | Offline clustering and model reports |
 | `tests/` | Regression and interaction tests |
 | `templates/`, `static/`, `unified_map.py` | Compatibility Flask/Folium interface |
+| `school_views.py`, `school_profiles.py`, `data/schools/` | School profile pages, map-click pincode lookup and their generated data (Flask website) |
 
 The earlier Flask website remains available:
 
@@ -218,12 +220,33 @@ python -m pip install -r requirements.txt
 flask --app app run
 ```
 
-It runs at **http://127.0.0.1:5000/** and retains the area, air-quality, transport and export routes.
+It runs at **http://127.0.0.1:5000/** and retains the area, air-quality, transport and export routes, plus the school profile pages (`/schools`).
+
+## School profiles by pincode (Flask website)
+
+Run the Flask website (`python -m flask --app app run`) and open **http://127.0.0.1:5000/schools**. `/schools` lists Delhi's 93 school pincodes and `/schools/<pincode>` shows one: the management mix (Dept. of Education, local body, aided, private unaided, central), highest level offered, board, main medium, and ranges (median with 10th–90th percentile) for pupil-teacher ratio, students per classroom, teachers with a postgraduate degree, teachers trained in computers and regular teachers, plus the share of schools with a smart board or a dedicated special educator, each beside the Delhi-wide value. Ranges are hidden for pincodes with fewer than 5 schools.
+
+There is deliberately no quality score. Pincode explains only a small share of the differences between schools, and basics such as water, library, electricity and internet are reported by nearly every school. The figures are school-reported staffing and resources, not learning outcomes. The UDISE+ data has no school names or coordinates, so individual schools cannot be matched to map points.
+
+Clicking the air-quality map (`/air-quality`) or an area cell on the Flask area page (`/`) looks up the pincode containing that point (`/schools/lookup?lat=..&lon=..`, run on the server from the boundary file) and adds its profile to the side panel. 1,453 of the 1,487 grid cells get a profile; the other 34 have their centre outside every pincode polygon. Pincodes are postal areas, not neighbourhoods or school catchments, and boundaries are approximate: a point within about 100 m of an edge can land in the neighbouring pincode. Pincodes 110080 and 110090 (55 schools) have no polygon, so they can only be opened from `/schools`.
+
+These pages belong to the Flask website. The Flet desktop and browser app (`main.py`) does not show them yet.
+
+To rebuild, download `07_prof1.csv`, `07_fac.csv`, `07_tch.csv` and `07_enr1.csv` from the OpenCity UDISE+ page below into one folder, and the Delhi KML from the OpenCity pincode page:
+
+```bash
+python scripts/build_school_profiles.py /path/to/udise-folder
+python scripts/build_pincode_boundaries.py /path/to/Delhi-Pincodes.kml
+```
+
+Both write to `data/schools/`. The build rules (outlier caps, how classrooms and students are counted, what is left out and why) are stored in `pincode_profiles.json` under `metadata`. Restart Flask after rebuilding, because the boundary file is cached in memory.
 
 ## Sources and licences
 
 - **Facilities and background maps:** [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), ODbL. Extract fingerprints and bounds are recorded in `data/area_manifest.json`; original download dates are unverified.
 - **Delhi boundary:** [DataMeet Municipal Spatial Data](https://github.com/datameet/Municipal_Spatial_Data/tree/master/Delhi), [CC BY-SA 2.5 India](https://creativecommons.org/licenses/by-sa/2.5/in/). Source notes are preserved in `data/boundary_source.md`. This community reference is not a certified legal boundary.
+- **School profiles:** UDISE+ Delhi 2024-25, Ministry of Education, republished on [OpenCity](https://data.opencity.in/dataset/delhi-udise-2024-25) (public domain). Code lists follow the UDISE+ data capture format (2023-24 edition checked; 2024-25 codes not separately verified).
+- **Pincode boundaries:** India Post boundaries republished by [OpenCity](https://data.opencity.in/dataset/pincode-maps-of-cities/resource/4fe127ea-5fbf-4d86-b456-605323a8caaf) (data updated 25 Nov 2025; credited to India Post, compiled by Deepak Malghan). The page lists CC BY-SA and also public domain; keep the attribution and share any redistributed boundary file on the same terms.
 - **Air observations:** [Real-time air-quality dataset on data.gov.in](https://www.data.gov.in/resource/real-time-air-quality-index-various-locations).
 - **Project code:** see [LICENSE](LICENSE).
 

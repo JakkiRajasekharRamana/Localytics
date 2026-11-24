@@ -4,6 +4,7 @@
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='areas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='schools.css') }}">
 {% endblock %}
 {% block content %}
     <h1>Find an area that fits your priorities</h1>
@@ -110,6 +111,7 @@
         <script id="area-config" type="application/json">{{ browser_config|tojson }}</script>
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
         <script src="{{ url_for('static', filename='shared.js') }}"></script>
+        <script src="{{ url_for('static', filename='school_profile.js') }}"></script>
         <script src="{{ url_for('static', filename='areas.js') }}"></script>
     {% endif %}
 {% endblock %}

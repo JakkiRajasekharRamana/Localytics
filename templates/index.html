@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block title %}India Air Quality Explorer{% endblock %}
-{% block styles %}<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='schools.css') }}">
+{% endblock %}
 {% block content %}
     <div class="eyebrow">INDIA · STATION EXPLORER</div>
     <h1>Air quality & connectivity</h1>
@@ -43,4 +47,7 @@
     Data: CPCB / data.gov.in · Map: OpenStreetMap contributors · <a href="https://www.airquality.cpcb.gov.in/ccr_docs/About_AQI.pdf">CPCB AQI reference</a>
     </footer>
 {% endblock %}
-{% block scripts %}<script src="{{ url_for('static', filename='index.js') }}"></script>{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='school_profile.js') }}"></script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+{% endblock %}

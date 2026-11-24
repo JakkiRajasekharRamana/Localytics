@@ -10,6 +10,7 @@ import data_store
 from area_views import register as register_area_views
 from config import ROOT, TRANSPORT_CATEGORIES
 from geography import coordinates
+from school_views import register as register_school_views
 from transport import search_transport, transport_map
 from unified_map import build_map
 
@@ -92,6 +93,7 @@ def connectivity():
 
 
 register_area_views(app)
+register_school_views(app)
 
 if __name__ == "__main__":
     from main import launch

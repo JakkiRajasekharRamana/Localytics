@@ -1,0 +1,47 @@
+{% from "_school_macros.html" import mixbar, legend, stat %}
+<div class="school-card">
+    <hr>
+    <b>School profile</b>
+    {% if status == "invalid" %}
+        <p>
+            <small>Could not read that location.</small>
+        </p>
+    {% elif status == "missing" %}
+        <p>
+            <small>School profile data is not built yet. See the README.</small>
+        </p>
+    {% elif status == "outside" %}
+        <p>
+            <small>This point is outside the Delhi pincode boundaries, so there is no school profile for it.</small>
+        </p>
+    {% elif status == "no_schools" %}
+        <p>
+            <small>Pincode {{ pincode }} has no schools in the UDISE+ data, so there is no profile.</small>
+        </p>
+    {% else %}
+        <div class="school-summary">
+            Pincode <b>{{ detail.pincode }}</b> · {{ '{:,}'.format(detail.schools) }} schools · {{ '{:,}'.format(detail.students) }} students
+        </div>
+        <div class="school-caption">Who runs the schools</div>
+        {{ mixbar(detail.management, 'Management') }}
+        {{ legend(detail.management) }}
+        <table>
+            <tr>
+                <th>Median (10th–90th)</th>
+                <th>Here</th>
+                <th>Delhi</th>
+            </tr>
+            {% for key, name, unit, digits in sp.INDICATORS %}
+                <tr>
+                    <td>{{ name }}</td>
+                    <td>{{ stat(detail.indicators[key]) }}</td>
+                    <td>{{ stat(delhi.indicators[key]) }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p class="school-link">
+            <a href="{{ url_for('schools.detail', pincode=detail.pincode) }}">Full profile for {{ detail.pincode }}</a>
+        </p>
+        <small>A profile, not a score. Postal area, not a school catchment; school-reported resources, not results. Pincode boundaries: India Post via OpenCity (CC BY-SA).</small>
+    {% endif %}
+</div>

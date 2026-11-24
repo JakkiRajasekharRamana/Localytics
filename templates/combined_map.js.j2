@@ -104,8 +104,10 @@
     html += '<hr><small>Project connectivity score, not an official rating. Straight-line distances. OSM coverage and duplicates affect counts; passenger airport service is unverified. PM2.5 colours assume 24-hour µg/m³ and are not official overall AQI.</small></div>';
     window.parent.postMessage({
       type: 'localytics:selection',
-      html: html
-    }, window.location.origin === 'null' ? '*' : window.location.origin);
+      html: html,
+      lat: point.lat,
+      lon: point.lon
+    },window.location.origin === 'null' ? '*' : window.location.origin);
   }
   for (const s of stations) {
     const a = s.air;

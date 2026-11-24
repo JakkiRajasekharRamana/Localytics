@@ -11,6 +11,11 @@
       return;
     const target = document.getElementById("selection-details");
     if (target) target.innerHTML = event.data.html;
+    LocalyticsSchools.load(
+      document.getElementById("school-profile"),
+      event.data.lat,
+      event.data.lon,
+    );
   });
 
   document.getElementById("filters").addEventListener("submit", () => {

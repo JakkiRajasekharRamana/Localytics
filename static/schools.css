@@ -1,0 +1,155 @@
+body:has(.schools-page) {
+  font:
+    16px system-ui,
+    sans-serif;
+}
+body:has(.schools-page) main {
+  max-width: 1250px;
+  padding: 28px;
+}
+.schools-page .panel {
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+  margin: 20px 0;
+  border: 1px solid #dbe3eb;
+}
+.schools-page .note {
+  padding: 16px;
+  background: #fff6df;
+  border-left: 4px solid #d69b26;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.schools-page .error {
+  background: #fee9e7;
+  padding: 16px;
+  border-radius: 8px;
+}
+.schools-page .stats {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+.schools-page .stats strong {
+  display: block;
+  font-size: 26px;
+}
+.schools-page .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+.schools-page .toolbar {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.schools-page .toolbar label {
+  margin: 0;
+  font-size: 16px;
+}
+.schools-page input[type="search"] {
+  padding: 10px;
+  border: 1px solid #bac8d5;
+  border-radius: 6px;
+  width: 240px;
+  font: inherit;
+}
+.schools-page .table {
+  overflow: auto;
+}
+.schools-page table,
+.school-card table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.schools-page td,
+.schools-page th {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #e5eaf0;
+  vertical-align: top;
+}
+.schools-page th {
+  background: #f3f6fa;
+}
+.schools-page th.sortable {
+  cursor: pointer;
+  white-space: nowrap;
+}
+.schools-page th.sortable:hover {
+  text-decoration: underline;
+}
+.schools-page tr.delhi td {
+  background: #eef6f6;
+  font-weight: 600;
+}
+.schools-page .muted,
+.school-card .muted {
+  color: #526578;
+  font-size: 13px;
+}
+.schools-page small,
+.school-card small {
+  color: #526578;
+}
+.nowrap {
+  white-space: nowrap;
+}
+/* Mix bars and legends are shared by the pages and the map/area sidebar card. */
+.school-bar {
+  display: flex;
+  height: 14px;
+  min-width: 130px;
+  border-radius: 7px;
+  overflow: hidden;
+  background: #e5eaf0;
+}
+.school-bar span {
+  display: block;
+  height: 100%;
+}
+.school-card .school-legend,
+.schools-page .school-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+}
+.school-card .school-legend li,
+.schools-page .school-legend li {
+  margin: 0;
+}
+.school-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  border-radius: 2px;
+}
+.school-legend-key {
+  margin-top: 14px;
+}
+.school-card .school-summary {
+  font-size: 14px;
+  margin: 4px 0 8px;
+}
+.school-card .school-caption {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+.school-card table {
+  margin-top: 12px;
+}
+.school-card .school-link {
+  margin: 10px 0 4px;
+}

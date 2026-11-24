@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% from "_school_macros.html" import mixbar, legend, stat, colors %}
+{% block title %}Localytics · School profiles{% endblock %}
+{% block styles %}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='schools.css') }}">
+{% endblock %}
+{% block content %}
+    <div class="schools-page">
+        {% if missing %}
+            <h1>School profiles</h1>
+            <p class="error" role="alert">
+                School profile data is missing. Run <code>python scripts/build_school_profiles.py /path/to/udise-folder</code> as described in the README.
+            </p>
+        {% elif not_found %}
+            <h1>School profiles</h1>
+            <p class="error" role="alert">
+                No school profile for pincode “{{ not_found }}”. <a href="{{ url_for("schools.index") }}">See all pincodes</a>.
+            </p>
+        {% elif detail %}
+            <h1>Pincode {{ detail.pincode }}</h1>
+            <p>
+                <a href="{{ url_for("schools.index") }}">← All pincodes</a>
+            </p>
+            <div class="stats">
+                <div>
+                    <strong>{{ '{:,}'.format(detail.schools) }}</strong>schools
+                </div>
+                <div>
+                    <strong>{{ '{:,}'.format(detail.students) }}</strong>students enrolled
+                </div>
+                <div>
+                    <strong>{{ '{:,}'.format(detail.teachers) }}</strong>teachers
+                </div>
+            </div>
+            <div class="note">
+                This is a <b>profile, not a score</b>. It shows how schools in this postal area differ, next to the Delhi-wide picture. Staffing and resource figures are reported by schools and are not measures of teaching quality or results.
+            </div>
+            {% if not on_map %}
+                <p class="muted">
+                    This pincode has no boundary in the pincode map file, so clicking the map cannot show it; it is only reachable here.
+                </p>
+            {% endif %}
+            <div class="grid">
+                <section class="panel">
+                    <h2>Who runs the schools</h2>
+                    {{ mixbar(detail.management, 'Management') }}
+                    {{ legend(detail.management) }}
+                </section>
+                <section class="panel">
+                    <h2>Highest level offered</h2>
+                    {{ mixbar(detail.stage, 'Highest level') }}
+                    {{ legend(detail.stage) }}
+                </section>
+                <section class="panel">
+                    <h2>Board</h2>
+                    {{ mixbar(detail.board, 'Board') }}
+                    {{ legend(detail.board) }}
+                    <p class="muted">Secondary-section board, or higher-secondary board if there is none.</p>
+                </section>
+                <section class="panel">
+                    <h2>Main medium of instruction</h2>
+                    {{ mixbar(detail.medium, 'Medium') }}
+                    {{ legend(detail.medium) }}
+                </section>
+            </div>
+            <section class="panel">
+                <h2>Ranges across schools</h2>
+                <p class="muted">
+                    Median, with the 10th–90th percentile range of schools in brackets. A wide range means schools here differ a lot.
+                </p>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Indicator</th>
+                                <th>This pincode</th>
+                                <th>Delhi overall</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key, name, unit, digits in sp.INDICATORS %}
+                                <tr>
+                                    <td>
+                                        {{ name }}
+                                        <br>
+                                        <small>{{ unit }}</small>
+                                    </td>
+                                    <td>
+                                        {{ stat(detail.indicators[key]) }}
+                                        <br>
+                                        <small>{{ detail.indicators[key].n }} schools</small>
+                                    </td>
+                                    <td>{{ stat(delhi.indicators[key]) }}</td>
+                                </tr>
+                            {% endfor %}
+                            {% for key, name in sp.SHARES %}
+                                <tr>
+                                    <td>{{ name }}</td>
+                                    <td>
+                                        <b>{{ '%.0f'|format(detail.shares[key].pct) }}%</b> <small>({{ detail.shares[key].yes }} of {{ detail.shares[key].n }})</small>
+                                    </td>
+                                    <td>
+                                        <b>{{ '%.0f'|format(delhi.shares[key].pct) }}%</b>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        {% else %}
+            <h1>School profiles by pincode</h1>
+            <p>
+                How schools differ across Delhi’s postal areas: who runs them, what they teach up to, and ranges for staffing and resources. UDISE+ 2024-25 open data.
+            </p>
+            <div class="note">
+                <b>No single quality score, on purpose.</b> Pincode explains only a small part of the differences between schools, so one number per pincode would hide most of them. Pincodes are postal areas, not the 1 km grid cells, and the source data has no school names or locations. Each cell shows the median with the 10th–90th percentile range of schools in brackets; “–” means fewer than {{ meta.min_schools_for_range }} schools.
+            </div>
+            <section class="panel">
+                <div class="toolbar">
+                    <label for="filter">Find a pincode</label>
+                    <input id="filter"
+                           type="search"
+                           inputmode="numeric"
+                           placeholder="e.g. 110094">
+                    <span class="muted">Click a column heading to sort.</span>
+                </div>
+                <div class="table">
+                    <table id="profiles">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-type="text">Pincode</th>
+                                <th class="sortable" data-type="num">Schools</th>
+                                <th class="sortable" data-type="num">Management mix (sorts by private share)</th>
+                                <th class="sortable" data-type="num">Pupil-teacher ratio</th>
+                                <th class="sortable" data-type="num">Students per classroom</th>
+                                <th class="sortable" data-type="num">Postgraduate teachers %</th>
+                                <th class="sortable" data-type="num">Computer-trained teachers %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="delhi" data-fixed="1">
+                                <td>All Delhi</td>
+                                <td>{{ '{:,}'.format(delhi.schools) }}</td>
+                                <td>{{ mixbar(delhi.management, 'Management') }}</td>
+                                {% for k in ['pupil_teacher_ratio', 'students_per_classroom', 'pct_postgraduate_teachers', 'pct_computer_trained_teachers'] %}
+                                    <td>{{ stat(delhi.indicators[k]) }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% for r in rows %}
+                                <tr>
+                                    <td data-sort="{{ r.pincode }}">
+                                        <a href="{{ url_for('schools.detail', pincode=r.pincode) }}">{{ r.pincode }}</a>
+                                    </td>
+                                    <td data-sort="{{ r.schools }}">{{ r.schools }}</td>
+                                    <td data-sort="{{ r.private_pct }}">{{ mixbar(r.management, 'Management') }}</td>
+                                    {% for k in ['pupil_teacher_ratio', 'students_per_classroom', 'pct_postgraduate_teachers', 'pct_computer_trained_teachers'] %}
+                                        <td data-sort="{{ r.indicators[k].text.sort if r.indicators[k].text else -1 }}">{{ stat(r.indicators[k]) }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <ul class="school-legend school-legend-key">
+                    {% for k, label in sp.MANAGEMENT %}
+                        <li>
+                            <i style="background:{{ colors[k] }}"></i>{{ label }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endif %}
+        {% if meta %}
+            <section class="panel">
+                <h2>How to read this</h2>
+                <ul>
+                    {% for t in meta.rules %}<li>{{ t }}</li>{% endfor %}
+                </ul>
+                <h3>Not shown</h3>
+                <ul>
+                    {% for t in meta.not_shown %}<li>{{ t }}</li>{% endfor %}
+                </ul>
+                <h3>Limitations</h3>
+                <ul>
+                    {% for t in meta.limitations %}<li>{{ t }}</li>{% endfor %}
+                </ul>
+                <p class="muted">
+                    {{ meta.schools_total }} schools in {{ meta.pincode_count }} pincodes; {{ meta.schools_without_pincode }} schools have no pincode and are left out of pincode pages. Source: <a href="https://data.opencity.in/dataset/delhi-udise-2024-25">UDISE+ Delhi 2024-25 on OpenCity</a> (public domain). Built {{ meta.generated_at_utc[:10] }}. Map click lookup uses pincode boundaries from India Post, republished by <a href="https://data.opencity.in/dataset/pincode-maps-of-cities/resource/4fe127ea-5fbf-4d86-b456-605323a8caaf">OpenCity</a> (CC BY-SA); boundaries are approximate and a click near an edge can land in the neighbouring pincode.
+                </p>
+            </section>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block scripts %}
+    {% if rows %}<script src="{{ url_for('static', filename='schools.js') }}"></script>{% endif %}
+{% endblock %}
