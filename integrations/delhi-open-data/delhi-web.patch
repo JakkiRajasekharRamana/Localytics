@@ -1,0 +1,431 @@
+diff --git a/integration/localytics_api.py b/integration/localytics_api.py
+index 5149d85..137f666 100644
+--- a/integration/localytics_api.py
++++ b/integration/localytics_api.py
+@@ -3,7 +3,7 @@
+ import argparse
+ import json
+ import sys
+-from http.server import BaseHTTPRequestHandler, HTTPServer
++from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+ from pathlib import Path
+ from urllib.parse import parse_qsl, urlsplit
+ 
+@@ -22,15 +22,60 @@ def main():
+ 
+     service = LocalyticsService(args.localytics / "data/areas.sqlite")
+ 
++    import advisor
++    from advisor_chat import Advisor, ChatError
++
++    chat = Advisor(args.localytics)
++
+     def preferences_arguments(values):
+         weights, radius, cap, workplace, must = preferences(values)
+         return weights, radius, cap, service.stations, workplace, must
+ 
+     class Handler(BaseHTTPRequestHandler):
++        def respond(self, status, body):
++            payload = json.dumps(body, default=str).encode()
++            self.send_response(status)
++            self.send_header("Content-Type", "application/json")
++            self.send_header("Cache-Control", "no-store")
++            self.send_header("Content-Length", str(len(payload)))
++            self.end_headers()
++            self.wfile.write(payload)
++
++        def do_POST(self):
++            """Chat advisor: /advisor/chat (needs an API key), /advisor/search (the same engine, no key), /advisor/reset."""
++            url = urlsplit(self.path)
++            try:
++                length = int(self.headers.get("Content-Length") or 0)
++                if length > 20000:
++                    return self.respond(413, {"error": "Request too large."})
++                body = json.loads(self.rfile.read(length) or b"{}")
++                if not isinstance(body, dict):
++                    raise ValueError("expected a JSON object")
++            except ValueError:
++                return self.respond(400, {"error": "Send a JSON object."})
++            try:
++                if url.path == "/api/localytics/advisor/chat":
++                    return self.respond(200, chat.chat(str(body.get("session") or ""), str(body.get("text") or "")))
++                if url.path == "/api/localytics/advisor/search":
++                    return self.respond(200, dict(search=advisor.search(body.get("brief") or {})))
++                if url.path == "/api/localytics/advisor/reset":
++                    chat.reset(str(body.get("session") or ""))
++                    return self.respond(200, {"ok": True})
++            except ChatError as exc:
++                return self.respond(503 if exc.code in ("no_key", "offline", "busy") else 400, {"error": exc.code, "message": exc.message})
++            except advisor.BriefError as exc:
++                return self.respond(400, {"error": "brief", "message": str(exc)})
++            except Exception as exc:  # never leave the page hanging on a bug
++                print("advisor error:", repr(exc), file=sys.stderr)
++                return self.respond(500, {"error": "error", "message": "Something went wrong in the advisor."})
++            self.respond(404, {"error": "Unknown endpoint."})
++
+         def do_GET(self):
+             url = urlsplit(self.path)
+             status = 200
+-            if url.path == "/api/localytics/grid":
++            if url.path == "/api/localytics/advisor/status":
++                body = chat.status()
++            elif url.path == "/api/localytics/grid":
+                 body = {
+                     "factors": FACTORS,
+                     "grid": {
+@@ -75,7 +120,7 @@ def main():
+             self.end_headers()
+             self.wfile.write(payload)
+ 
+-    HTTPServer(("127.0.0.1", args.port), Handler).serve_forever()
++    ThreadingHTTPServer(("127.0.0.1", args.port), Handler).serve_forever()  # a slow chat reply must not block the map's data
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/web/index.html b/web/index.html
+index cc21d5f..618c176 100644
+--- a/web/index.html
++++ b/web/index.html
+@@ -12,6 +12,7 @@
+   <div id="map"></div>
+ 
+   <div class="topbar">
++    <button id="btn-ask" title="Say what you need and see the best areas on the map" hidden>Ask</button>
+     <button id="btn-guide" title="How this works">Guide</button>
+     <button id="btn-replay" title="Replay the intro">Replay</button>
+     <button id="btn-tour" title="Fly through the matches">Tour</button>
+@@ -38,7 +39,7 @@
+     <div class="pill" id="q-pill" hidden></div>
+     <details id="neighbourhoods">
+       <summary>Neighbourhood filters · Delhi</summary>
+-      <p>Compare neighbourhoods on the property map. Scores cover Delhi; this property dataset covers Gurugram.</p>
++      <p id="area-blurb">Compare neighbourhoods on the property map. Scores cover Delhi; this property dataset covers Gurugram.</p>
+       <button type="button" class="ghost" id="area-zoom">Centre map on Delhi</button>
+       <form id="area-preferences">
+         <div id="area-factors"></div>
+@@ -134,6 +135,22 @@
+     <div class="feed" id="feed"></div>
+   </aside>
+ 
++  <div class="air-legend" id="air-legend" hidden></div>
++
++  <aside class="panel right" id="advisor" hidden aria-label="Ask Localytics">
++    <header class="adv-head">
++      <div><b>Ask Localytics</b><small>Delhi + Gurugram · numbers come from the map's own data</small></div>
++      <span class="adv-tools"><button class="linkbtn" id="adv-new" type="button">New chat</button><button class="iconbtn" id="adv-close" type="button" aria-label="Close">×</button></span>
++    </header>
++    <p class="adv-banner" id="adv-banner" hidden>The chat is not available right now (no Gemini or Claude API key, or no connection), so this is the quick form. It runs the same search.</p>
++    <div class="adv-thread" id="adv-thread" aria-live="polite"></div>
++    <form id="adv-chat-form" class="adv-input">
++      <textarea id="adv-text" rows="1" placeholder="e.g. 3 BHK rent near Golf Course Road, ~₹70k" maxlength="1500"></textarea>
++      <button class="primary" id="adv-send" type="submit">Send</button>
++    </form>
++    <form id="adv-quick" class="adv-quick" hidden></form>
++    <button class="linkbtn adv-switch" id="adv-switch" type="button"></button>
++  </aside>
+   <article class="card" id="card" hidden></article>
+ 
+   <div class="controls">
+@@ -152,6 +169,7 @@
+     </div>
+     <button id="ctl-locate" title="Show my location" aria-label="Show my location"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="3.2" fill="currentColor"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3" stroke="currentColor" stroke-width="1.8"/></svg></button>
+     <button id="ctl-home" title="Show the whole city" aria-label="Show the whole city"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 10.5 12 4l8 6.5V20h-5.5v-5.5h-5V20H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
++    <button id="ctl-air" title="Colour buildings by PM2.5 (nearest air monitor)" aria-label="Colour buildings by PM2.5" aria-pressed="false" hidden>PM2.5</button>
+     <button id="ctl-tilt" title="Switch between flat and 3D" aria-label="Switch between flat and 3D">2D</button>
+     <div class="zoom">
+       <button id="ctl-in" title="Zoom in" aria-label="Zoom in">+</button>
+diff --git a/web/src/filters.js b/web/src/filters.js
+index 096c137..48907ca 100644
+--- a/web/src/filters.js
++++ b/web/src/filters.js
+@@ -20,6 +20,9 @@ export const DEFAULT_CRITERIA = {
+   maxRent: null,    // rupees per month, renting
+   amenities: [],    // amenity keys, see AMENITY_KEYS
+   ready: false,     // only ready to move
++  city: null,       // 'Delhi' or 'Gurugram' (set by the chat advisor), null = both
++  commute: null,    // { lat, lng, km }: within km (straight line) of a workplace (set by the chat advisor)
++  strictPrice: false, // a society with no price for this mode cannot fit a budget (set by the chat advisor)
+ };
+ 
+ // Amenity keys -> words that identify them in portal amenity names.
+@@ -43,6 +46,13 @@ export const NEAR = {
+   shopping: { label: 'Mall or supermarket', kinds: ['shopping'], m: 1500 },
+ };
+ 
++// Straight-line distance in km (haversine); the chat advisor's engine uses the same formula.
++export function distanceKm(lat1, lon1, lat2, lon2) {
++  const rad = (d) => (d * Math.PI) / 180;
++  const a = Math.sin((rad(lat2) - rad(lat1)) / 2) ** 2 + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(rad(lon2 - lon1) / 2) ** 2;
++  return 6371.0088 * 2 * Math.asin(Math.sqrt(a));
++}
++
+ export function isNear(s, key) {
+   const n = NEAR[key];
+   return n.kinds.some((k) => (s.nearby?.[k]?.m ?? Infinity) <= n.m);
+@@ -118,17 +128,21 @@ const norm = (t) => (t || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+ 
+ export function matchSociety(s, c) {
+   if (c.only && !c.only.includes(s.id)) return 'no';
++  if (c.mode === 'buy' && s.no_sale) return 'unknown'; // this building's source has no sale prices
++  if (c.city && s.city_label && s.city_label !== c.city) return 'no'; // chat advisor: one city only
+   if (c.q) {
+     const hay = `${norm(s.name)} ${norm(s.developer)} ${norm(s.locality)}`;
+     if (!norm(c.q).split(' ').every((w) => hay.includes(w))) return 'no';
+   }
+   if (c.kinds.length && !c.kinds.includes(s.kind)) return 'no';
+   for (const key of c.near || []) if (!isNear(s, key)) return 'no';
++  if (c.commute && distanceKm(s.lat, s.lng, c.commute.lat, c.commute.lng) > c.commute.km) return 'no'; // chat advisor: straight-line distance to a workplace
+   if (c.ready && !/ready/i.test(s.status || '')) return 'no';
+   const budget = c.mode === 'rent' ? c.maxRent : c.maxPrice;
+   const floor = c.mode === 'rent' ? c.minRent : c.minPrice;
+   if (budget || floor) {
+     const p = priceFor(s, c.mode, c.bhk);
++    if (!p && (s.open_data || c.strictPrice)) return 'unknown'; // no price for this mode: it cannot be shown to fit a budget
+     if (p && budget && p.value > budget) return 'no';
+     if (p && floor && p.value < floor) return 'no';
+   }
+diff --git a/web/src/main.js b/web/src/main.js
+index bc4e8af..65754a2 100644
+--- a/web/src/main.js
++++ b/web/src/main.js
+@@ -1,6 +1,8 @@
+ import './style.css';
+ import maplibregl from 'maplibre-gl';
+ import { addBaseLayers, addSocietyLayers, BASE_MODES, createMap, OVERVIEW, setBaseMode, setHighlights, setSelected, setStates, startPulse } from './map.js';
++import { airLegend, setAirMode } from './airlayer.js';
++import { initAdvisor } from './advisor.js';
+ import { searchSocieties } from './search.js';
+ import { createFeed } from './feed.js';
+ import { AMENITY_KEYS, DEFAULT_CRITERIA, NEAR, RANK, feetLabel, formatINR, matchSociety, matchUnit, priceFor, roomPasses } from './filters.js';
+@@ -33,14 +35,26 @@ let data, byId, map, feed, selected = null, states = new Map(), tourTimer = null
+ let myList = [], allAmenities = [];
+ const highlights = { glow: true, bounds: true, labels: true, ...store.get('ff-highlights', {}) };
+ 
++function startCriteria(ui = {}) {
++  const c = structuredClone(DEFAULT_CRITERIA);
++  c.mode = ui.modes?.length === 1 ? ui.modes[0] : ui.default_mode || c.mode;
++  if (ui.default_kinds?.length) c.kinds = [...ui.default_kinds];
++  return c;
++}
++
+ async function boot() {
+   const cities = await fetch('/data/cities.json').then((r) => r.json()).catch(() => ({ gurgaon: { name: 'Gurugram' } }));
+-  cityId = cities[params.get('city')] ? params.get('city') : 'gurgaon';
++  cityId = cities[params.get('city')] ? params.get('city') : cities.ncr ? 'ncr' : 'gurgaon';
+   const [city, shapes] = await Promise.all([
+     fetch(`/data/${cityId}.json`).then((r) => r.json()),
+     fetch(`/data/${cityId}-shapes.geojson`).then((r) => r.json()),
+   ]);
+   data = city;
++  const ui = city.ui || {}; // per-city wording and options (Delhi); Gurugram has none and behaves as before
++  crit = startCriteria(ui);
++  if (ui.page_description) document.querySelector('meta[name="description"]')?.setAttribute('content', ui.page_description);
++  if (ui.neighbourhood_blurb && $('area-blurb')) $('area-blurb').textContent = ui.neighbourhood_blurb;
++  $('preset-divy').hidden = !!ui.hide_example;
+   OVERVIEW.center = city.city.center;
+   OVERVIEW.zoom = city.city.zoom || OVERVIEW.zoom;
+   byId = new Map(city.societies.map((s) => [s.id, s]));
+@@ -53,17 +67,25 @@ async function boot() {
+ 
+   myList = params.get('list') ? params.get('list').split(',').filter((id) => byId.has(id)) : store.get(`ff-list-${cityId}`, []).filter((id) => byId.has(id));
+   const c = city.counts, m = city.price_model || {}, rated = city.societies.filter((s) => s.rating).length;
+-  $('note').textContent = `${c.on_map.toLocaleString()} societies · ${(c.for_sale || 0).toLocaleString()} homes for sale, ${(c.for_rent || 0).toLocaleString()} for rent on Magicbricks · ${c.verified} verified from brochures and HRERA plans`;
+-  $('about-prices').innerHTML = `Prices and rents are medians of live Magicbricks listings. <b>⚠</b> marks a listing price our checks think is a typo (far from the same home nearby, or rent and price that cannot both be right): it is shown as listed but not used for filters. <b>~</b> marks our estimate: rent is about ${((m.city_yield || 0.025) * 100).toFixed(1)}% of the price per year here (measured on ${m.pairs || 0} society and BHK pairs, correlation ${m.log_price_rent_correlation ?? 'n/a'}). "Probably fits" uses a cautious bedroom size estimated from unit size (${city.room_model?.n || 0} verified unit types). Resident ratings exist for ${rated.toLocaleString()} societies.`;
++  $('note').textContent = ui.note || `${c.on_map.toLocaleString()} societies · ${(c.for_sale || 0).toLocaleString()} homes for sale, ${(c.for_rent || 0).toLocaleString()} for rent on Magicbricks · ${c.verified} verified from brochures and HRERA plans`;
++  $('about-prices').innerHTML = ui.about_prices || `Prices and rents are medians of live Magicbricks listings. <b>⚠</b> marks a listing price our checks think is a typo (far from the same home nearby, or rent and price that cannot both be right): it is shown as listed but not used for filters. <b>~</b> marks our estimate: rent is about ${((m.city_yield || 0.025) * 100).toFixed(1)}% of the price per year here (measured on ${m.pairs || 0} society and BHK pairs, correlation ${m.log_price_rent_correlation ?? 'n/a'}). "Probably fits" uses a cautious bedroom size estimated from unit size (${city.room_model?.n || 0} verified unit types). Resident ratings exist for ${rated.toLocaleString()} societies.`;
+   $('dl-all').href = `/data/${cityId}-societies.csv`;
+   $('dl-units').href = `/data/${cityId}-units.csv`;
+   $('dl-results').onclick = exportResults;
+ 
+   feed = createFeed($('feed'), $('log-mode'), { events: city.events, byId });
+   buildFilters();
++  if (ui.modes?.length) document.querySelectorAll('#f-mode button').forEach((b) => { b.hidden = !ui.modes.includes(b.dataset.m); });
+   buildSearch();
+   buildList();
+   buildControls();
++  initAdvisor({ // "Ask Localytics": only on the combined Delhi NCR map, where its search data matches
++    enabled: cityId === 'ncr', isMobile: mobile, map: () => map,
++    apply: (c) => useCriteria({ ...structuredClone(DEFAULT_CRITERIA), ...c }),
++    reset: () => useCriteria(startCriteria(data.ui || {})),
++    open: (id) => { stopTour(); openSociety(id); },
++    count: () => [...states.values()].filter((st) => ['match', 'likely', 'probable'].includes(st)).length,
++  });
+   buildOnboarding();
+   buildMobile();
+   hintTilt();
+@@ -78,11 +100,12 @@ async function boot() {
+     return;
+   }
+   const points = { type: 'FeatureCollection', features: city.societies.map((s) => ({
+-    type: 'Feature', properties: { sid: s.id, name: s.name, show: 1 }, geometry: { type: 'Point', coordinates: [s.lng, s.lat] } })) };
++    type: 'Feature', properties: { sid: s.id, name: s.name, show: 1, aq: s.aq ?? -1 }, geometry: { type: 'Point', coordinates: [s.lng, s.lat] } })) };
+   map.once('style.load', () => {
+     addSocietyLayers(map, shapes, points);
+     addBaseLayers(map);
+     setBaseMode(map, baseMode);
++    applyColorMode();
+     setHighlights(map, highlights);
+     startPulse(map);
+     // any hand on the map stops a running tour
+@@ -299,6 +322,8 @@ function renderResults() {
+   const bits = [];
+   if (rooms) bits.push(`${counts.match} verified`, `${counts.likely} likely`, `${counts.probable} probably fit`);
+   if (counts.unknown) bits.push(`${counts.unknown.toLocaleString()} not checked yet`);
++  if (crit.city) bits.push(`${crit.city} only`);
++  if (crit.commute) bits.push(`within ${crit.commute.km} km of ${crit.commute.name || 'your workplace'}`);
+   $('count-sub').textContent = bits.join(' · ');
+   $('v-list').textContent = myList.length ? `${myList.length} saved` : 'empty';
+   const groups = rooms
+@@ -365,6 +390,11 @@ function closeCard() {
+   feed?.ambient();
+ }
+ 
++const ageText = (iso) => {
++  if (!iso) return 'reading time unknown';
++  const d = Math.round((Date.now() - new Date(iso)) / 864e5);
++  return d <= 0 ? 'reading from today' : `reading from ${d} day${d > 1 ? 's' : ''} ago (${iso.slice(0, 10)})`;
++};
+ const metres = (m) => (m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m / 10) * 10} m`);
+ 
+ function renderCard(s) {
+@@ -379,17 +409,18 @@ function renderCard(s) {
+       ? u.bedrooms.map((r) => `<span class="${bad(r) ? 'fail' : ''}">${feetLabel(r[0])} × ${feetLabel(r[1])}</span>`).join(', ') + (u.rooms_complete ? '' : ' <span class="fine">(not all rooms read)</span>')
+         + (u.confidence === 'ocr' ? ` <span class="fine">(read from the plan by ${esc(u.checked_by || 'OCR')})</span>` : '')
+       : u.est_short ? `<span class="fine">plans not read · estimated at least ${feetLabel(u.est_short)} wide, ~${u.est_area} sq ft</span>` : '<span class="fine">room sizes not read yet</span>';
+-    const srcLabel = u.confidence === 'ai' || u.confidence === 'ocr' ? 'plan image' : u.confidence === 'primary' ? `plan${u.page ? ' p.' + esc(u.page) : ''}` : `portal${u.page ? ' p.' + esc(u.page) : ''}`;
++    const srcLabel = u.confidence === 'locality' ? 'open dataset' : u.confidence === 'ai' || u.confidence === 'ocr' ? 'plan image' : u.confidence === 'primary' ? `plan${u.page ? ' p.' + esc(u.page) : ''}` : `portal${u.page ? ' p.' + esc(u.page) : ''}`;
+     const src = u.source ? `<a href="${esc(u.source)}" target="_blank" rel="noopener">${srcLabel}</a>` : '';
+     const size = u.super_sqft ? `${u.super_sqft.toLocaleString()} super` : u.carpet_sqft ? `${u.carpet_sqft.toLocaleString()} carpet` : u.size_sqft ? `${u.size_sqft.toLocaleString()}` : '';
+     const vl = { unknown: 'unread', probable: 'probably' }[v] || v;
+     return `<tr><td>${esc(u.label)}<div class="fine">${size ? size + ' sq ft' : ''}</div></td><td>${roomText}</td><td>${v ? `<span class="badge ${v}">${vl}</span>` : ''}</td><td>${src}</td></tr>`;
+   }).join('');
+   const cell = (real, est, rent, flag, rangeFlag) => real
+-    ? `<b${flag ? ` class="flagged" title="${esc(flag)}"` : ''}>${formatINR(real.median)}${rent ? '/mo' : ''}${flag ? ' ⚠' : ''}</b><div class="fine">${real.n > 1 ? `${formatINR(real.min)} to ${formatINR(real.max)} · ` : ''}${real.n} listing${real.n > 1 ? 's' : ''}${rangeFlag ? ` · <span title="${esc(rangeFlag)}">⚠ odd listings</span>` : ''}</div>${flag ? `<div class="fine flag-note">⚠ Our check: ${esc(flag)}.${est ? ` Our estimate: ~${formatINR(est.value)}${rent ? '/mo' : ''}.` : ''}</div>` : ''}`
++    ? `<b${flag ? ` class="flagged" title="${esc(flag)}"` : ''}>${formatINR(real.median)}${rent ? '/mo' : ''}${flag ? ' ⚠' : ''}</b><div class="fine">${real.n > 1 ? `${formatINR(real.min)} to ${formatINR(real.max)} · ` : ''}${real.n} listing${real.n > 1 ? 's' : ''}${real.basis ? ' · ' + esc(real.basis) : ''}${rangeFlag ? ` · <span title="${esc(rangeFlag)}">⚠ odd listings</span>` : ''}</div>${flag ? `<div class="fine flag-note">⚠ Our check: ${esc(flag)}.${est ? ` Our estimate: ~${formatINR(est.value)}${rent ? '/mo' : ''}.` : ''}</div>` : ''}`
+     : est ? `<b class="est" title="${esc(est.basis)}">~${formatINR(est.value)}${rent ? '/mo' : ''}</b><div class="fine">our estimate: ${esc(est.basis)}</div>` : '<span class="fine">no data</span>';
++  const rentOnly = !!s.open_data;
+   const priceRows = Object.entries(s.prices || {}).filter(([b]) => !crit.bhk.length || crit.bhk.includes(+b)).map(([b, p]) =>
+-    `<tr><td>${b} BHK${p.psf ? `<div class="fine">₹${p.psf.toLocaleString()}/sq ft</div>` : ''}</td><td>${cell(p.buy, p.buy_est, false, p.flags?.buy, p.flags?.buy_range)}</td><td>${cell(p.rent, p.rent_est, true, p.flags?.rent, p.flags?.rent_range)}</td></tr>`).join('');
++    `<tr><td>${b} BHK${p.psf ? `<div class="fine">₹${p.psf.toLocaleString()}/sq ft</div>` : ''}</td>${rentOnly ? '' : `<td>${cell(p.buy, p.buy_est, false, p.flags?.buy, p.flags?.buy_range)}</td>`}<td>${cell(p.rent, p.rent_est, true, p.flags?.rent, p.flags?.rent_range)}</td></tr>`).join('');
+   const d = details?.[s.id];
+   const want = new Set(crit.amenities.flatMap((k) => AMENITY_KEYS[k] || [k.slice(2)]));
+   const facts = Object.entries(s.amen_facts || {}).map(([k, f]) => `<span class="hit">${esc(AMEN_LABELS[k] || k)}: ${esc(f.value)} (<a href="${esc(f.source)}" target="_blank" rel="noopener">p.${esc(f.page)}</a>)</span>`).join('');
+@@ -397,11 +428,14 @@ function renderCard(s) {
+   const plans = Object.entries(s.plan_links || {}).map(([b, urls]) => urls.slice(0, 2).map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">${b} BHK plan${urls.length > 1 ? ' ' + (i + 1) : ''}</a>`).join(' ')).join(' ');
+   const issue = `${REPO}/issues/new?title=${encodeURIComponent('Research: ' + s.name)}&body=${encodeURIComponent(`Please verify room sizes and amenities for ${s.name} (${s.locality || ''}).\n\nPortal page: ${s.url}\n${s.brochure_url ? 'Brochure: ' + s.brochure_url : ''}`)}`;
+   const facts2 = [s.towers && `${s.towers} towers`, s.units && `${Number(s.units).toLocaleString()} units`, s.acres && `${s.acres} acres`, s.status, s.possession && `possession ${s.possession}`].filter(Boolean).join(' · ');
+-  const counts = (s.sale_count || s.rent_count) ? `${(s.sale_count || 0).toLocaleString()} for sale · ${(s.rent_count || 0).toLocaleString()} for rent now` : 'No live listings';
++  const counts = s.open_data ? (s.rent_count ? `${s.rent_count.toLocaleString()} locality rent listings (${data.ui.rent_as_of})` : 'No rent data') : (s.sale_count || s.rent_count) ? `${(s.sale_count || 0).toLocaleString()} for sale · ${(s.rent_count || 0).toLocaleString()} for rent now` : 'No live listings';
+   const parts = s.score_parts || {};
+   const score = s.score != null ? `<div class="score"><div class="big">${s.score}<small>/10</small></div><div class="parts">
+       ${parts.residents != null ? `<span>Residents <b>${parts.residents}</b></span>` : '<span class="fine">No resident ratings yet</span>'}<span>Nearby <b>${parts.nearby}</b></span><span>Amenities <b>${parts.amenities}</b></span>
+       <span class="fine">Flat Finder score: residents' rating 50%, what is nearby 30%, amenities 20%</span></div></div>` : '';
++  const airBlock = data.ui?.air ? (s.air
++    ? `<h4>Air quality (PM2.5)</h4><div class="airrow"><i class="airdot" style="background:${esc(s.air.color)}"></i><b>${s.air.pm} µg/m³ · ${esc(s.air.label)}</b><small>${esc(s.air.monitor)}, ${s.air.km} km away · ${esc(ageText(s.air.updated))}</small></div><div class="fine">${esc(data.ui.air.note)}</div>`
++    : `<h4>Air quality (PM2.5)</h4><div class="fine">No monitor within ${data.ui.air.radius_km} km in the cached readings.</div>`) : '';
+   const near = s.nearby || {};
+   const nearRows = [['park', 'Park'], ['metro', 'Metro'], ['rail', 'Rail station'], ['school', 'School'], ['hospital', 'Hospital'], ['shopping', 'Mall or supermarket']]
+     .filter(([k]) => near[k]).map(([k, l]) => `<div><span>${l}</span><b>${metres(near[k].m)}</b><small>${esc(near[k].name || '')}${near[k].n > 1 ? ` · ${near[k].n} within 1 km` : ''}</small></div>`).join('');
+@@ -418,16 +452,17 @@ function renderCard(s) {
+     </div>
+     ${photos}
+     <h2>${esc(s.name)}</h2>
+-    <div class="meta">${esc(s.developer || '')}${s.locality ? ' · ' + esc(s.locality) : ''} · ${esc(s.config_text || s.kind)}${s.kind_inferred ? ' <span class="fine">(type inferred from name)</span>' : ''}</div>
++    <div class="meta">${esc(s.developer || '')}${s.locality ? ' · ' + esc(s.locality) : ''}${s.city_label ? ' · ' + esc(s.city_label) : ''} · ${esc(s.config_text || s.kind)}${s.kind_inferred ? ' <span class="fine">(type inferred from name)</span>' : ''}</div>
+     <div class="meta">${esc(facts2)}</div>
+     ${score}
+     <div class="meta">${s.rating ? `<span class="stars">★ ${s.rating.toFixed(1)}</span> ${s.rating_count || 0} resident ratings · ${s.review_count || 0} reviews · ` : ''}${counts}</div>
+     ${s.note ? `<div class="fine">${esc(s.note)}</div>` : ''}
+-    <h4>Buy and rent</h4>
+-    ${priceRows ? `<table class="prices"><tr><th>Home</th><th>Buy</th><th>Rent</th></tr>${priceRows}</table>` : '<div class="fine">No price data.</div>'}
++    <h4>${esc(s.open_data ? (data.ui?.price_heading || 'Rent (locality median)') : 'Buy and rent')}</h4>
++    ${priceRows ? `<table class="prices"><tr><th>Home</th>${rentOnly ? '' : '<th>Buy</th>'}<th>Rent</th></tr>${priceRows}</table>` : '<div class="fine">No price data.</div>'}
+     ${trend}
+     <h4>Bedrooms</h4>
+     ${unitRows ? `<table><tr><th>Unit</th><th>Bedrooms</th><th></th><th>Source</th></tr>${unitRows}</table>` : '<div class="fine">No unit types listed.</div>'}
++    ${airBlock}
+     ${nearRows ? `<h4>Nearby</h4><div class="near">${nearRows}</div>` : ''}
+     ${ratingBars ? `<h4>What residents rate</h4>${ratingBars}` : ''}${reviews}
+     ${facts || amen ? `<h4>Amenities (${s.amenities.length})</h4><div class="amen">${facts}${amen}</div>` : ''}
+@@ -435,12 +470,12 @@ function renderCard(s) {
+     <div class="links">
+       <a class="btnlink" href="${esc(s.gmaps)}" target="_blank" rel="noopener">Google Maps and reviews</a>
+       <a class="btnlink" href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}" target="_blank" rel="noopener">Directions</a>
+-      <a href="${esc(s.url)}" target="_blank" rel="noopener">Magicbricks page</a>
++      <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.open_data ? 'OpenStreetMap page' : 'Magicbricks page')}</a>
+       ${s.brochure_url ? `<a href="${esc(s.brochure_url)}" target="_blank" rel="noopener">Brochure</a>` : ''}
+       ${plans}
+-      ${!s.verified ? `<a href="${esc(issue)}" target="_blank" rel="noopener">Request a room check →</a>` : ''}
++      ${!s.verified && !s.open_data ? `<a href="${esc(issue)}" target="_blank" rel="noopener">Request a room check →</a>` : ''}
+     </div>
+-    <div class="fine">${s.rera_id ? 'RERA ' + esc(s.rera_id) + ' · ' : ''}${s.shape === 'osm' ? 'Buildings from OpenStreetMap' : s.shape === 'osm-site' ? 'Boundary from OpenStreetMap, towers drawn approximately' : 'Approximate shape: towers drawn from the listed tower count'}</div>`;
++    <div class="fine">${s.rera_id ? 'RERA ' + esc(s.rera_id) + ' · ' : ''}${s.shape_note ? esc(s.shape_note) : s.shape === 'osm' ? 'Buildings from OpenStreetMap' : s.shape === 'osm-site' ? 'Boundary from OpenStreetMap, towers drawn approximately' : 'Approximate shape: towers drawn from the listed tower count'}</div>`;
+   $('card').hidden = false;
+   $('c-close').onclick = () => { stopTour(); closeCard(); };
+   $('c-star').onclick = () => { toggle(myList, s.id); saveList(); renderCard(s); renderResults(); };
+@@ -563,6 +598,7 @@ function setBase(mode) {
+   baseMode = mode;
+   document.body.dataset.base = mode;
+   if (map?.getLayer?.('st-bg')) setBaseMode(map, mode);
++  if (colorBy === 'pm25' && data?.ui?.air) setAirMode(map, data.ui.air.bands);
+   document.querySelectorAll('#layers button[data-mode]').forEach((b) => b.classList.toggle('on', b.dataset.mode === mode));
+   $('btn-theme').innerHTML = mode === 'light' ? MOON : SUN;
+   $('btn-theme').title = mode === 'light' ? 'Dark mode' : 'Light mode';
+@@ -571,7 +607,31 @@ function setBase(mode) {
+   history.replaceState(null, '', q.toString() ? `?${q}` : location.pathname);
+ }
+ 
++// ---------- PM2.5 colouring (cities that ship indicative PM2.5 per building) ----------
++let colorBy = params.get('color') === 'pm25' ? 'pm25' : 'match';
++function applyColorMode() {
++  const air = data?.ui?.air;
++  if (!map?.getLayer?.('bld') || !air) return;
++  if (map.getLayer('st-bg')) setBaseMode(map, baseMode); // back to search-match colours first
++  if (colorBy === 'pm25') setAirMode(map, air.bands);
++  $('ctl-air').classList.toggle('on', colorBy === 'pm25');
++  $('ctl-air').setAttribute('aria-pressed', String(colorBy === 'pm25'));
++  $('air-legend').hidden = colorBy !== 'pm25';
++}
++
+ function buildControls() {
++  const air = data.ui?.air;
++  $('ctl-air').hidden = !air;
++  if (air) {
++    $('air-legend').innerHTML = airLegend(air);
++    $('ctl-air').onclick = () => {
++      colorBy = colorBy === 'pm25' ? 'match' : 'pm25';
++      const q = new URLSearchParams(location.search);
++      colorBy === 'pm25' ? q.set('color', 'pm25') : q.delete('color');
++      history.replaceState(null, '', `?${q}`);
++      applyColorMode();
++    };
++  }
+   $('ctl-in').onclick = () => map?.zoomIn();
+   $('ctl-out').onclick = () => map?.zoomOut();
+   $('ctl-tilt').onclick = () => { is3d = !is3d; $('ctl-tilt').textContent = is3d ? '2D' : '3D'; map?.easeTo({ pitch: is3d ? 50 : 0, bearing: 0, duration: 800 }); };
+@@ -608,10 +668,11 @@ function buildOnboarding() {
+     ['How to read the map', '<span class="lg match"></span> Verified: every bedroom read from builder plans and passes.<br><span class="lg likely"></span> Likely: the rooms read so far pass.<br><span class="lg probable"></span> Probably fits: plans not read yet, estimated from unit size.<br><span class="lg unknown"></span> Not checked yet: no room data, so neither pass nor fail.'],
+     ['Open a society, keep a list', 'Click any building for prices, bedrooms, ratings and the research behind every number. Star the ones you like, or paste a list of names you already have. Export your results as a CSV any time.'],
+   ];
++  data.ui?.onboarding?.forEach((step, k) => { if (step) steps[k] = step; }); // per-city wording shipped with the data
+   let i = 0;
+   const show = () => {
+     $('ob-steps').innerHTML = steps.map((_, j) => `<i class="${j === i ? 'on' : ''}"></i>`).join('');
+-    $('ob-body').innerHTML = `<h3>${steps[i][0]}</h3><p>${steps[i][1]}</p>${i === 1 ? '<button class="preset" id="ob-divy">Try an example search</button>' : ''}`;
++    $('ob-body').innerHTML = `<h3>${steps[i][0]}</h3><p>${steps[i][1]}</p>${i === 1 && !data.ui?.hide_example ? '<button class="preset" id="ob-divy">Try an example search</button>' : ''}`;
+     $('ob-back').hidden = i === 0;
+     $('ob-next').textContent = i === steps.length - 1 ? 'Start exploring' : 'Next';
+     $('ob-divy')?.addEventListener('click', () => { useCriteria(DIVY); done(); });
+diff --git a/web/src/map.js b/web/src/map.js
+index 6de33aa..8ba3dbc 100644
+--- a/web/src/map.js
++++ b/web/src/map.js
+@@ -13,7 +13,7 @@ export function createMap(container, { mobile }) {
+     container,
+     attributionControl: { compact: true },
+     center: mobile ? OVERVIEW.center : [78.5, 22.5],
+-    zoom: mobile ? 11.6 : 2.2,
++    zoom: mobile ? Math.min(11.6, OVERVIEW.zoom) : 2.2, // a wider city (Delhi NCR) starts zoomed out enough to show both parts
+     pitch: mobile ? 45 : 0,
+     bearing: 0,
+     maxPitch: 70,

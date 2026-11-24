@@ -1,0 +1,14 @@
+#ctl-air { font-size: 11px; letter-spacing: 0.02em; }
+#ctl-air.on { color: var(--accent); border-color: var(--accent); }
+.air-legend { position: absolute; z-index: 3; left: 50%; bottom: 34px; transform: translateX(-50%); max-width: min(560px, 92vw);
+  padding: 10px 14px; border-radius: 10px; font-size: 12px; line-height: 1.5; background: var(--glass); backdrop-filter: blur(12px);
+  border: 1px solid var(--chip-line); box-shadow: var(--shadow); }
+.air-legend[hidden] { display: none; }
+.air-bands { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 5px 0 4px; }
+.air-bands span { white-space: nowrap; }
+.air-bands i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+.air-legend small { display: block; opacity: 0.75; }
+.airrow { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.airrow small { flex-basis: 100%; opacity: 0.75; }
+.airdot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.35); }
+@media (max-width: 700px) { .air-legend { bottom: calc(46vh + 60px); } }
