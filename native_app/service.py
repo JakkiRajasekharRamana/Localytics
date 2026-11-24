@@ -65,9 +65,9 @@ def score_color(score):
 
 
 class LocalyticsService:
-    def __init__(self, database):
+    def __init__(self, database, include_gurugram=False):
         self.repository = AreaRepository(database)
-        self.cells, self.manifest = self.repository.dataset()
+        self.cells, self.manifest = self.repository.dataset(include_gurugram)
         self.cells_by_id = {c["id"]: c for c in self.cells}
         self.selection = Selection()
         self.results = []

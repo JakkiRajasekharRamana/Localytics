@@ -3,21 +3,18 @@
 import argparse
 import hashlib
 import json
-import math
 import sqlite3
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-import numpy as np
 from pyproj import Transformer
-from scipy.spatial import cKDTree
-from shapely.geometry import Point, box, mapping, shape
+from shapely.geometry import shape
 from shapely.ops import transform, unary_union
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from geography import covered_radius
+from grid_cells import grid_cells, index_rows
 from osm_data import extract_sources
 
 
@@ -52,102 +49,8 @@ def build(sources, output, boundary_path):
         ],
     )
     bounds = [b for s in meta["sources"] for b in s["bounds"]]
-    cats = [
-        "bus_stop",
-        "metro_station",
-        "airport_terminal",
-        "school",
-        "hospital",
-        "park",
-        "gym",
-        "mall",
-        "ev",
-    ]
-    trees = {}
-    catrows = {}
-
-    # 3D spherical indexing keeps straight-line distances accurate across the extracts.
-    def xyz(lat, lon):
-        a, b = math.radians(lat), math.radians(lon)
-        return [math.cos(a) * math.cos(b), math.cos(a) * math.sin(b), math.sin(a)]
-
-    for c in cats + ["locality"]:
-        catrows[c] = [r for r in rows if r["category"] == c]
-        if catrows[c]:
-            trees[c] = cKDTree([xyz(r["lat"], r["lon"]) for r in catrows[c]])
-    cells = []
-    minx, miny, maxx, maxy = projected.bounds
-    for x in range(math.floor(minx / 1000) * 1000, math.ceil(maxx / 1000) * 1000, 1000):
-        for y in range(math.floor(miny / 1000) * 1000, math.ceil(maxy / 1000) * 1000, 1000):
-            center = Point(x + 500, y + 500)
-            if not projected.covers(center):
-                continue
-            lon, lat = reverse(center.x, center.y)
-            cell = dict(
-                id=f"DL43_{x // 1000}_{y // 1000}",
-                lat=lat,
-                lon=lon,
-                geometry=mapping(
-                    transform(reverse, box(x, y, x + 1000, y + 1000).intersection(projected))
-                ),
-                features={},
-            )
-            if "locality" in trees:
-                chord, idx = trees["locality"].query(xyz(lat, lon))
-                km = 2 * 6371.0088 * math.asin(min(1, chord / 2))
-                cell["label"] = catrows["locality"][idx]["name"] + f" vicinity ({km:.1f} km)"
-            else:
-                cell["label"] = cell["id"]
-            for radius in (1, 2, 5):
-                indicators = {}
-                for c in cats:
-                    r = 25 if c == "airport_terminal" else radius
-                    covered = covered_radius(lat, lon, r, bounds)
-                    nearby = []
-                    nearest = None
-                    if c in trees:
-                        chord, idx = trees[c].query(xyz(lat, lon))
-                        nearest = 2 * 6371.0088 * math.asin(min(1, chord / 2))
-                        indices = trees[c].query_ball_point(
-                            xyz(lat, lon), 2 * math.sin(r / (2 * 6371.0088))
-                        )
-                        for idx in indices:
-                            p = catrows[c][idx]
-                            d = (
-                                2
-                                * 6371.0088
-                                * math.asin(
-                                    min(
-                                        1,
-                                        float(
-                                            np.linalg.norm(
-                                                np.array(xyz(lat, lon)) - xyz(p["lat"], p["lon"])
-                                            )
-                                        )
-                                        / 2,
-                                    )
-                                )
-                            )
-                            nearby.append(
-                                dict(
-                                    name=p["name"],
-                                    km=round(d, 3),
-                                    lat=p["lat"],
-                                    lon=p["lon"],
-                                    method=p["method"],
-                                    osm=f"{p['osm_type']}/{p['osm_id']}",
-                                    access=p["tags"].get("access", "unknown"),
-                                )
-                            )
-                        nearby.sort(key=lambda p: p["km"])
-                    indicators[c] = dict(
-                        count=len(nearby),
-                        nearest_km=round(nearest, 3) if nearest is not None else None,
-                        coverage=covered,
-                        nearby=nearby[:5],
-                    )
-                cell["features"][str(radius)] = indicators
-            cells.append(cell)
+    trees, catrows = index_rows(rows)
+    cells = grid_cells("DL43", projected, reverse, trees, catrows, bounds)
     meta["cell_count"] = len(cells)
     temp = output.with_suffix(".tmp")
     if temp.exists():

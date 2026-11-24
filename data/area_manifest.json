@@ -53,7 +53,17 @@
     "Counts are mapped facilities, not proof of actual service availability.",
     "Unknown access is retained and disclosed; private/no access excluded.",
     "EV connector and airport passenger service are unverified.",
-    "Grid cells do not imply residential suitability or land-use permission."
+    "Grid cells do not imply residential suitability or land-use permission.",
+    "Gurugram cells were added after the Delhi build, from the same stored facilities and the OpenStreetMap Gurugram district boundary; no clustering or sensitivity analysis was run on them."
   ],
-  "cell_count": 1487
+  "cell_count": 1487,
+  "gurugram": {
+    "cells": 1257,
+    "boundary_area_km2": 1252.9423881907933,
+    "boundary_source": "https://www.openstreetmap.org/relation/3577685",
+    "boundary_license": "ODbL 1.0, (c) OpenStreetMap contributors",
+    "boundary_sha256": "62ffc92f5010d0f8978c082ddf2a6e0820bf55a902c78550f73076a479ff3b00",
+    "added_at": "2026-11-24T20:13:46.336881+00:00",
+    "cell_prefix": "GG43"
+  }
 }

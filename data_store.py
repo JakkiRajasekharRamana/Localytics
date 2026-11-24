@@ -16,21 +16,23 @@ class AreaRepository:
 
     def __init__(self, database):
         self.database = Path(database)
-        self._dataset = None
+        self._datasets = {}
 
-    def dataset(self):
-        if self._dataset is None:
+    def dataset(self, include_gurugram=False):
+        """(cells, manifest). Delhi's cells only unless Gurugram's (GG43_* rows, added later) are asked for: the web site, the
+        clustering and the evaluation reports were all made on Delhi alone and keep seeing exactly that."""
+        include = bool(include_gurugram)
+        if include not in self._datasets:
+            query = "SELECT payload FROM cells" + ("" if include else " WHERE substr(id, 1, 5) <> 'GG43_'") + " ORDER BY id"
             with sqlite3.connect(self.database.resolve().as_uri() + "?mode=ro", uri=True) as db:
                 manifest = json.loads(
                     db.execute("SELECT value FROM metadata WHERE key=?", ("manifest",)).fetchone()[
                         0
                     ]
                 )
-                cells = [
-                    json.loads(r[0]) for r in db.execute("SELECT payload FROM cells ORDER BY id")
-                ]
-            self._dataset = cells, manifest
-        return self._dataset
+                cells = [json.loads(r[0]) for r in db.execute(query)]
+            self._datasets[include] = cells, manifest
+        return self._datasets[include]
 
     def cache_air(self, state, city, records):
         if not self.database.exists():
