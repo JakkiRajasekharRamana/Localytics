@@ -1,25 +1,72 @@
 diff --git a/integration/localytics_api.py b/integration/localytics_api.py
-index 5149d85..137f666 100644
+index 5149d85..a74324d 100644
 --- a/integration/localytics_api.py
 +++ b/integration/localytics_api.py
-@@ -3,7 +3,7 @@
+@@ -2,17 +2,27 @@
+ 
  import argparse
  import json
++import mimetypes
++import sqlite3
  import sys
 -from http.server import BaseHTTPRequestHandler, HTTPServer
 +from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
  from pathlib import Path
- from urllib.parse import parse_qsl, urlsplit
+-from urllib.parse import parse_qsl, urlsplit
++from urllib.parse import parse_qsl, unquote, urlsplit
++
++# explicit, because the system's mime database differs between machines and a module script with the wrong type fails silently
++STATIC_TYPES = {".js": "text/javascript", ".mjs": "text/javascript", ".css": "text/css", ".html": "text/html; charset=utf-8",
++                ".json": "application/json", ".geojson": "application/geo+json", ".csv": "text/csv; charset=utf-8",
++                ".svg": "image/svg+xml", ".png": "image/png", ".woff2": "font/woff2", ".wasm": "application/wasm"}
  
-@@ -22,15 +22,60 @@ def main():
  
-     service = LocalyticsService(args.localytics / "data/areas.sqlite")
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument("localytics", type=Path)
+     parser.add_argument("--port", type=int, default=8766)
++    parser.add_argument("--host", default="127.0.0.1", help="0.0.0.0 inside a container")
++    parser.add_argument("--static", type=Path, action="append", default=[], help="folder of the built site to serve (repeat for several roots; used on Cloud Run)")
+     args = parser.parse_args()
++    static_roots = [root.resolve() for root in args.static]
+     sys.path.insert(0, str(args.localytics.resolve()))
  
+     from areas import evaluate
+@@ -20,17 +30,117 @@ def main():
+     from native_app.service import LocalyticsService, Selection
+     from preferences import preferences
+ 
+-    service = LocalyticsService(args.localytics / "data/areas.sqlite")
++    database = args.localytics / "data/areas.sqlite"
++    service = LocalyticsService(database, include_gurugram=True)  # Delhi's cells and Gurugram's (added later); the Flask and Flet apps still see Delhi only
++
++    # The map's neighbourhood air layer is a snapshot, like its building-level PM2.5: read every cached Delhi and Haryana (Gurugram) search,
++    # ignore readings much older than the newest so both cities come from the same day, and show a reading's real age instead of refusing it
++    # after 6 hours (the live Flask and Flet apps keep that rule: this setting is only in this process).
++    import areas
++    from observations import freshest_only, monitors
++
++    areas.MONITOR_MAX_AGE_HOURS = 24 * 60
++
++    def load_snapshot():
++        rows, fetched = [], []
++        with sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True) as db:
++            for query, stamp, payload in db.execute("SELECT query, fetched_at, payload FROM air_cache ORDER BY fetched_at"):
++                if json.loads(query)[0] in ("delhi", "haryana"):
++                    rows += json.loads(payload)
++                    fetched.append(stamp)
++        service.air_rows, service.air_fetched = rows, (max(fetched) if fetched else None)
++        service.stations = freshest_only(monitors(rows))
++
++    service.reload_air = load_snapshot
++    service.reload_air()
++    service.apply(service.selection)
++
 +    import advisor
 +    from advisor_chat import Advisor, ChatError
 +
 +    chat = Advisor(args.localytics)
-+
+ 
      def preferences_arguments(values):
          weights, radius, cap, workplace, must = preferences(values)
          return weights, radius, cap, service.stations, workplace, must
@@ -33,6 +80,38 @@ index 5149d85..137f666 100644
 +            self.send_header("Content-Length", str(len(payload)))
 +            self.end_headers()
 +            self.wfile.write(payload)
++
++        def static(self, path, head=False):
++            """Serve the built site (only when --static is given): pre-gzipped copies are used when the browser accepts them."""
++            relative = unquote(path).lstrip("/") or "index.html"
++            found = None
++            for root in static_roots:
++                candidate = (root / relative).resolve()
++                if candidate.is_file() and candidate.is_relative_to(root):  # each root is checked on its own: no path can climb out of it
++                    found = candidate
++                    break
++            if found is None:
++                return self.respond(404, {"error": "Not found."})
++            kind = STATIC_TYPES.get(found.suffix.lower()) or mimetypes.guess_type(found.name)[0] or "application/octet-stream"
++            gzipped = found.with_name(found.name + ".gz")
++            use_gzip = gzipped.is_file() and "gzip" in (self.headers.get("Accept-Encoding") or "")
++            payload = (gzipped if use_gzip else found).read_bytes()
++            self.send_response(200)
++            self.send_header("Content-Type", kind)
++            if use_gzip:
++                self.send_header("Content-Encoding", "gzip")
++            self.send_header("Vary", "Accept-Encoding")
++            self.send_header("Cache-Control", "public, max-age=31536000, immutable" if relative.startswith("assets/") else "no-cache")
++            self.send_header("Content-Length", str(len(payload)))
++            self.end_headers()
++            if not head:
++                self.wfile.write(payload)
++
++        def do_HEAD(self):
++            url = urlsplit(self.path)
++            if static_roots and not url.path.startswith("/api/"):
++                return self.static(url.path, head=True)
++            self.respond(404, {"error": "Unknown endpoint."})
 +
 +        def do_POST(self):
 +            """Chat advisor: /advisor/chat (needs an API key), /advisor/search (the same engine, no key), /advisor/reset."""
@@ -73,17 +152,26 @@ index 5149d85..137f666 100644
                  body = {
                      "factors": FACTORS,
                      "grid": {
-@@ -75,7 +120,7 @@ def main():
+@@ -65,6 +175,8 @@ def main():
+                         body = evaluate(cell, *preferences_arguments(values))
+                     except ValueError as exc:
+                         status, body = 400, {"error": str(exc)}
++            elif static_roots and not url.path.startswith("/api/"):
++                return self.static(url.path)
+             else:
+                 status, body = 404, {"error": "Unknown endpoint."}
+             payload = json.dumps(body, default=str).encode()
+@@ -75,7 +187,7 @@ def main():
              self.end_headers()
              self.wfile.write(payload)
  
 -    HTTPServer(("127.0.0.1", args.port), Handler).serve_forever()
-+    ThreadingHTTPServer(("127.0.0.1", args.port), Handler).serve_forever()  # a slow chat reply must not block the map's data
++    ThreadingHTTPServer((args.host, args.port), Handler).serve_forever()  # a slow chat reply must not block the map's data
  
  
  if __name__ == "__main__":
 diff --git a/web/index.html b/web/index.html
-index cc21d5f..618c176 100644
+index cc21d5f..f7d0eda 100644
 --- a/web/index.html
 +++ b/web/index.html
 @@ -12,6 +12,7 @@
@@ -94,16 +182,60 @@ index cc21d5f..618c176 100644
      <button id="btn-guide" title="How this works">Guide</button>
      <button id="btn-replay" title="Replay the intro">Replay</button>
      <button id="btn-tour" title="Fly through the matches">Tour</button>
-@@ -38,7 +39,7 @@
+@@ -32,14 +33,14 @@
+       <ol id="q-results" hidden></ol>
+     </div>
+     <div class="row-between">
+-      <div class="seg" id="f-mode"><button data-m="buy">Buy</button><button data-m="rent">Rent</button></div>
++      <label class="modepick">Show <select id="f-mode" aria-label="Buy, rent or both"><option value="both">Buy &amp; rent</option><option value="buy">Buy</option><option value="rent">Rent</option></select></label>
+       <button class="preset" id="preset-divy">Load Divy's search</button>
+     </div>
      <div class="pill" id="q-pill" hidden></div>
      <details id="neighbourhoods">
-       <summary>Neighbourhood filters · Delhi</summary>
+-      <summary>Neighbourhood filters · Delhi</summary>
 -      <p>Compare neighbourhoods on the property map. Scores cover Delhi; this property dataset covers Gurugram.</p>
-+      <p id="area-blurb">Compare neighbourhoods on the property map. Scores cover Delhi; this property dataset covers Gurugram.</p>
-       <button type="button" class="ghost" id="area-zoom">Centre map on Delhi</button>
+-      <button type="button" class="ghost" id="area-zoom">Centre map on Delhi</button>
++      <summary>Neighbourhood filters · Delhi + Gurugram</summary>
++      <p id="area-blurb">Compare neighbourhoods on the property map. Scores cover Delhi and Gurugram.</p>
++      <button type="button" class="ghost" id="area-zoom">Centre map on Delhi + Gurugram</button>
        <form id="area-preferences">
          <div id="area-factors"></div>
-@@ -134,6 +135,22 @@
+         <label>Search radius <select name="radius"><option>1</option><option selected>2</option><option>5</option></select> km</label>
+@@ -82,10 +83,19 @@
+       <div class="k row">Home size <span class="val" id="v-size">Any</span></div>
+       <div id="f-size"></div>
+     </section>
+-    <section>
+-      <div class="k row"><span id="l-price">Budget</span> <span class="val" id="v-price">Any</span></div>
++    <section id="sec-buy">
++      <div class="k row">Budget to buy <span class="val" id="v-price">Any</span></div>
+       <div id="f-price"></div>
+     </section>
++    <section id="sec-rent">
++      <div class="k row">Monthly rent <span class="val" id="v-rent">Any</span></div>
++      <div id="f-rent"></div>
++    </section>
++    <div class="count">
++      <div class="k">Matching societies</div>
++      <div class="n" id="count">0</div>
++      <div class="sub" id="count-sub"></div>
++    </div>
+     <section>
+       <div class="k">Amenities</div>
+       <div class="chips" id="f-amen"></div>
+@@ -110,11 +120,6 @@
+       </div>
+     </section>
+ 
+-    <div class="count">
+-      <div class="k">Matching societies</div>
+-      <div class="n" id="count">0</div>
+-      <div class="sub" id="count-sub"></div>
+-    </div>
+     <div class="k row">Results <select id="f-sort" aria-label="Sort results">
+       <option value="best">Best match</option><option value="score">Flat Finder score</option><option value="rating">Resident rating</option>
+       <option value="price">Price, low to high</option><option value="listings">Most listings</option></select></div>
+@@ -134,6 +139,22 @@
      <div class="feed" id="feed"></div>
    </aside>
  
@@ -126,7 +258,7 @@ index cc21d5f..618c176 100644
    <article class="card" id="card" hidden></article>
  
    <div class="controls">
-@@ -152,6 +169,7 @@
+@@ -152,6 +173,7 @@
      </div>
      <button id="ctl-locate" title="Show my location" aria-label="Show my location"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="3.2" fill="currentColor"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3" stroke="currentColor" stroke-width="1.8"/></svg></button>
      <button id="ctl-home" title="Show the whole city" aria-label="Show the whole city"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 10.5 12 4l8 6.5V20h-5.5v-5.5h-5V20H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
@@ -135,10 +267,16 @@ index cc21d5f..618c176 100644
      <div class="zoom">
        <button id="ctl-in" title="Zoom in" aria-label="Zoom in">+</button>
 diff --git a/web/src/filters.js b/web/src/filters.js
-index 096c137..48907ca 100644
+index 096c137..d363a92 100644
 --- a/web/src/filters.js
 +++ b/web/src/filters.js
-@@ -20,6 +20,9 @@ export const DEFAULT_CRITERIA = {
+@@ -15,11 +15,14 @@ export const DEFAULT_CRITERIA = {
+   maxSqft: null,
+   minPrice: null,   // rupees, buying
+   minRent: null,    // rupees per month
+-  mode: 'buy',      // 'buy' or 'rent'
++  mode: 'buy',      // 'buy', 'rent' or 'both' (the page starts on 'both')
+   maxPrice: null,   // rupees, buying
    maxRent: null,    // rupees per month, renting
    amenities: [],    // amenity keys, see AMENITY_KEYS
    ready: false,     // only ready to move
@@ -162,9 +300,27 @@ index 096c137..48907ca 100644
  export function isNear(s, key) {
    const n = NEAR[key];
    return n.kinds.some((k) => (s.nearby?.[k]?.m ?? Infinity) <= n.m);
-@@ -118,17 +128,21 @@ const norm = (t) => (t || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+@@ -116,19 +126,39 @@ export function matchUnit(u, c) {
  
+ const norm = (t) => (t || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+ 
++// mode 'both' = buy or rent. A society passes if it passes either way, but a budget only counts for the mode it was set for:
++// with only a buy budget set, rent-only buildings cannot fit it; with only a rent budget, buy-only ones cannot; with neither (or both), either way will do.
  export function matchSociety(s, c) {
++  if (c.mode !== 'both') return matchOne(s, c);
++  const buyBudget = !!(c.maxPrice || c.minPrice), rentBudget = !!(c.maxRent || c.minRent);
++  let modes = buyBudget && !rentBudget ? ['buy'] : rentBudget && !buyBudget ? ['rent'] : ['buy', 'rent'];
++  if (s.no_sale && modes.length === 2) modes = ['rent']; // a building with no sale prices is judged on its rent alone
++  let best = 'no';
++  for (const mode of modes) {
++    const r = matchOne(s, { ...c, mode });
++    if (RANK[r] > RANK[best]) best = r;
++    if (best === 'match') break;
++  }
++  return best;
++}
++
++function matchOne(s, c) {
    if (c.only && !c.only.includes(s.id)) return 'no';
 +  if (c.mode === 'buy' && s.no_sale) return 'unknown'; // this building's source has no sale prices
 +  if (c.city && s.city_label && s.city_label !== c.city) return 'no'; // chat advisor: one city only
@@ -185,7 +341,7 @@ index 096c137..48907ca 100644
      if (p && floor && p.value < floor) return 'no';
    }
 diff --git a/web/src/main.js b/web/src/main.js
-index bc4e8af..65754a2 100644
+index bc4e8af..18c507f 100644
 --- a/web/src/main.js
 +++ b/web/src/main.js
 @@ -1,6 +1,8 @@
@@ -197,13 +353,14 @@ index bc4e8af..65754a2 100644
  import { searchSocieties } from './search.js';
  import { createFeed } from './feed.js';
  import { AMENITY_KEYS, DEFAULT_CRITERIA, NEAR, RANK, feetLabel, formatINR, matchSociety, matchUnit, priceFor, roomPasses } from './filters.js';
-@@ -33,14 +35,26 @@ let data, byId, map, feed, selected = null, states = new Map(), tourTimer = null
+@@ -33,14 +35,27 @@ let data, byId, map, feed, selected = null, states = new Map(), tourTimer = null
  let myList = [], allAmenities = [];
  const highlights = { glow: true, bounds: true, labels: true, ...store.get('ff-highlights', {}) };
  
 +function startCriteria(ui = {}) {
 +  const c = structuredClone(DEFAULT_CRITERIA);
-+  c.mode = ui.modes?.length === 1 ? ui.modes[0] : ui.default_mode || c.mode;
++  const modes = ui.modes?.length ? ui.modes : ['buy', 'rent'];
++  c.mode = modes.length === 1 ? modes[0] : 'both'; // buy and rent together unless the city has only one
 +  if (ui.default_kinds?.length) c.kinds = [...ui.default_kinds];
 +  return c;
 +}
@@ -225,7 +382,7 @@ index bc4e8af..65754a2 100644
    OVERVIEW.center = city.city.center;
    OVERVIEW.zoom = city.city.zoom || OVERVIEW.zoom;
    byId = new Map(city.societies.map((s) => [s.id, s]));
-@@ -53,17 +67,25 @@ async function boot() {
+@@ -53,17 +68,28 @@ async function boot() {
  
    myList = params.get('list') ? params.get('list').split(',').filter((id) => byId.has(id)) : store.get(`ff-list-${cityId}`, []).filter((id) => byId.has(id));
    const c = city.counts, m = city.price_model || {}, rated = city.societies.filter((s) => s.rating).length;
@@ -239,7 +396,10 @@ index bc4e8af..65754a2 100644
  
    feed = createFeed($('feed'), $('log-mode'), { events: city.events, byId });
    buildFilters();
-+  if (ui.modes?.length) document.querySelectorAll('#f-mode button').forEach((b) => { b.hidden = !ui.modes.includes(b.dataset.m); });
++  if (ui.modes?.length) {
++    [...$('f-mode').options].forEach((o) => { if (o.value === 'both' ? ui.modes.length < 2 : !ui.modes.includes(o.value)) o.remove(); });
++    $('f-mode').closest('.modepick').hidden = ui.modes.length < 2; // one way only (Delhi open data is rent): nothing to choose
++  }
    buildSearch();
    buildList();
    buildControls();
@@ -253,7 +413,7 @@ index bc4e8af..65754a2 100644
    buildOnboarding();
    buildMobile();
    hintTilt();
-@@ -78,11 +100,12 @@ async function boot() {
+@@ -78,11 +104,12 @@ async function boot() {
      return;
    }
    const points = { type: 'FeatureCollection', features: city.societies.map((s) => ({
@@ -267,7 +427,84 @@ index bc4e8af..65754a2 100644
      setHighlights(map, highlights);
      startPulse(map);
      // any hand on the map stops a running tour
-@@ -299,6 +322,8 @@ function renderResults() {
+@@ -168,7 +195,7 @@ function useCriteria(c) {
+ }
+ 
+ let redrawFilters = () => {};
+-let sizeSlider, priceSlider;
++let sizeSlider, priceSlider, rentSlider;
+ function buildFilters() {
+   const amenList = () => {
+     const q = $('amen-q').value.toLowerCase();
+@@ -182,10 +209,12 @@ function buildFilters() {
+   };
+   sizeSlider = dualRange($('f-size'), { min: 0, max: 8000, step: 50, fmt: (v, end) => (end === 'hi' && v >= 8000 ? 'Any' : `${v.toLocaleString()} sq ft · ${Math.round(v / 9)} gaj`),
+     onChange: (a, b) => { crit.minSqft = a; crit.maxSqft = b >= 8000 ? null : b; labels(); applyFilters(); } });
+-  priceSlider = dualRange($('f-price'), { min: 0, max: 20, step: 0.25, fmt: (v) => v, onChange: (a, b) => {
+-    const top = priceSlider.cfg.max, unit = crit.mode === 'rent' ? 1000 : 1e7;
+-    if (crit.mode === 'rent') { crit.minRent = a > 0 ? a * unit : null; crit.maxRent = b >= top ? null : b * unit; }
+-    else { crit.minPrice = a > 0 ? a * unit : null; crit.maxPrice = b >= top ? null : b * unit; }
++  priceSlider = dualRange($('f-price'), { min: 0, max: 20, step: 0.25, fmt: (v, end) => (end === 'hi' && v >= 20 ? 'Any' : v ? formatINR(v * 1e7) : '₹0'), onChange: (a, b) => {
++    crit.minPrice = a > 0 ? a * 1e7 : null; crit.maxPrice = b >= 20 ? null : b * 1e7;
++    labels(); applyFilters();
++  } });
++  rentSlider = dualRange($('f-rent'), { min: 0, max: 500, step: 5, fmt: (v, end) => (end === 'hi' && v >= 500 ? 'Any' : v ? `${formatINR(v * 1000)}/mo` : '₹0'), onChange: (a, b) => {
++    crit.minRent = a > 0 ? a * 1000 : null; crit.maxRent = b >= 500 ? null : b * 1000;
+     labels(); applyFilters();
+   } });
+   redrawFilters = () => {
+@@ -198,7 +227,7 @@ function buildFilters() {
+       ...custom.map((k) => chip(`${esc(allAmenities.find((a) => a.name.toLowerCase() === k.slice(2))?.name || k.slice(2))} ×`, true, () => { toggle(crit.amenities, k); redrawFilters(); applyFilters(); })),
+       chip($('amen-more').hidden ? `More (${allAmenities.length})` : 'Fewer', false, () => { $('amen-more').hidden = !$('amen-more').hidden; redrawFilters(); if (!$('amen-more').hidden) { amenList(); $('amen-q').focus(); } }, 'chip more-chip'));
+     $('f-near').replaceChildren(...Object.entries(NEAR).map(([k, n]) => chip(`${n.label} <small>${n.m >= 1000 ? n.m / 1000 + ' km' : n.m + ' m'}</small>`, crit.near.includes(k), () => { toggle(crit.near, k); redrawFilters(); applyFilters(); })));
+-    document.querySelectorAll('#f-mode button').forEach((b) => b.classList.toggle('on', b.dataset.m === crit.mode));
++    $('f-mode').value = crit.mode;
+     document.querySelectorAll('#f-room-mode button').forEach((b) => b.classList.toggle('on', b.dataset.r === roomMode));
+     document.querySelectorAll('#f-area-unit button').forEach((b) => b.classList.toggle('on', b.dataset.u === areaUnit));
+     $('f-area').hidden = roomMode !== 'area';
+@@ -207,10 +236,10 @@ function buildFilters() {
+     $('f-est').checked = crit.estimates !== false;
+     if (crit.roomArea) $('f-area-range').value = crit.roomArea / 9;
+     sizeSlider.set(crit.minSqft || 0, crit.maxSqft ?? 8000);
+-    const rent = crit.mode === 'rent';
+-    priceSlider.reconfig(rent ? { min: 0, max: 500, step: 5, fmt: (v, end) => (end === 'hi' && v >= 500 ? 'Any' : v ? `${formatINR(v * 1000)}/mo` : '₹0') }
+-      : { min: 0, max: 20, step: 0.25, fmt: (v, end) => (end === 'hi' && v >= 20 ? 'Any' : v ? formatINR(v * 1e7) : '₹0') });
+-    priceSlider.set(rent ? (crit.minRent || 0) / 1000 : (crit.minPrice || 0) / 1e7, rent ? (crit.maxRent ? crit.maxRent / 1000 : 500) : (crit.maxPrice ? crit.maxPrice / 1e7 : 20));
++    $('sec-buy').hidden = crit.mode === 'rent'; // each budget shows only for the way you are looking
++    $('sec-rent').hidden = crit.mode === 'buy';
++    priceSlider.set((crit.minPrice || 0) / 1e7, crit.maxPrice ? crit.maxPrice / 1e7 : 20);
++    rentSlider.set((crit.minRent || 0) / 1000, crit.maxRent ? crit.maxRent / 1000 : 500);
+     $('f-ready').checked = crit.ready;
+     $('f-only').checked = !!crit.only;
+     if (!$('amen-more').hidden) amenList();
+@@ -225,14 +254,13 @@ function buildFilters() {
+   function labels() {
+     const range = (a, b, f) => (a && b ? `${f(a)} to ${f(b)}` : a ? `from ${f(a)}` : b ? `up to ${f(b)}` : 'Any');
+     $('v-size').textContent = range(crit.minSqft, crit.maxSqft, (v) => `${v.toLocaleString()} sq ft`);
+-    const rent = crit.mode === 'rent';
+-    $('v-price').textContent = range(rent ? crit.minRent : crit.minPrice, rent ? crit.maxRent : crit.maxPrice, (v) => formatINR(v) + (rent ? '/mo' : ''));
+-    $('l-price').textContent = rent ? 'Monthly rent' : 'Budget';
++    $('v-price').textContent = range(crit.minPrice, crit.maxPrice, formatINR);
++    $('v-rent').textContent = range(crit.minRent, crit.maxRent, (v) => formatINR(v) + '/mo');
+     const g = +$('f-area-range').value;
+     $('v-area').textContent = areaUnit === 'gaj' ? `at least ${g.toFixed(2).replace(/\.?0+$/, '')} gaj (${Math.round(g * 9)} sq ft)` : `at least ${Math.round(g * 9)} sq ft (${g.toFixed(1)} gaj)`;
+     $('room-hint').textContent = 'Every bedroom must be at least this big (length × width).';
+   }
+-  document.querySelectorAll('#f-mode button').forEach((b) => (b.onclick = () => { crit.mode = b.dataset.m; redrawFilters(); applyFilters(); }));
++  $('f-mode').onchange = () => { crit.mode = $('f-mode').value; redrawFilters(); applyFilters(); };
+   document.querySelectorAll('#f-room-mode button').forEach((b) => (b.onclick = () => { roomMode = b.dataset.r; redrawFilters(); readRoom(); }));
+   document.querySelectorAll('#f-area-unit button').forEach((b) => (b.onclick = () => { areaUnit = b.dataset.u; redrawFilters(); }));
+   $('f-area-range').oninput = readRoom;
+@@ -275,7 +303,7 @@ function applyFilters(wave = false) {
+ const dist = (s, c) => (s.lng - c[0]) ** 2 + (s.lat - c[1]) ** 2;
+ 
+ function sorted(list) {
+-  const price = (s) => priceFor(s, crit.mode, crit.bhk)?.value ?? Infinity;
++  const price = (s) => priceFor(s, crit.mode === 'both' ? 'rent' : crit.mode, crit.bhk)?.value ?? Infinity; // buy and rent cannot be ranked together: 'both' sorts by rent
+   const by = {
+     best: (a, b) => RANK[states.get(b.id)] - RANK[states.get(a.id)] || b.verified - a.verified || (b.score || 0) - (a.score || 0),
+     score: (a, b) => (b.score || 0) - (a.score || 0),
+@@ -299,6 +327,8 @@ function renderResults() {
    const bits = [];
    if (rooms) bits.push(`${counts.match} verified`, `${counts.likely} likely`, `${counts.probable} probably fit`);
    if (counts.unknown) bits.push(`${counts.unknown.toLocaleString()} not checked yet`);
@@ -276,7 +513,21 @@ index bc4e8af..65754a2 100644
    $('count-sub').textContent = bits.join(' · ');
    $('v-list').textContent = myList.length ? `${myList.length} saved` : 'empty';
    const groups = rooms
-@@ -365,6 +390,11 @@ function closeCard() {
+@@ -322,8 +352,11 @@ function renderResults() {
+ function resultItem(s) {
+   const li = document.createElement('li');
+   const st = states.get(s.id);
+-  const p = priceFor(s, crit.mode, crit.bhk);
+-  const money = p ? `${p.estimated ? '~' : ''}${formatINR(p.value)}${crit.mode === 'rent' ? '/mo' : ''}` : '';
++  const one = (mode) => {
++    const p = priceFor(s, mode, crit.bhk);
++    return p ? `${p.estimated ? '~' : ''}${formatINR(p.value)}${mode === 'rent' ? '/mo' : ''}` : '';
++  };
++  const money = crit.mode === 'both' ? [one('buy'), one('rent')].filter(Boolean).join(' · ') : one(crit.mode);
+   const how = s.verified ? ' · checked by hand' : s.ai_read ? ' · AI-read plans' : '';
+   li.innerHTML = `<span class="nm">${myList.includes(s.id) ? '★ ' : ''}${esc(s.name)}<small>${esc(s.locality || '')}${how}</small></span>
+     <span class="tag ${st}">${money}${s.score != null ? `<small>score ${s.score}</small>` : ''}</span>`;
+@@ -365,6 +398,11 @@ function closeCard() {
    feed?.ambient();
  }
  
@@ -288,7 +539,7 @@ index bc4e8af..65754a2 100644
  const metres = (m) => (m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m / 10) * 10} m`);
  
  function renderCard(s) {
-@@ -379,17 +409,18 @@ function renderCard(s) {
+@@ -379,17 +417,18 @@ function renderCard(s) {
        ? u.bedrooms.map((r) => `<span class="${bad(r) ? 'fail' : ''}">${feetLabel(r[0])} × ${feetLabel(r[1])}</span>`).join(', ') + (u.rooms_complete ? '' : ' <span class="fine">(not all rooms read)</span>')
          + (u.confidence === 'ocr' ? ` <span class="fine">(read from the plan by ${esc(u.checked_by || 'OCR')})</span>` : '')
        : u.est_short ? `<span class="fine">plans not read · estimated at least ${feetLabel(u.est_short)} wide, ~${u.est_area} sq ft</span>` : '<span class="fine">room sizes not read yet</span>';
@@ -310,7 +561,7 @@ index bc4e8af..65754a2 100644
    const d = details?.[s.id];
    const want = new Set(crit.amenities.flatMap((k) => AMENITY_KEYS[k] || [k.slice(2)]));
    const facts = Object.entries(s.amen_facts || {}).map(([k, f]) => `<span class="hit">${esc(AMEN_LABELS[k] || k)}: ${esc(f.value)} (<a href="${esc(f.source)}" target="_blank" rel="noopener">p.${esc(f.page)}</a>)</span>`).join('');
-@@ -397,11 +428,14 @@ function renderCard(s) {
+@@ -397,11 +436,14 @@ function renderCard(s) {
    const plans = Object.entries(s.plan_links || {}).map(([b, urls]) => urls.slice(0, 2).map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">${b} BHK plan${urls.length > 1 ? ' ' + (i + 1) : ''}</a>`).join(' ')).join(' ');
    const issue = `${REPO}/issues/new?title=${encodeURIComponent('Research: ' + s.name)}&body=${encodeURIComponent(`Please verify room sizes and amenities for ${s.name} (${s.locality || ''}).\n\nPortal page: ${s.url}\n${s.brochure_url ? 'Brochure: ' + s.brochure_url : ''}`)}`;
    const facts2 = [s.towers && `${s.towers} towers`, s.units && `${Number(s.units).toLocaleString()} units`, s.acres && `${s.acres} acres`, s.status, s.possession && `possession ${s.possession}`].filter(Boolean).join(' · ');
@@ -326,7 +577,7 @@ index bc4e8af..65754a2 100644
    const near = s.nearby || {};
    const nearRows = [['park', 'Park'], ['metro', 'Metro'], ['rail', 'Rail station'], ['school', 'School'], ['hospital', 'Hospital'], ['shopping', 'Mall or supermarket']]
      .filter(([k]) => near[k]).map(([k, l]) => `<div><span>${l}</span><b>${metres(near[k].m)}</b><small>${esc(near[k].name || '')}${near[k].n > 1 ? ` · ${near[k].n} within 1 km` : ''}</small></div>`).join('');
-@@ -418,16 +452,17 @@ function renderCard(s) {
+@@ -418,16 +460,17 @@ function renderCard(s) {
      </div>
      ${photos}
      <h2>${esc(s.name)}</h2>
@@ -347,7 +598,7 @@ index bc4e8af..65754a2 100644
      ${nearRows ? `<h4>Nearby</h4><div class="near">${nearRows}</div>` : ''}
      ${ratingBars ? `<h4>What residents rate</h4>${ratingBars}` : ''}${reviews}
      ${facts || amen ? `<h4>Amenities (${s.amenities.length})</h4><div class="amen">${facts}${amen}</div>` : ''}
-@@ -435,12 +470,12 @@ function renderCard(s) {
+@@ -435,12 +478,12 @@ function renderCard(s) {
      <div class="links">
        <a class="btnlink" href="${esc(s.gmaps)}" target="_blank" rel="noopener">Google Maps and reviews</a>
        <a class="btnlink" href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}" target="_blank" rel="noopener">Directions</a>
@@ -363,7 +614,23 @@ index bc4e8af..65754a2 100644
    $('card').hidden = false;
    $('c-close').onclick = () => { stopTour(); closeCard(); };
    $('c-star').onclick = () => { toggle(myList, s.id); saveList(); renderCard(s); renderResults(); };
-@@ -563,6 +598,7 @@ function setBase(mode) {
+@@ -541,11 +584,12 @@ function toast(msg) {
+ 
+ // ---------- CSV export of the current results ----------
+ function exportResults() {
+-  const cols = ['name', 'locality', 'verdict', 'type', crit.mode === 'rent' ? 'rent_from' : 'price_from', 'estimated', 'for_sale', 'for_rent', 'flat_finder_score', 'resident_rating', 'towers', 'units', 'nearest_park_m', 'nearest_metro_m', 'magicbricks_url', 'google_maps_url', 'flat_finder_url'];
++  const ways = crit.mode === 'both' ? ['buy', 'rent'] : [crit.mode];
++  const cols = ['name', 'locality', 'verdict', 'type', ...ways.flatMap((m) => [m === 'rent' ? 'rent_from' : 'price_from', `${m}_estimated`]), 'for_sale', 'for_rent', 'flat_finder_score', 'resident_rating', 'towers', 'units', 'nearest_park_m', 'nearest_metro_m', 'magicbricks_url', 'google_maps_url', 'flat_finder_url'];
+   const q = (v) => (v == null ? '' : /[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : String(v));
+   const rows = ranked().map((s) => {
+-    const p = priceFor(s, crit.mode, crit.bhk);
+-    return [s.name, s.locality, states.get(s.id), s.kind, p?.value, p ? p.estimated : '', s.sale_count, s.rent_count, s.score, s.rating, s.towers, s.units,
++    const prices = ways.flatMap((m) => { const p = priceFor(s, m, crit.bhk); return [p?.value, p ? p.estimated : '']; });
++    return [s.name, s.locality, states.get(s.id), s.kind, ...prices, s.sale_count, s.rent_count, s.score, s.rating, s.towers, s.units,
+       s.nearby?.park?.m, s.nearby?.metro?.m, s.url, s.gmaps, `${location.origin}/?city=${cityId}&open=${s.id}`];
+   });
+   const blob = new Blob([[cols, ...rows].map((r) => r.map(q).join(',')).join('\n')], { type: 'text/csv' });
+@@ -563,6 +607,7 @@ function setBase(mode) {
    baseMode = mode;
    document.body.dataset.base = mode;
    if (map?.getLayer?.('st-bg')) setBaseMode(map, mode);
@@ -371,7 +638,7 @@ index bc4e8af..65754a2 100644
    document.querySelectorAll('#layers button[data-mode]').forEach((b) => b.classList.toggle('on', b.dataset.mode === mode));
    $('btn-theme').innerHTML = mode === 'light' ? MOON : SUN;
    $('btn-theme').title = mode === 'light' ? 'Dark mode' : 'Light mode';
-@@ -571,7 +607,31 @@ function setBase(mode) {
+@@ -571,7 +616,31 @@ function setBase(mode) {
    history.replaceState(null, '', q.toString() ? `?${q}` : location.pathname);
  }
  
@@ -403,7 +670,7 @@ index bc4e8af..65754a2 100644
    $('ctl-in').onclick = () => map?.zoomIn();
    $('ctl-out').onclick = () => map?.zoomOut();
    $('ctl-tilt').onclick = () => { is3d = !is3d; $('ctl-tilt').textContent = is3d ? '2D' : '3D'; map?.easeTo({ pitch: is3d ? 50 : 0, bearing: 0, duration: 800 }); };
-@@ -608,10 +668,11 @@ function buildOnboarding() {
+@@ -608,10 +677,11 @@ function buildOnboarding() {
      ['How to read the map', '<span class="lg match"></span> Verified: every bedroom read from builder plans and passes.<br><span class="lg likely"></span> Likely: the rooms read so far pass.<br><span class="lg probable"></span> Probably fits: plans not read yet, estimated from unit size.<br><span class="lg unknown"></span> Not checked yet: no room data, so neither pass nor fail.'],
      ['Open a society, keep a list', 'Click any building for prices, bedrooms, ratings and the research behind every number. Star the ones you like, or paste a list of names you already have. Export your results as a CSV any time.'],
    ];
@@ -429,3 +696,51 @@ index 6de33aa..8ba3dbc 100644
      pitch: mobile ? 45 : 0,
      bearing: 0,
      maxPitch: 70,
+diff --git a/web/src/neighbourhoods.js b/web/src/neighbourhoods.js
+index c1b2250..d130242 100644
+--- a/web/src/neighbourhoods.js
++++ b/web/src/neighbourhoods.js
+@@ -81,8 +81,8 @@ function drawGrid() {
+   map.setPaintProperty('area-fill', 'fill-color', colors[layer]);
+   byId('area-legend').textContent = {
+     score: 'Green ≥70 · Gold 40–69 · Red <40 · Grey unranked',
+-    pm: 'PM2.5 indicator · Green ≤30 through burgundy >250 · Grey means no eligible recent reading',
+-    groups: 'Colours show groups of similar areas. Grey means no group data.',
++    pm: 'PM2.5 indicator · Green ≤30 through burgundy >250 · Grey means no monitor within 5 km',
++    groups: 'Colours show groups of similar areas, found for Delhi only. Grey means no group data (all of Gurugram).',
+   }[layer];
+ }
+ 
+@@ -120,7 +120,7 @@ document.addEventListener('flat-finder-map-ready', () => {
+ });
+ 
+ byId('area-zoom').onclick = () => {
+-  map?.fitBounds([[76.78, 28.39], [77.35, 28.9]], { padding: 40, pitch: 0, bearing: 0 });
++  map?.fitBounds([[76.65, 28.2], [77.35, 28.9]], { padding: 40, pitch: 0, bearing: 0 });
+ };
+ 
+ const fmt = (value, suffix = '') => value == null ? 'Unavailable' : String(value) + suffix;
+@@ -257,7 +257,7 @@ explorer.addEventListener('toggle', async () => {
+   }
+   if (grid || loading) return;
+   loading = true;
+-  status.textContent = 'Loading Delhi area data…';
++  status.textContent = 'Loading Delhi and Gurugram area data…';
+   try {
+     ({ grid, factors, groups } = await request('grid'));
+     createInputs();
+diff --git a/web/src/style.css b/web/src/style.css
+index 38341c9..1805787 100644
+--- a/web/src/style.css
++++ b/web/src/style.css
+@@ -91,7 +91,9 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
+ /* results */
+ .count .n { font-size: 50px; font-weight: 300; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+ .count .sub { font-size: 11px; color: var(--muted); margin-top: 5px; line-height: 1.5; }
+-#f-sort { background: var(--chip); border: 1px solid var(--line); border-radius: 8px; font-size: 11.5px; padding: 3px 4px; letter-spacing: 0; text-transform: none; }
++#f-sort, #f-mode { background: var(--chip); border: 1px solid var(--line); border-radius: 8px; font-size: 11.5px; padding: 3px 4px; letter-spacing: 0; text-transform: none; }
++.modepick { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
++#f-mode { font-size: 13px; padding: 6px 8px; color: var(--text); }
+ .group { font-size: 11px; font-weight: 600; margin: 8px 0 2px; padding-left: 8px; border-left: 3px solid; }
+ .group.match { border-color: var(--accent); } .group.likely { border-color: var(--likely); } .group.probable { border-color: var(--probable); }
+ .results { list-style: none; display: flex; flex-direction: column; gap: 1px; }

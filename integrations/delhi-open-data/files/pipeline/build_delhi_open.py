@@ -310,7 +310,7 @@ def nearby_for(lat, lon, trees):
 def load_monitors(db, localytics):
     sys.path.insert(0, str(localytics))
     from config import MONITOR_RADIUS_KM, PM25_BANDS
-    from observations import group_monitors, severity
+    from observations import freshest_only, group_monitors, severity
 
     # Every cached search for Delhi or Haryana (e.g. a "Haryana / Gurugram" refresh) feeds the monitors.
     records, fetched = [], []
@@ -322,7 +322,7 @@ def load_monitors(db, localytics):
     if not records:
         return [], None, MONITOR_RADIUS_KM, PM25_BANDS, severity
     monitors, _ = group_monitors(records)
-    usable = [m for m in monitors if m["pm"] is not None and 28.15 <= m["lat"] <= 28.95 and 76.7 <= m["lon"] <= 77.5]
+    usable = freshest_only([m for m in monitors if m["pm"] is not None and 28.15 <= m["lat"] <= 28.95 and 76.7 <= m["lon"] <= 77.5])
     return usable, max(fetched), MONITOR_RADIUS_KM, PM25_BANDS, severity
 
 

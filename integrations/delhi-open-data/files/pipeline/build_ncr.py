@@ -42,6 +42,7 @@ def build(args):
 
     db = sqlite3.connect(f"file:{Path(args.localytics) / 'data/areas.sqlite'}?mode=ro", uri=True)
     monitors, fetched, radius_km, bands, severity = bdo.load_monitors(db, Path(args.localytics))
+    haryana = db.execute("""SELECT COUNT(*) FROM air_cache WHERE query LIKE '["haryana"%'""").fetchone()[0] > 0  # a Haryana / Gurugram refresh was cached
 
     aq_by_sid = {}
     with_air = 0
@@ -50,18 +51,23 @@ def build(args):
         s["air"], s["aq"] = bdo.air_for(s["lat"], s["lng"], monitors, radius_km, bands, severity)
         with_air += 1 if s["air"] else 0
         aq_by_sid[s["id"]] = s["aq"]
+    delhi_with_air = 0
     for s in d["societies"]:
+        # Delhi is recomputed from the same monitors as Gurugram, not copied from delhi.json: both cities must be read from one snapshot,
+        # because PM2.5 swings a lot day to day and Gurugram today next to Delhi from an older fetch would compare nothing.
+        s["air"], s["aq"] = bdo.air_for(s["lat"], s["lng"], monitors, radius_km, bands, severity)
+        delhi_with_air += 1 if s["air"] else 0
         aq_by_sid[s["id"]] = s["aq"]
 
     shapes = gs["features"] + ds["features"]
     for f in shapes:
-        f["properties"].setdefault("aq", aq_by_sid.get(f["properties"]["sid"], -1))
+        f["properties"]["aq"] = aq_by_sid.get(f["properties"]["sid"], f["properties"].get("aq", -1))
 
     gc, dc = g["counts"], d["counts"]
     n_g, n_d = len(g["societies"]), len(d["societies"])
     counts = dict(listed=gc.get("listed", n_g) + dc["listed"], on_map=n_g + n_d, not_located=gc.get("not_located", 0), ai_read=gc.get("ai_read", 0),
                   for_sale=gc.get("for_sale", 0), for_rent=gc.get("for_rent", 0) + dc["for_rent"], verified=gc.get("verified", 0),
-                  gurugram=n_g, delhi=n_d, gurugram_with_pm25=with_air, delhi_with_pm25=dc["with_pm25"])
+                  gurugram=n_g, delhi=n_d, gurugram_with_pm25=with_air, delhi_with_pm25=delhi_with_air)
     du = d["ui"]
     ui = dict(
         default_mode="rent", default_kinds=["apartment", "builder floor"], hide_example=True,  # Divy's example is a Gurugram floor-plan search: see ?city=gurgaon
@@ -73,13 +79,15 @@ def build(args):
                       "</b>, about six years old, so today's rents are higher; they are not the building's own listings, and Delhi has no sale prices "
                       "(in Buy mode Delhi buildings show as not checked). The Delhi rent dataset is declared CC0 by its uploader; its listings were originally taken from a real-estate website." + du.get("more_note", "")),
         page_description="Delhi and Gurugram apartment buildings on one map: Gurugram prices and rents from listings, Delhi locality rents (open data), and indicative PM2.5.",
-        neighbourhood_blurb="Compare neighbourhoods on the property map. Localytics scores cover Delhi only; Gurugram buildings have none.",
+        neighbourhood_blurb="Compare neighbourhoods on the property map. Localytics scores cover Delhi and Gurugram: one-kilometre cells scored from mapped schools, hospitals, parks, transit and the nearest air monitor.",
         air=dict(fetched=fetched, radius_km=radius_km, bands=du["air"]["bands"],
-                 note=("Indicative PM2.5 from the nearest monitor within %d km in the cached Delhi readings. Gurugram buildings show a value only when a Delhi monitor is that close; "
-                       "Haryana readings (cached from a data.gov.in refresh) would be used too, but none are cached. Not an official AQI; it may be days old." % radius_km)),
+                 note=(("Indicative PM2.5 from the nearest government monitor (CPCB, DPCC, HSPCB or IMD) within %d km. Delhi and Gurugram are read from the same snapshot, taken %s, so the two cities can be compared. "
+                        "A building with no monitor in range shows no reading. Not an official AQI: it is one snapshot, and PM2.5 swings a lot from day to day." % (radius_km, str(fetched)[:10])) if haryana else
+                       ("Indicative PM2.5 from the nearest monitor within %d km in the cached Delhi readings. Gurugram buildings show a value only when a Delhi monitor is that close; "
+                        "Haryana readings (cached from a data.gov.in refresh) would be used too, but none are cached. Not an official AQI; it may be days old." % radius_km))),
         onboarding=[
             ["Delhi and Gurugram, on one map", f"{n_g + n_d:,} buildings: {n_g:,} Gurugram societies with prices and rents from Magicbricks listings, and {n_d:,} Delhi apartment buildings, colonies and other mapped residential areas from OpenStreetMap with locality rents ({du['rent_as_of']}). Use the city picker to look at one city alone."],
-            ["Start with what you cannot live without", "The map opens in Rent mode, where both cities have data. Set your budget and the BHK you need. Switching to Buy shows Gurugram prices; Delhi has no sale prices, so those buildings show as not checked."],
+            ["Start with what you cannot live without", "The map opens on Buy and rent together, so both cities show. Set your budget and the BHK you need, or use the Show menu to look at Buy or Rent alone. Delhi has no sale prices, so Delhi buildings only count under Rent."],
             None,
             None,
         ],
@@ -87,7 +95,7 @@ def build(args):
     doc = dict(city=dict(id="ncr", name="Delhi NCR · Delhi + Gurugram", center=CENTER, zoom=ZOOM), price_model=g.get("price_model", {}), room_model=g.get("room_model", {}),
                counts=counts, sources=list(dict.fromkeys(g["sources"] + d["sources"])), ui=ui, societies=g["societies"] + d["societies"], events=g["events"] + d["events"])
     # steps 2 and 3 of the onboarding keep the app's own wording unless Delhi's differ; use the Delhi wording for the map legend step
-    ui["onboarding"][2] = ["How to read the map", "Brighter buildings fit your search and faint ones are not checked yet. The PM2.5 button colours every building by the nearest air monitor instead (Delhi mostly; Gurugram only near a Delhi monitor). Delhi rents are locality medians, not the building's own listings."]
+    ui["onboarding"][2] = ["How to read the map", "Brighter buildings fit your search and faint ones are not checked yet. The PM2.5 button colours every building by the nearest air monitor instead (" + ("Delhi and Gurugram monitors" if haryana else "Delhi mostly; Gurugram only near a Delhi monitor") + "). Delhi rents are locality medians, not the building's own listings."]
     ui["onboarding"][3] = ["Open a building, keep a list", "Click any building for its prices or rents by BHK, what is nearby and PM2.5. Star the ones you like. Export your results as a CSV any time."]
 
     (data / "ncr.json").write_text(json.dumps(doc, separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
@@ -126,7 +134,7 @@ def build(args):
 
     print(json.dumps(counts, indent=1))
     print("shape features:", len(shapes), "| files:", {p.name: round(p.stat().st_size / 1e6, 1) for p in data.glob("ncr*")})
-    print("Gurugram buildings with a Delhi monitor within", radius_km, "km:", with_air, "of", n_g)
+    print("Gurugram buildings with a monitor within", radius_km, "km:", with_air, "of", n_g)
 
 
 if __name__ == "__main__":

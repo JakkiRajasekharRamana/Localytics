@@ -46,6 +46,25 @@ describe('mixed Delhi and Gurugram data', () => {
     expect(matchSociety(unpriced, { ...DEFAULT_CRITERIA, mode: 'rent', maxRent: 20000, strictPrice: true })).toBe('unknown');
     expect(matchSociety(unpriced, { ...DEFAULT_CRITERIA, mode: 'rent', maxRent: 20000 })).toBe('match'); // the panel's own behaviour is unchanged
   });
+  it('Buy & rent (both): a rent-only Delhi building and a Gurugram society both show with no budget', () => {
+    const c = { ...DEFAULT_CRITERIA, mode: 'both', bhk: [2] };
+    expect(matchSociety(delhi, c)).toBe('match'); // buy says "unknown" (no sale prices), rent says "match": the better one wins
+    expect(matchSociety(gurugram, c)).toBe('match');
+  });
+  it('Buy & rent: a budget only counts for the way it was set', () => {
+    const buyOnly = { ...DEFAULT_CRITERIA, mode: 'both', bhk: [2], maxPrice: 10000000 };
+    expect(matchSociety(delhi, buyOnly)).toBe('unknown'); // rent-only building cannot be shown to fit a buy budget
+    expect(matchSociety(gurugram, buyOnly)).toBe('match'); // 90 L is under 1 Cr
+    expect(matchSociety(gurugram, { ...buyOnly, maxPrice: 5000000 })).toBe('no');
+    const rentOnly = { ...DEFAULT_CRITERIA, mode: 'both', bhk: [2], maxRent: 30000 };
+    expect(matchSociety(delhi, rentOnly)).toBe('match'); // 25k is under 30k
+    expect(matchSociety(gurugram, rentOnly)).toBe('no'); // 40k is over 30k
+  });
+  it('Buy & rent with both budgets set: passing either way is enough', () => {
+    const c = { ...DEFAULT_CRITERIA, mode: 'both', bhk: [2], maxPrice: 5000000, maxRent: 45000 };
+    expect(matchSociety(gurugram, c)).toBe('match'); // too dear to buy, but the rent fits
+    expect(matchSociety(delhi, { ...c, maxRent: 20000 })).toBe('no');
+  });
   it('rent budget applies to Delhi rents', () => {
     expect(matchSociety(delhi, { ...DEFAULT_CRITERIA, mode: 'rent', maxRent: 20000 })).toBe('no');
     expect(priceFor(delhi, 'rent', [2]).value).toBe(25000);
